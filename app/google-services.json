@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "133674030228",
+    "firebase_url": "https://trip-reminder-8e0e2-default-rtdb.firebaseio.com",
+    "project_id": "trip-reminder-8e0e2",
+    "storage_bucket": "trip-reminder-8e0e2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:133674030228:android:168ca94b93eaf08a035081",
+        "android_client_info": {
+          "package_name": "com.mad41.trip_reminder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "133674030228-muo84rv6g90l0u4i0b3ppfi1u7qdimma.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPIckAk3T_MVGYhhxlgKjYuq4-r3BzkXg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "133674030228-muo84rv6g90l0u4i0b3ppfi1u7qdimma.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:133674030228:android:19c91133407b574a035081",
+        "android_client_info": {
+          "package_name": "com.mad41.tripreminder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "133674030228-muo84rv6g90l0u4i0b3ppfi1u7qdimma.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPIckAk3T_MVGYhhxlgKjYuq4-r3BzkXg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "133674030228-muo84rv6g90l0u4i0b3ppfi1u7qdimma.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

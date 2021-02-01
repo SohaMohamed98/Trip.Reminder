@@ -30,7 +30,7 @@ public interface TripDao extends MyGenericDao<Trip> {
     void deleteAllTrips();
 
     @Override
-    @Query("SELECT * FROM trips_table WHERE status=1")
+    @Query("SELECT * FROM trips_table WHERE status=2")
     List<Trip> getUpcomingTrips();
 
     @Override

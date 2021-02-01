@@ -24,7 +24,11 @@ import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.mad41.tripreminder.constants.Constants;
+import com.mad41.tripreminder.room_database.MyRoomDataBase;
+import com.mad41.tripreminder.room_database.trip.Trip;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -32,14 +36,15 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class HomeActivity extends AppCompatActivity {
-
-    TextView txt_place;
+    public static final String TAG="room";
+    EditText txt_place;
     TextView txtDate;
     TextView txtTtime;
     CircleImageView btnDate;
     CircleImageView btnTime;
     int t1Hour, t1Minuite, t2Hour, t2Minuite;
     private int mYear, mMonth, mDay, mHour, mMinute;
+    private MyRoomDataBase dataBaseInstance;
 
 
     int AUTOCOMPLETE_REQUEST_CODE = 1;
@@ -50,7 +55,7 @@ public class HomeActivity extends AppCompatActivity {
 
     AutocompleteSupportFragment autocompleteFragmentStart;
     AutocompleteSupportFragment autocompleteFragmentEnd;
-    String TAG = "lifeCycle";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +68,7 @@ public class HomeActivity extends AppCompatActivity {
 
         txtDate = (TextView) findViewById(R.id.txt_date);
         txtTtime = (TextView) findViewById(R.id.txt_time);
-        txt_place = (TextView) findViewById(R.id.txt_place);
+        txt_place = (EditText) findViewById(R.id.txt_place);
 
         txt_start=(EditText)findViewById(R.id.txt_startPlace) ;
         txt_end=(EditText)findViewById(R.id.txt_endPlace);
@@ -71,7 +76,23 @@ public class HomeActivity extends AppCompatActivity {
         btnDate = (CircleImageView) findViewById(R.id.btn_date);
         btnTime = (CircleImageView) findViewById(R.id.btn_time);
         btn_place=(Button) findViewById(R.id.btn_addTrip) ;
+        dataBaseInstance=MyRoomDataBase.getUserDataBaseInstance(this);
 
+        btn_place.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Trip myTrip=new Trip(txt_place.getText().toString(),txt_start.getText().toString(),txt_end.getText().toString(),
+                        txtTtime.getText().toString(),txtDate.getText().toString(), Constants.TRIP_UPCOMING,true,true);
+                new Thread(){
+                    @Override
+                    public void run() {
+                        dataBaseInstance.tripDao().insertTrip(myTrip);
+                        printTrip();
+                    }
+                }.start();
+
+            }
+        });
 
         btnDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,7 +120,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-btnTime.setOnClickListener(new View.OnClickListener() {
+    btnTime.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
 
@@ -129,12 +150,7 @@ btnTime.setOnClickListener(new View.OnClickListener() {
          });
         End_trip();
         Start_trip();
-
-
-
     }
-
-
 
     private void Start_trip() {
         txt_start.setFocusable(false);
@@ -163,13 +179,24 @@ btnTime.setOnClickListener(new View.OnClickListener() {
             }
         });
     }
+    private void printTrip(){
+        new Thread(){
+            @Override
+            public void run() {
+                ArrayList<Trip> trips= (ArrayList<Trip>) dataBaseInstance.tripDao().getUpcomingTrips();
+                Log.i(TAG, ""+trips.get(0));
+            }
+        }.start();
+
+
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
-                txt_start.setText(place.getAddress());
+                txt_start.setText(place.getName());
 
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 // TODO: Handle the error.
@@ -184,7 +211,7 @@ btnTime.setOnClickListener(new View.OnClickListener() {
 
                 if (resultCode == RESULT_OK) {
                     Place place = Autocomplete.getPlaceFromIntent(data);
-                    txt_end.setText(place.getAddress());
+                    txt_end.setText(place.getName());
 
                 } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                     // TODO: Handle the error.

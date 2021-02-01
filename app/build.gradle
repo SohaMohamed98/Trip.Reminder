@@ -4,15 +4,18 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
+    //noinspection GradleCompatible
+    compileSdkVersion 29
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.mad41.tripreminder"
         minSdkVersion 19
-        targetSdkVersion 30
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
+
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -40,16 +43,31 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    implementation 'com.google.firebase:firebase-database:19.2.1'
-    implementation 'com.google.firebase:firebase-auth:17.0.0'
-    implementation 'com.google.android.gms:play-services-auth:17.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation platform('com.google.firebase:firebase-bom:26.3.0')
     implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.android.material:material:1.0.0'
+
+    //firebase
+    implementation 'com.google.firebase:firebase-database:19.2.1'
+    implementation 'com.google.firebase:firebase-auth:17.0.0'
+    implementation 'com.google.android.gms:play-services-auth:17.0.0'
     implementation 'com.google.firebase:firebase-core:17.0.0'
     implementation 'com.firebaseui:firebase-ui-auth:6.2.1'
-    implementation 'com.google.android.material:material:1.0.0'
+
+    //Location
+    implementation 'com.google.android.libraries.places:places:2.4.0'
+    implementation "com.google.android.gms:play-services-location:16.0.0"
+    implementation "com.google.android.gms:play-services-maps:16.1.0"
+
+    //RecycleView
+    implementation "androidx.recyclerview:recyclerview-selection:1.1.0-rc03"
+    implementation "androidx.recyclerview:recyclerview:1.1.0"
+    implementation "androidx.cardview:cardview:1.0.0"
     implementation 'de.hdodenhof:circleimageview:3.1.0'
-    
+
+
+    def multidex_version = "2.0.1"
+    implementation "androidx.multidex:multidex:$multidex_version"
 
 }

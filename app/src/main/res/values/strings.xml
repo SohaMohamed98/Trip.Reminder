@@ -5,5 +5,12 @@
     <string name="facebook_application_id" translatable="false">861440641315611</string>
     <!-- Facebook Application ID, prefixed by 'fb'. Enables Chrome Custom tabs. -->
     <string name="facebook_login_protocol_scheme" translatable="false">fb861440641315611</string>
+    <string name="TripName">TripName</string>
+    <string name="Place">Place</string>
+    <string name="Start">Start</string>
+    <string name="End">End</string>
+    <string name="Date">Date</string>
+    <string name="Time">Time</string>
+    <string name="AddTrip">Add Trip</string>
 
 </resources>

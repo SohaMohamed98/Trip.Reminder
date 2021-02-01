@@ -42,11 +42,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="@string/TripName"
-                        app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName4"
+                        app:layout_constraintStart_toStartOf="@+id/txt_place"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <EditText
-                        android:id="@+id/editTextTextPersonName4"
+                        android:id="@+id/txt_place"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
@@ -84,18 +84,19 @@
                 android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:text="@string/Start"
-                app:layout_constraintStart_toStartOf="@+id/autocomplete_fragment_start"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_editor_absoluteX="16dp" />
 
-            <fragment
-                android:id="@+id/autocomplete_fragment_start"
-                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
-                android:layout_width="match_parent"
+            <EditText
+                android:id="@+id/txt_startPlace"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/textView4"
-                tools:ignore="MissingConstraints" />
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Name"
+                app:layout_constraintStart_toStartOf="@+id/textView4"
+                app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
@@ -114,19 +115,19 @@
                 android:id="@+id/textView5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:text="@string/End"
-                app:layout_constraintStart_toStartOf="@+id/autocomplete_fragment_end"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_editor_absoluteX="16dp" />
 
-            <fragment
-                android:id="@+id/autocomplete_fragment_end"
-                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
-                android:layout_width="match_parent"
+            <EditText
+                android:id="@+id/txt_endPlace"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView5"
-                tools:ignore="MissingConstraints" />
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Name"
+                app:layout_constraintStart_toStartOf="@+id/textView5"
+                app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
@@ -274,7 +275,7 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:id="@+id/textView2"
+                        android:id="@+id/txt_note"
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
                         android:layout_marginTop="16dp"
@@ -292,7 +293,7 @@
             android:layout_height="wrap_content">
 
             <Button
-                android:id="@+id/btn_add"
+                android:id="@+id/btn_addTrip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/AddTrip"

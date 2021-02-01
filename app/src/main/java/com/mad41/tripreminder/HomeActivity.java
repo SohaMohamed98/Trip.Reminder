@@ -2,29 +2,38 @@ package com.mad41.tripreminder;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class HomeActivity extends AppCompatActivity {
 
+    TextView txt_place;
     TextView txtDate;
     TextView txtTtime;
     CircleImageView btnDate;
@@ -33,6 +42,11 @@ public class HomeActivity extends AppCompatActivity {
     private int mYear, mMonth, mDay, mHour, mMinute;
 
 
+    int AUTOCOMPLETE_REQUEST_CODE = 1;
+    int AUTOCOMPLETE_REQUEST_CODE2 = 2;
+    EditText txt_start;
+    EditText txt_end;
+    Button btn_place;
 
     AutocompleteSupportFragment autocompleteFragmentStart;
     AutocompleteSupportFragment autocompleteFragmentEnd;
@@ -45,13 +59,19 @@ public class HomeActivity extends AppCompatActivity {
 
         Places.initialize(getApplication().getBaseContext(), "AIzaSyA7dH75J8SZ0-GkeHqHANbflPhdpbfU5yI");
 
-        autocomplete_fragmentStart();
-        autocomplete_fragmentEnd();
+
+
         txtDate = (TextView) findViewById(R.id.txt_date);
         txtTtime = (TextView) findViewById(R.id.txt_time);
+        txt_place = (TextView) findViewById(R.id.txt_place);
+
+        txt_start=(EditText)findViewById(R.id.txt_startPlace) ;
+        txt_end=(EditText)findViewById(R.id.txt_endPlace);
 
         btnDate = (CircleImageView) findViewById(R.id.btn_date);
         btnTime = (CircleImageView) findViewById(R.id.btn_time);
+        btn_place=(Button) findViewById(R.id.btn_addTrip) ;
+
 
         btnDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,51 +127,78 @@ btnTime.setOnClickListener(new View.OnClickListener() {
                  timePickerDialog.show();
              }
          });
+        End_trip();
+        Start_trip();
+
 
 
     }
 
 
-    public void autocomplete_fragmentStart() {
-        autocompleteFragmentStart = (AutocompleteSupportFragment)
-                getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment_start);
 
-        autocompleteFragmentStart.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
-        autocompleteFragmentStart.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+    private void Start_trip() {
+        txt_start.setFocusable(false);
+        txt_start.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onPlaceSelected(Place place) {
-                // TODO: Get info about the selected place.
-                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
-            }
+            public void onClick(View v) {
+                List<Place.Field> fields1= Arrays.asList(Place.Field.ID,Place.Field.NAME);
 
-            @Override
-            public void onError(Status status) {
-                // TODO: Handle the error.
-                Log.i(TAG, "An error occurred: " + status);
+                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields1) //FullScreen
+                        .build(getApplication().getBaseContext());
+                startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
             }
         });
     }
 
-
-    public void autocomplete_fragmentEnd() {
-        autocompleteFragmentEnd = (AutocompleteSupportFragment)
-                getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment_end);
-
-        autocompleteFragmentEnd.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
-        // Set up a PlaceSelectionListener to handle the response.
-        autocompleteFragmentEnd.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+    private void End_trip() {
+        txt_end.setFocusable(false);
+        txt_end.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onPlaceSelected(Place place) {
-                // TODO: Get info about the selected place.
-                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
-            }
+            public void onClick(View v) {
+                List<Place.Field> fields1= Arrays.asList(Place.Field.ID,Place.Field.NAME);
 
-            @Override
-            public void onError(Status status) {
-                // TODO: Handle the error.
-                Log.i(TAG, "An error occurred: " + status);
+                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields1) //FullScreen
+                        .build(getApplication().getBaseContext());
+                startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE2);
             }
         });
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Place place = Autocomplete.getPlaceFromIntent(data);
+                txt_start.setText(place.getAddress());
+
+            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                // TODO: Handle the error.
+                Status status = Autocomplete.getStatusFromIntent(data);
+
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
+            return;
+
+        }else if(requestCode == AUTOCOMPLETE_REQUEST_CODE2) {
+
+                if (resultCode == RESULT_OK) {
+                    Place place = Autocomplete.getPlaceFromIntent(data);
+                    txt_end.setText(place.getAddress());
+
+                } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                    // TODO: Handle the error.
+                    Status status = Autocomplete.getStatusFromIntent(data);
+                    // Log.i(TAG, status.getStatusMessage());
+
+                } else if (resultCode == RESULT_CANCELED) {
+                    // The user canceled the operation.
+                }
+                return;
+            }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+
 
 }

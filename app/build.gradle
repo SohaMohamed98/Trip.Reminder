@@ -50,6 +50,9 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-auth:6.2.1'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
-    
 
+    //room database dependency
+    def room_version = "2.2.6"
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
 }

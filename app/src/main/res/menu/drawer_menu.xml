@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    tools:showIn="navigation_view">
+    <!--    this changes the view to navigation view  -->
+
+
+
+    <!-- single here means we can only choose on item at a time from this group -->
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/btnOngoing"
+            android:icon="@drawable/ic_baseline_directions_car_24"
+            android:title="@string/on_going" />
+        <item
+            android:id="@+id/btnHistory"
+            android:icon="@drawable/ic_baseline_history_24"
+            android:title="@string/history" />
+
+    </group>
+    <item android:title="@string/options">
+        <menu>
+            <item
+                android:id="@+id/btnLanguage"
+                android:icon="@drawable/ic_language"
+                android:title="@string/Language" />
+            <item
+                android:id="@+id/btnExit"
+                android:icon="@drawable/ic_logout"
+                android:title="@string/Logout" />
+        </menu>
+    </item>
+
+</menu>

@@ -1,9 +1,13 @@
 package com.mad41.tripreminder.trip_ui;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
@@ -30,10 +34,17 @@ import com.mad41.tripreminder.room_database.MyRoomDataBase;
 import com.mad41.tripreminder.room_database.trip.Trip;
 
 import java.sql.SQLOutput;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -49,6 +60,8 @@ public class AddTrip extends AppCompatActivity {
     private int mYear, mMonth, mDay;
     private MyRoomDataBase dataBaseInstance;
 
+    public final static String START = "START";
+    public final static String END = "END";
 
     int AUTOCOMPLETE_REQUEST_CODE_START = 1;
     int AUTOCOMPLETE_REQUEST_CODE2_END = 2;
@@ -88,8 +101,8 @@ public class AddTrip extends AppCompatActivity {
                     }
                 }.start();
 
-
-
+                finish();
+                setAlram();
             }
         });
 
@@ -118,6 +131,10 @@ public class AddTrip extends AppCompatActivity {
                                                   int monthOfYear, int dayOfMonth) {
 
                                 txtDate.setText("Date: "+dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                                mYear = year;
+                                mMonth = monthOfYear;
+                                mDay = dayOfMonth;
+                                txtDate.setText("Date: " + dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
 
                             }
                         }, mYear, mMonth, mDay);
@@ -255,5 +272,52 @@ public class AddTrip extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    private void setAlram() {
+        long alarmTime = getAlarmTime();
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Intent notifyIntent = new Intent(this, TransparentActivity.class);
+            notifyIntent.putExtra(AddTrip.START,txt_start.getText().toString());
+            notifyIntent.putExtra(END,txt_end.getText().toString());
+
+            PendingIntent notifyPendingIntent = PendingIntent.getActivity(this,0,notifyIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime()+alarmTime,notifyPendingIntent);
+//            alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime()+5000,notifyPendingIntent);
+            Log.i("alram what is this ",SystemClock.elapsedRealtime()+"");
+        }
+    }
+
+    private long getAlarmTime() {
+
+        long alarmTime = 0;
+        Calendar calendar = Calendar.getInstance();
+        //alarm time
+        calendar.set(mYear, mMonth,  mDay, t1Hour, t1Minuite);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy");
+        String date = calendar.getTime().toString();
+        //current time
+        Calendar c = Calendar.getInstance();
+        String datee = simpleDateFormat.format(c.getTime());
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss z yyyy");
+            LocalDateTime localDate = LocalDateTime.parse(date, formatter);
+            alarmTime = localDate.atOffset(ZoneOffset.UTC).toInstant().toEpochMilli();
+            localDate = LocalDateTime.parse(datee, formatter);
+            alarmTime = alarmTime - localDate.atOffset(ZoneOffset.UTC).toInstant().toEpochMilli();
+            Log.i(TAG, "alarm " + alarmTime);
+        }else{
+            SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy");
+            try {
+                Date mDate = simpleDateFormat1.parse(date);
+                alarmTime = mDate.getTime();
+                alarmTime = alarmTime - simpleDateFormat1.parse(datee).getTime();
+                Log.i(TAG, "alarm " + alarmTime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return alarmTime;
+    }
 }

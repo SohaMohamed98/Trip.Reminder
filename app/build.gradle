@@ -77,4 +77,12 @@ dependencies {
     def room_version = "2.2.6"
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
+
+    //Dynamic fragment
+    implementation "androidx.fragment:fragment:1.2.5"
+    //Circle img view
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+    //open maps
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+
 }

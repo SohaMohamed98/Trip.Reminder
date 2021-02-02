@@ -26,7 +26,7 @@ public class UpcomingActivity extends AppCompatActivity {
 
     ArrayList<TripModel> tripModelArrayList;
 
-    int count=0;
+    int count=-1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +69,6 @@ public class UpcomingActivity extends AppCompatActivity {
                 time = data.getStringExtra("time");
                 date = data.getStringExtra("date");
                 tripModelArrayList.add(new TripModel(name, start, end, time, date,1, true, true));
-           //     tripModelArrayList.add(new TripModel("","","","","",1,true,true)
                 adapter.notifyItemInserted(count++);
 
             }

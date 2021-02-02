@@ -36,6 +36,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AddTrip extends AppCompatActivity {
+
     public static final String TAG = "room";
     EditText txt_place;
     TextView txtDate;
@@ -47,15 +48,11 @@ public class AddTrip extends AppCompatActivity {
     private MyRoomDataBase dataBaseInstance;
 
 
-    int AUTOCOMPLETE_REQUEST_CODE = 1;
-    int AUTOCOMPLETE_REQUEST_CODE2 = 2;
+    int AUTOCOMPLETE_REQUEST_CODE_START = 1;
+    int AUTOCOMPLETE_REQUEST_CODE2_END = 2;
     EditText txt_start;
     EditText txt_end;
     Button btn_place;
-
-    AutocompleteSupportFragment autocompleteFragmentStart;
-    AutocompleteSupportFragment autocompleteFragmentEnd;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +60,6 @@ public class AddTrip extends AppCompatActivity {
         setContentView(R.layout.activity_add_trip);
 
         Places.initialize(getApplication().getBaseContext(), "AIzaSyA7dH75J8SZ0-GkeHqHANbflPhdpbfU5yI");
-
 
         txtDate = (TextView) findViewById(R.id.txt_date);
         txtTtime = (TextView) findViewById(R.id.txt_time);
@@ -89,6 +85,8 @@ public class AddTrip extends AppCompatActivity {
                         printTrip();
                     }
                 }.start();
+
+
 
             }
         });
@@ -160,7 +158,7 @@ public class AddTrip extends AppCompatActivity {
 
                 Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields1) //FullScreen
                         .build(getApplication().getBaseContext());
-                startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
+                startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE_START);
             }
         });
     }
@@ -174,26 +172,43 @@ public class AddTrip extends AppCompatActivity {
 
                 Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields1) //FullScreen
                         .build(getApplication().getBaseContext());
-                startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE2);
+                startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE2_END);
             }
         });
     }
 
     private void printTrip() {
+
         new Thread() {
             @Override
             public void run() {
                 ArrayList<Trip> trips = (ArrayList<Trip>) dataBaseInstance.tripDao().getUpcomingTrips();
-                Log.i(TAG, "" + trips.get(0));
+                Log.i(TAG, "" + trips.get(3));
+                Intent intentToCard=new Intent(AddTrip.this, UpcomingActivity.class);
+
+                for(int i=0; i<trips.size();i++){
+                    intentToCard.putExtra("name", trips.get(i).getName());
+                    intentToCard.putExtra("date", trips.get(i).getDate());
+                    intentToCard.putExtra("time", trips.get(i).getTime());
+                    intentToCard.putExtra("start", trips.get(i).getStartLoacation());
+                    intentToCard.putExtra("end", trips.get(i).getEndLoacation());
+                    intentToCard.putExtra("status",String.valueOf(trips.get(i).getStatus()));
+
+                }
+                startActivity(intentToCard);
+
+
             }
         }.start();
+
+
 
 
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+        if (requestCode == AUTOCOMPLETE_REQUEST_CODE_START) {
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
                 txt_start.setText(place.getName());
@@ -207,7 +222,7 @@ public class AddTrip extends AppCompatActivity {
             }
             return;
 
-        } else if (requestCode == AUTOCOMPLETE_REQUEST_CODE2) {
+        } else if (requestCode == AUTOCOMPLETE_REQUEST_CODE2_END) {
 
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);

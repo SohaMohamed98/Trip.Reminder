@@ -12,5 +12,16 @@
     <string name="Date">Date</string>
     <string name="Time">Time</string>
     <string name="AddTrip">Add Trip</string>
+    <string name="on_going">On Going</string>
+    <string name="history">History</string>
+    <string name="options">Options</string>
+    <string name="Language">Language</string>
+    <string name="Logout">Log Out</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!--for the menu drawer-->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
 
 </resources>

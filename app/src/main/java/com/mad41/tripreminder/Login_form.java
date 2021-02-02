@@ -54,7 +54,7 @@ public class Login_form extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if(user != null)
                 {
-                    startActivity(new Intent(getApplicationContext(),UpcomingActivity.class));
+                    startActivity(new Intent(getApplicationContext(),MainScreen.class));
                     finish();
                     Toast.makeText(Login_form.this, "you already login before", Toast.LENGTH_SHORT).show();
                 }
@@ -79,7 +79,7 @@ public class Login_form extends AppCompatActivity {
             IdpResponse response = IdpResponse.fromResultIntent(data);
             if(requestCode == RESULT_OK ) {
                 Toast.makeText(this, "Done", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getApplicationContext(),UpcomingActivity.class));
+                startActivity(new Intent(getApplicationContext(),MainScreen.class));
                 finish();
             }
             else {

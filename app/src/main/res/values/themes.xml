@@ -31,4 +31,9 @@
          <item name="windowNoTitle">false</item>
         <item name="android:textColorHint">@android:color/white</item>
     </style>
+    <style name="Theme.TripReminder.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
 </resources>

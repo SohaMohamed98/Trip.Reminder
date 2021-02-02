@@ -1,4 +1,4 @@
-package com.mad41.tripreminder;
+package com.mad41.tripreminder.trip_ui;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -22,8 +22,8 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
-import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.mad41.tripreminder.R;
 import com.mad41.tripreminder.constants.Constants;
 import com.mad41.tripreminder.room_database.MyRoomDataBase;
 import com.mad41.tripreminder.room_database.trip.Trip;
@@ -35,8 +35,8 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class HomeActivity extends AppCompatActivity {
-    public static final String TAG="room";
+public class AddTrip extends AppCompatActivity {
+    public static final String TAG = "room";
     EditText txt_place;
     TextView txtDate;
     TextView txtTtime;
@@ -60,30 +60,29 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_add_trip);
 
         Places.initialize(getApplication().getBaseContext(), "AIzaSyA7dH75J8SZ0-GkeHqHANbflPhdpbfU5yI");
-
 
 
         txtDate = (TextView) findViewById(R.id.txt_date);
         txtTtime = (TextView) findViewById(R.id.txt_time);
         txt_place = (EditText) findViewById(R.id.txt_place);
 
-        txt_start=(EditText)findViewById(R.id.txt_startPlace) ;
-        txt_end=(EditText)findViewById(R.id.txt_endPlace);
+        txt_start = (EditText) findViewById(R.id.txt_startPlace);
+        txt_end = (EditText) findViewById(R.id.txt_endPlace);
 
         btnDate = (CircleImageView) findViewById(R.id.btn_date);
         btnTime = (CircleImageView) findViewById(R.id.btn_time);
-        btn_place=(Button) findViewById(R.id.btn_addTrip) ;
-        dataBaseInstance=MyRoomDataBase.getUserDataBaseInstance(this);
+        btn_place = (Button) findViewById(R.id.btn_addTrip);
+        dataBaseInstance = MyRoomDataBase.getUserDataBaseInstance(this);
 
         btn_place.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Trip myTrip=new Trip(txt_place.getText().toString(),txt_start.getText().toString(),txt_end.getText().toString(),
-                        txtTtime.getText().toString(),txtDate.getText().toString(), Constants.TRIP_UPCOMING,true,true);
-                new Thread(){
+                Trip myTrip = new Trip(txt_place.getText().toString(), txt_start.getText().toString(), txt_end.getText().toString(),
+                        txtTtime.getText().toString(), txtDate.getText().toString(), Constants.TRIP_UPCOMING, true, true);
+                new Thread() {
                     @Override
                     public void run() {
                         dataBaseInstance.tripDao().insertTrip(myTrip);
@@ -104,7 +103,7 @@ public class HomeActivity extends AppCompatActivity {
                 mDay = c.get(Calendar.DAY_OF_MONTH);
 
 
-                DatePickerDialog datePickerDialog = new DatePickerDialog(HomeActivity.this,
+                DatePickerDialog datePickerDialog = new DatePickerDialog(AddTrip.this,
                         new DatePickerDialog.OnDateSetListener() {
 
                             @Override
@@ -120,34 +119,34 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-    btnTime.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
+        btnTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-      //initialize TimePicker Dialogue
-               TimePickerDialog timePickerDialog= new TimePickerDialog(
-                         HomeActivity.this, new TimePickerDialog.OnTimeSetListener() {
-                     @Override
-                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                         //Intialize Hour and Minute
-                         t1Hour= hourOfDay;
-                         t1Minuite=minute;
-                         //initialize Calender
-                         Calendar calendar=Calendar.getInstance();
-                         calendar.set(0,0,0,t1Hour,t1Minuite);
+                //initialize TimePicker Dialogue
+                TimePickerDialog timePickerDialog = new TimePickerDialog(
+                        AddTrip.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        //Intialize Hour and Minute
+                        t1Hour = hourOfDay;
+                        t1Minuite = minute;
+                        //initialize Calender
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.set(0, 0, 0, t1Hour, t1Minuite);
 
-                         txtTtime.setText("Time: " + DateFormat.format("hh:mm:aa",calendar));
+                        txtTtime.setText("Time: " + DateFormat.format("hh:mm:aa", calendar));
 
 
-                     }
-                 },12,0,false
-                 );
+                    }
+                }, 12, 0, false
+                );
 
-                 //Displayed previous Selected time
-                 timePickerDialog.updateTime(t1Hour,t1Minuite);
-                 timePickerDialog.show();
-             }
-         });
+                //Displayed previous Selected time
+                timePickerDialog.updateTime(t1Hour, t1Minuite);
+                timePickerDialog.show();
+            }
+        });
         End_trip();
         Start_trip();
     }
@@ -157,7 +156,7 @@ public class HomeActivity extends AppCompatActivity {
         txt_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<Place.Field> fields1= Arrays.asList(Place.Field.ID,Place.Field.NAME);
+                List<Place.Field> fields1 = Arrays.asList(Place.Field.ID, Place.Field.NAME);
 
                 Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields1) //FullScreen
                         .build(getApplication().getBaseContext());
@@ -171,7 +170,7 @@ public class HomeActivity extends AppCompatActivity {
         txt_end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<Place.Field> fields1= Arrays.asList(Place.Field.ID,Place.Field.NAME);
+                List<Place.Field> fields1 = Arrays.asList(Place.Field.ID, Place.Field.NAME);
 
                 Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields1) //FullScreen
                         .build(getApplication().getBaseContext());
@@ -179,12 +178,13 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
-    private void printTrip(){
-        new Thread(){
+
+    private void printTrip() {
+        new Thread() {
             @Override
             public void run() {
-                ArrayList<Trip> trips= (ArrayList<Trip>) dataBaseInstance.tripDao().getUpcomingTrips();
-                Log.i(TAG, ""+trips.get(0));
+                ArrayList<Trip> trips = (ArrayList<Trip>) dataBaseInstance.tripDao().getUpcomingTrips();
+                Log.i(TAG, "" + trips.get(0));
             }
         }.start();
 
@@ -207,25 +207,24 @@ public class HomeActivity extends AppCompatActivity {
             }
             return;
 
-        }else if(requestCode == AUTOCOMPLETE_REQUEST_CODE2) {
+        } else if (requestCode == AUTOCOMPLETE_REQUEST_CODE2) {
 
-                if (resultCode == RESULT_OK) {
-                    Place place = Autocomplete.getPlaceFromIntent(data);
-                    txt_end.setText(place.getName());
+            if (resultCode == RESULT_OK) {
+                Place place = Autocomplete.getPlaceFromIntent(data);
+                txt_end.setText(place.getName());
 
-                } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
-                    // TODO: Handle the error.
-                    Status status = Autocomplete.getStatusFromIntent(data);
-                    // Log.i(TAG, status.getStatusMessage());
+            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                // TODO: Handle the error.
+                Status status = Autocomplete.getStatusFromIntent(data);
+                // Log.i(TAG, status.getStatusMessage());
 
-                } else if (resultCode == RESULT_CANCELED) {
-                    // The user canceled the operation.
-                }
-                return;
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
             }
+            return;
+        }
         super.onActivityResult(requestCode, resultCode, data);
     }
-
 
 
 }

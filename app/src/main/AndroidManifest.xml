@@ -5,21 +5,15 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name="androidx.multidex.MultiDexApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.TripReminder"
-        android:name="androidx.multidex.MultiDexApplication" >
-
-        <activity android:name=".UpcomingActivity">
-
-        </activity>
-
-        <activity android:name=".HomeActivity">
-
-        </activity>
+        android:theme="@style/Theme.TripReminder">
+        <activity android:name=".trip_ui.UpcomingActivity"></activity>
+        <activity android:name=".trip_ui.AddTrip"></activity>
         <activity android:name=".Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,14 +21,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Login_form"></activity>
+        <activity android:name=".Login_form" />
         <activity android:name=".SecondActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyA7dH75J8SZ0-GkeHqHANbflPhdpbfU5yI" />
-
-
     </application>
 
 </manifest>

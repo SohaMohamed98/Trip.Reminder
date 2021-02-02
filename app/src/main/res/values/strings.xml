@@ -12,5 +12,6 @@
     <string name="Date">Date</string>
     <string name="Time">Time</string>
     <string name="AddTrip">Add Trip</string>
+    <string name="trip_notes">Trip notes</string>
 
 </resources>

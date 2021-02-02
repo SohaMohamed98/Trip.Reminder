@@ -34,8 +34,6 @@ public class UpcomingActivity extends AppCompatActivity {
                 Intent intentToHome =new Intent(UpcomingActivity.this,HomeActivity.class);
                 startActivity(intentToHome);
 
-
-
             }
         });
     }

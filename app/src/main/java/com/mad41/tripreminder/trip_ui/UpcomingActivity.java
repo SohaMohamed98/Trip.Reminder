@@ -1,5 +1,6 @@
 package com.mad41.tripreminder.trip_ui;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,6 +26,8 @@ public class UpcomingActivity extends AppCompatActivity {
 
     ArrayList<TripModel> tripModelArrayList;
 
+    int count=0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,28 +42,39 @@ public class UpcomingActivity extends AppCompatActivity {
         btn_add_trip();
         setRecyclerView();
 
-
-        Intent intent = getIntent();
-        name = intent.getStringExtra("name");
-        start = intent.getStringExtra("start");
-        end = intent.getStringExtra("end");
-        time = intent.getStringExtra("time");
-        date = intent.getStringExtra("date");
-
-        tripModelArrayList.add(new TripModel(name, start,end,time,date,1, true, true));
-
     }
-
-
 
     void btn_add_trip() {
         btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intentToAddTrip = new Intent(UpcomingActivity.this, AddTrip.class);
-                startActivity(intentToAddTrip);
+                startActivityForResult(intentToAddTrip,100);
+                //count++;
+
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 100)
+        {
+            if(resultCode==RESULT_OK)
+            {
+                name = data.getStringExtra("name");
+                start = data.getStringExtra("start");
+                end = data.getStringExtra("end");
+                time = data.getStringExtra("time");
+                date = data.getStringExtra("date");
+                tripModelArrayList.add(new TripModel(name, start, end, time, date,1, true, true));
+           //     tripModelArrayList.add(new TripModel("","","","","",1,true,true)
+                adapter.notifyItemInserted(count++);
+
+            }
+
+        }
     }
 
     void setRecyclerView(){
@@ -72,5 +86,6 @@ public class UpcomingActivity extends AppCompatActivity {
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+
     }
 }

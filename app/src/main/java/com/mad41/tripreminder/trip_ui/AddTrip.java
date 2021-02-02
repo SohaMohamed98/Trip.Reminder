@@ -12,6 +12,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,6 +29,7 @@ import com.mad41.tripreminder.constants.Constants;
 import com.mad41.tripreminder.room_database.MyRoomDataBase;
 import com.mad41.tripreminder.room_database.trip.Trip;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -43,8 +45,8 @@ public class AddTrip extends AppCompatActivity {
     TextView txtTtime;
     CircleImageView btnDate;
     CircleImageView btnTime;
-    int t1Hour, t1Minuite, t2Hour, t2Minuite;
-    private int mYear, mMonth, mDay, mHour, mMinute;
+    int t1Hour, t1Minuite;
+    private int mYear, mMonth, mDay;
     private MyRoomDataBase dataBaseInstance;
 
 
@@ -91,6 +93,13 @@ public class AddTrip extends AppCompatActivity {
             }
         });
 
+        selectDate();
+        selectTime();
+        End_trip();
+        Start_trip();
+    }
+
+    void selectDate(){
         btnDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,7 +117,7 @@ public class AddTrip extends AppCompatActivity {
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
 
-                                txtDate.setText("Date: " + dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                                txtDate.setText("Date: "+dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
 
                             }
                         }, mYear, mMonth, mDay);
@@ -116,7 +125,9 @@ public class AddTrip extends AppCompatActivity {
 
             }
         });
+    }
 
+    void selectTime(){
         btnTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,7 +144,7 @@ public class AddTrip extends AppCompatActivity {
                         Calendar calendar = Calendar.getInstance();
                         calendar.set(0, 0, 0, t1Hour, t1Minuite);
 
-                        txtTtime.setText("Time: " + DateFormat.format("hh:mm:aa", calendar));
+                        txtTtime.setText("Time:" + DateFormat.format("hh:mm:aa", calendar));
 
 
                     }
@@ -145,16 +156,15 @@ public class AddTrip extends AppCompatActivity {
                 timePickerDialog.show();
             }
         });
-        End_trip();
-        Start_trip();
     }
 
     private void Start_trip() {
+
         txt_start.setFocusable(false);
         txt_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<Place.Field> fields1 = Arrays.asList(Place.Field.ID, Place.Field.NAME);
+                List<Place.Field> fields1 = Arrays.asList(Place.Field.ADDRESS, Place.Field.LAT_LNG, Place.Field.ID, Place.Field.NAME);
 
                 Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields1) //FullScreen
                         .build(getApplication().getBaseContext());
@@ -168,7 +178,7 @@ public class AddTrip extends AppCompatActivity {
         txt_end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<Place.Field> fields1 = Arrays.asList(Place.Field.ID, Place.Field.NAME);
+                List<Place.Field> fields1 = Arrays.asList(Place.Field.ADDRESS, Place.Field.LAT_LNG, Place.Field.ID, Place.Field.NAME);
 
                 Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields1) //FullScreen
                         .build(getApplication().getBaseContext());
@@ -183,19 +193,20 @@ public class AddTrip extends AppCompatActivity {
             @Override
             public void run() {
                 ArrayList<Trip> trips = (ArrayList<Trip>) dataBaseInstance.tripDao().getUpcomingTrips();
-                Log.i(TAG, "" + trips.get(3));
+              //  Log.i(TAG, "" + trips.get(3));
                 Intent intentToCard=new Intent(AddTrip.this, UpcomingActivity.class);
 
-                for(int i=0; i<trips.size();i++){
+                for(int i = 0; i < trips.size(); i++){
                     intentToCard.putExtra("name", trips.get(i).getName());
-                    intentToCard.putExtra("date", trips.get(i).getDate());
-                    intentToCard.putExtra("time", trips.get(i).getTime());
+                    intentToCard.putExtra("date", trips.get(i).getDate().toString());
+                    intentToCard.putExtra("time", trips.get(i).getTime().toString());
                     intentToCard.putExtra("start", trips.get(i).getStartLoacation());
                     intentToCard.putExtra("end", trips.get(i).getEndLoacation());
                     intentToCard.putExtra("status",String.valueOf(trips.get(i).getStatus()));
 
                 }
-                startActivity(intentToCard);
+                setResult(RESULT_OK,intentToCard);
+                finish();
 
 
             }
@@ -206,12 +217,15 @@ public class AddTrip extends AppCompatActivity {
 
     }
 
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE_START) {
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
-                txt_start.setText(place.getName());
+                txt_start.setText(place.getAddress());
+                Toast.makeText(AddTrip.this,place.getLatLng()+"",Toast.LENGTH_LONG).show();
 
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 // TODO: Handle the error.
@@ -226,7 +240,7 @@ public class AddTrip extends AppCompatActivity {
 
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
-                txt_end.setText(place.getName());
+                txt_end.setText(place.getAddress());
 
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 // TODO: Handle the error.

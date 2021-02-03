@@ -9,11 +9,13 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainScreen extends AppCompatActivity {
     private Toolbar toolbar;
@@ -68,6 +70,8 @@ public class MainScreen extends AppCompatActivity {
                         break;
                     case R.id.btnExit:
                         Toast.makeText(MainScreen.this, "show logout dialog", Toast.LENGTH_SHORT).show();
+                        FirebaseAuth.getInstance().signOut();
+                        startActivity(new Intent(getApplicationContext(),Login_form.class));
                         break;
                 }
                 drawer.closeDrawer(GravityCompat.START);

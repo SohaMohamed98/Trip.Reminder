@@ -14,14 +14,16 @@ public interface TripDao extends MyGenericDao<Trip> {
 
     @Override
     @Insert
-    void insertTrip(Trip trip);
+    long insertTrip(Trip trip);
 
     @Override
     @Query("update trips_table  SET name=:name ,startLoacation=:startLoacation," +
-     "endLoacation=:endLoacation,time=:time,date=:date,status=:status,isRepeated=:isRepeated," +
+            "endLoacation=:endLoacation,time=:time,date=:date,status=:status,isRepeated=:isRepeated," +
             "isRound=:isRound Where id=:id")
-        void updateTrip(int id, String name, String startLoacation, String endLoacation, String time, String date, int status, boolean isRepeated, boolean isRound);
+    void updateTrip(int id, String name, String startLoacation, String endLoacation, String time, String date, int status, boolean isRepeated, boolean isRound);
 
+    @Query("update trips_table  SET status=:status Where id=:id")
+    void updateStatus(int id,int status);
     @Override
     @Query("DELETE FROM trips_table WHERE id = :id")
     void deletTripById(int id);
@@ -42,5 +44,3 @@ public interface TripDao extends MyGenericDao<Trip> {
     List<Trip> getAllTrips();
 
 }
-
-

@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,6 +60,10 @@ public class AddTripFragments extends Fragment {
 
     public final static String START = "START";
     public final static String END = "END";
+    public static final String ID = "ID";
+
+    private int id;
+
 
     int AUTOCOMPLETE_REQUEST_CODE_START = 1;
     int AUTOCOMPLETE_REQUEST_CODE2_END = 2;
@@ -123,18 +128,25 @@ Context context;
         btn_place.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                communicatorListener.respon(txt_start.getText().toString(), txt_end.getText().toString());
-                myData();
 
-                Trip myTrip=new Trip(txt_place.getText().toString(),txt_start.getText().toString(),txt_end.getText().toString(),
-                        txtTtime.getText().toString(),txtDate.getText().toString(), Constants.TRIP_UPCOMING,true,true);
-                new Thread(){
-                    @Override
-                    public void run() {
-                        dataBaseInstance.tripDao().insertTrip(myTrip);
-                        printTrip();
-                    }
-                }.start();
+                long alarmTime = getAlarmTime();
+                if(alarmTime>0){
+                    Trip myTrip=new Trip(txt_place.getText().toString(),txt_start.getText().toString(),txt_end.getText().toString(),
+                            txtTtime.getText().toString(),txtDate.getText().toString(), Constants.TRIP_UPCOMING,true,true);
+                    new Thread(){
+                        @Override
+                        public void run() {
+                            id = (int) dataBaseInstance.tripDao().insertTrip(myTrip);
+                            Log.i("room","id is: "+id);
+                            printTrip();
+                        }
+                    }.start();
+                    communicatorListener.respon(alarmTime,id, txt_end.getText().toString());
+                    myData();
+                }else{
+                    Toast.makeText(getContext(), "Please enter a valid date & time", Toast.LENGTH_SHORT).show();
+                }
+
 
             }
         });
@@ -145,6 +157,23 @@ Context context;
         End_trip();
 
         return view;
+    }
+
+    private long getAlarmTime() {
+        Calendar calendar1 = Calendar.getInstance();
+        calendar1.set(Calendar.YEAR,calendar1.get(Calendar.YEAR));
+        calendar1.set(Calendar.MONTH,calendar1.get(Calendar.MONTH));
+        calendar1.set(Calendar.DAY_OF_MONTH,calendar1.get(Calendar.DAY_OF_MONTH));
+        calendar1.set(Calendar.HOUR_OF_DAY,calendar1.get(Calendar.HOUR_OF_DAY));
+        calendar1.set(Calendar.MINUTE,calendar1.get(Calendar.MINUTE));
+        long l = calendar1.getTimeInMillis();
+
+        Calendar calendar = Calendar.getInstance();
+        //alarm time
+        calendar.set(mYear, mMonth,  mDay, t1Hour, t1Minuite);
+        long alarmTime = calendar.getTimeInMillis()-l;
+        Log.i("room"," check "+alarmTime);
+        return alarmTime;
     }
 
     void selectDate() {
@@ -303,7 +332,7 @@ Context context;
 
 public interface Communicator
 {
-    void respon(String start, String end);
+    void respon(long alarmTime, int id, String end);
     void sendArrayListToRecycleView(ArrayList<Trip> arrayList2);
     void returnToOnGoingActivity();
 }

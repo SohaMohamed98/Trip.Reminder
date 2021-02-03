@@ -10,8 +10,13 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
@@ -121,11 +126,21 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
     }
 
     @Override
-    public void respon(String start, String end) {
-//        Intent intentToMain= new Intent(this, TransparentActivity.class);
-//        intentToMain.putExtra("startData", start);
-//        intentToMain.putExtra("endData", end);
-//        startActivity(intentToMain);
+    public void respon(long alarmTime, int id, String end) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Intent notifyIntent = new Intent(this, TransparentActivity.class);
+
+            notifyIntent.putExtra(AddTripFragments.END,end);
+            Log.i("room","id sent "+id);
+            notifyIntent.putExtra(AddTripFragments.ID,id);
+            notifyIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            PendingIntent notifyPendingIntent = PendingIntent.getActivity(this,0,notifyIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime()+alarmTime,notifyPendingIntent);
+//            alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime()+5000,notifyPendingIntent);
+            Log.i("alram what is this ",SystemClock.elapsedRealtime()+"");
+        }
 
     }
 

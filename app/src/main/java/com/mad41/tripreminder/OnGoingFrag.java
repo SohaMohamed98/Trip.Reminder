@@ -11,6 +11,8 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +20,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.mad41.tripreminder.room_database.MyRoomDataBase;
+import com.mad41.tripreminder.room_database.trip.Trip;
 import com.mad41.tripreminder.trip_ui.TripAdapter;
 import com.mad41.tripreminder.trip_ui.TripModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class OnGoingFrag extends Fragment {
     private FloatingActionButton btn_add;
@@ -33,8 +38,8 @@ public class OnGoingFrag extends Fragment {
     String name, start, end, time, date;
     Boolean status, round;
 
-   onGoingCommunicator onGoingCommunicator1;
-    ArrayList<TripModel> tripModelArrayList;
+    onGoingCommunicator onGoingCommunicator1;
+    List<Trip> tripModelArrayList;
 
     int count = 0;
 
@@ -53,16 +58,32 @@ public class OnGoingFrag extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    class MyHandler extends Handler{
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            setRecyclerView();
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-
-        tripModelArrayList = new ArrayList<>();
+        MyHandler h = new MyHandler();
+//        tripModelArrayList = new ArrayList<>();
         View fragment = inflater.inflate(R.layout.fragment_on_going2, container, false);
         btn_add = fragment.findViewById(R.id.btnf_add);
         tripModelArrayList = new ArrayList<>();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                tripModelArrayList = MyRoomDataBase.getUserDataBaseInstance(getContext().getApplicationContext()).tripDao().getUpcomingTrips();
+                h.sendEmptyMessage(0);
+            }
+        }).start();
 
         recyclerView = (RecyclerView) fragment.findViewById(R.id.recyclerView);
 
@@ -71,11 +92,10 @@ public class OnGoingFrag extends Fragment {
             public void onClick(View v) {
                 count++;
                onGoingCommunicator1.startAddTripFragment();
-               onGoingCommunicator1.saveArrayList(tripModelArrayList);
+//               onGoingCommunicator1.saveArrayList(tripModelArrayList);
             }
         });
 
-        setRecyclerView();
 
 
         if (getArguments() != null) {
@@ -84,7 +104,7 @@ public class OnGoingFrag extends Fragment {
             end = getArguments().getString("end");
             date = getArguments().getString("date");
             time = getArguments().getString("time");
-            tripModelArrayList.add(new TripModel(name, start, end, time, date, 1, true, true));
+//            tripModelArrayList.add(new TripModel(name, start, end, time, date, 1, true, true));
           //  adapter.notifyItemInserted(count);
 
             setRecyclerView();
@@ -107,9 +127,9 @@ public class OnGoingFrag extends Fragment {
 
     }
 
-    public void getArrayList(ArrayList<TripModel> arrayList2){
-        this.tripModelArrayList=arrayList2;
-        setRecyclerView();
+    public void getArrayList(ArrayList<Trip> arrayList2){
+//        this.tripModelArrayList=arrayList2;
+//        setRecyclerView();
     }
 
     @Override
@@ -120,7 +140,7 @@ public class OnGoingFrag extends Fragment {
 
    public interface onGoingCommunicator
     {
-        void saveArrayList(ArrayList<TripModel> arr);
+        void saveArrayList(ArrayList<Trip> arr);
         void startAddTripFragment();
     }
 }

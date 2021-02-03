@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+import com.mad41.tripreminder.room_database.trip.Trip;
 import com.mad41.tripreminder.trip_ui.TripModel;
 
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
 
 
     @Override
-    public void saveArrayList(ArrayList<TripModel> arr) {
+    public void saveArrayList(ArrayList<Trip> arr) {
         fragment.getArrayList(arr);
     }
 
@@ -121,21 +122,22 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
 
     @Override
     public void respon(String start, String end) {
-        Intent intentToMain= new Intent(this, TransparentActivity.class);
-        intentToMain.putExtra("startData", start);
-        intentToMain.putExtra("endData", end);
-        startActivity(intentToMain);
+//        Intent intentToMain= new Intent(this, TransparentActivity.class);
+//        intentToMain.putExtra("startData", start);
+//        intentToMain.putExtra("endData", end);
+//        startActivity(intentToMain);
 
     }
 
     @Override
-    public void sendArrayListToRecycleView(ArrayList<TripModel> arrayList2) {
+    public void sendArrayListToRecycleView(ArrayList<Trip> arrayList2) {
         frag1.getArrayList(arrayList2);
     }
 
     @Override
     public void returnToOnGoingActivity() {
         FragmentManager fragmentManager = getSupportFragmentManager();
+        frag1 = new OnGoingFrag();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.dynamicFrag, frag1);
         fragmentTransaction.addToBackStack(null);

@@ -8,11 +8,13 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mad41.tripreminder.R;
+import com.mad41.tripreminder.room_database.trip.Trip;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TripAdapter extends RecyclerView.Adapter<com.mad41.tripreminder.trip_ui.TripAdapter.ExampleViewHolder> {
-    private ArrayList<TripModel> tripModels;
+    private List<Trip> tripModels;
 
     public static class ExampleViewHolder extends RecyclerView.ViewHolder {
         public TextView txt_date;
@@ -33,7 +35,7 @@ public class TripAdapter extends RecyclerView.Adapter<com.mad41.tripreminder.tri
         }
     }
 
-    public TripAdapter(ArrayList<TripModel> exampleList) {
+    public TripAdapter(List<Trip> exampleList) {
         tripModels = exampleList;
     }
 
@@ -47,7 +49,7 @@ public class TripAdapter extends RecyclerView.Adapter<com.mad41.tripreminder.tri
 
     @Override
     public void onBindViewHolder(ExampleViewHolder holder, int position) {
-        TripModel currentItem = tripModels.get(position);
+        Trip currentItem = tripModels.get(position);
         holder.txt_date.setText(currentItem.getDate());
         holder.txt_time.setText(currentItem.getTime());
         holder.txt_start.setText(currentItem.getStartLoacation());

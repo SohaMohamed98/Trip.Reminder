@@ -30,6 +30,7 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.mad41.tripreminder.constants.Constants;
 import com.mad41.tripreminder.room_database.MyRoomDataBase;
 import com.mad41.tripreminder.room_database.trip.Trip;
 import com.mad41.tripreminder.trip_ui.TripModel;
@@ -71,7 +72,7 @@ Context context;
 
     private Communicator communicatorListener;
 
-    ArrayList<TripModel> arrayList;
+    ArrayList<Trip> arrayList;
 
     public AddTripFragments() {
         // Required empty public constructor
@@ -125,6 +126,15 @@ Context context;
                 communicatorListener.respon(txt_start.getText().toString(), txt_end.getText().toString());
                 myData();
 
+                Trip myTrip=new Trip(txt_place.getText().toString(),txt_start.getText().toString(),txt_end.getText().toString(),
+                        txtTtime.getText().toString(),txtDate.getText().toString(), Constants.TRIP_UPCOMING,true,true);
+                new Thread(){
+                    @Override
+                    public void run() {
+                        dataBaseInstance.tripDao().insertTrip(myTrip);
+                        printTrip();
+                    }
+                }.start();
 
             }
         });
@@ -230,28 +240,7 @@ Context context;
     }
 
     void myData() {
-
-    /*    Bundle bundle = new Bundle();
-        bundle.putString("name", txt_place.getText().toString());
-        bundle.putString("start", txt_start.getText().toString());
-        bundle.putString("end", txt_end.getText().toString());
-        bundle.putString("date", txtTtime.getText().toString());
-        bundle.putString("time", txtDate.getText().toString());
-
-        OnGoingFrag frag = new OnGoingFrag();
-        frag.setArguments(bundle);*/
-        arrayList.add(new TripModel(txt_place.getText().toString(), txt_start.getText().toString(), txt_end.getText().toString(),
-                txtTtime.getText().toString(), txtDate.getText().toString(), 1, true, true));
         communicatorListener.returnToOnGoingActivity();
-        communicatorListener.sendArrayListToRecycleView(arrayList);
-
-        for(int i=0; i<arrayList.size();i++){
-            Toast.makeText(context, arrayList.get(i).toString(), Toast.LENGTH_LONG).show();
-
-        }
-
-
-
     }
 
     @Override
@@ -266,22 +255,6 @@ Context context;
             @Override
             public void run() {
                 ArrayList<Trip> trips = (ArrayList<Trip>) dataBaseInstance.tripDao().getUpcomingTrips();
-                //  Log.i(TAG, "" + trips.get(3));
-
-
-          /*      for(int i = 0; i < trips.size(); i++){
-                    intentToCard.putExtra("name", trips.get(i).getName());
-                    intentToCard.putExtra("date", trips.get(i).getDate().toString());
-                    intentToCard.putExtra("time", trips.get(i).getTime().toString());
-                    intentToCard.putExtra("start", trips.get(i).getStartLoacation());
-                    intentToCard.putExtra("end", trips.get(i).getEndLoacation());
-                    intentToCard.putExtra("status",String.valueOf(trips.get(i).getStatus()));
-
-                }
-                setResult(RESULT_OK,intentToCard);
-                finish();*/
-
-
             }
         }.start();
 
@@ -323,7 +296,7 @@ Context context;
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    void getArrayList(ArrayList<TripModel> arrayList)
+    void getArrayList(ArrayList<Trip> arrayList)
     {
         this.arrayList=arrayList;
     }
@@ -331,7 +304,7 @@ Context context;
 public interface Communicator
 {
     void respon(String start, String end);
-    void sendArrayListToRecycleView(ArrayList<TripModel> arrayList2);
+    void sendArrayListToRecycleView(ArrayList<Trip> arrayList2);
     void returnToOnGoingActivity();
 }
 

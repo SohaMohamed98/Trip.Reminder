@@ -13,7 +13,6 @@ import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
 
 import com.google.firebase.auth.FirebaseUser;
-import com.mad41.tripreminder.trip_ui.UpcomingActivity;
 
 import java.util.Arrays;
 import java.util.List;
@@ -47,9 +46,6 @@ public class Login_form extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if(user != null)
                 {
-                    //soha
-                  //  startActivity(new Intent(getApplicationContext(), UpcomingActivity.class));
-                    //Moataz
                     startActivity(new Intent(getApplicationContext(),MainScreen.class));
                     finish();
                     Toast.makeText(Login_form.this, "you already login before", Toast.LENGTH_SHORT).show();

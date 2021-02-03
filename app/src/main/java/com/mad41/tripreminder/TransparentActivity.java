@@ -13,17 +13,20 @@ import android.widget.Toast;
 public class TransparentActivity extends AppCompatActivity {
     private AlertDialog.Builder builder;
     Intent incomingIntent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transparent);
         incomingIntent = getIntent();
 
-        String start = incomingIntent.getStringExtra(HomeActivity.START);
-        String end = incomingIntent.getStringExtra(HomeActivity.END);
-        Log.i("location",incomingIntent.getAction()+"");
-        Log.i("location",start);
-        Log.i("location",end);
+        String start = incomingIntent.getStringExtra("startData");
+        String end = incomingIntent.getStringExtra("endData");
+        Log.i("location", incomingIntent.getAction() + "");
+        Log.i("location", start);
+        Log.i("location", end);
+        Toast.makeText(this,start + end,Toast.LENGTH_LONG).show();
+
 
 
         builder = new AlertDialog.Builder(this);
@@ -32,16 +35,16 @@ public class TransparentActivity extends AppCompatActivity {
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // Create a Uri from an intent string. Use the result to create an Intent.
-                        Uri openMaps = Uri.parse("http://maps.google.com/maps?daddr="+Uri.encode(end)+" &dirflg=d");
+                        Uri openMaps = Uri.parse("http://maps.google.com/maps?daddr=" + Uri.encode(end) + " &dirflg=d");
                         // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
                         Intent mapIntent = new Intent(Intent.ACTION_VIEW, openMaps);
                         // Make the Intent explicit by setting the Google Maps package
                         mapIntent.setPackage("com.google.android.apps.maps");
                         // check if there's at least one app can open that intent
-                        if(mapIntent.resolveActivity(getPackageManager()) != null){
+                        if (mapIntent.resolveActivity(getPackageManager()) != null) {
                             // Attempt to start an activity that can handle the Intent
                             startActivity(mapIntent);
-                        }else{
+                        } else {
                             Toast.makeText(TransparentActivity.this, "There's an issue opening google maps", Toast.LENGTH_SHORT).show();
                         }
 
@@ -55,11 +58,11 @@ public class TransparentActivity extends AppCompatActivity {
                         finish();
                     }
                 }).setNeutralButton("Snooze", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
 
-                    }
-                });
+            }
+        });
         //Creating dialog box
         AlertDialog alert = builder.create();
         //Setting the title manually

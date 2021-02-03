@@ -13,12 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TripReminder">
 
-        <activity android:name=".trip_ui.UpcomingActivity"></activity>
-        <activity android:name=".trip_ui.AddTrip"></activity>
-
         <activity
             android:name=".TransparentActivity"
             android:theme="@style/Theme.AppCompat.Transparent.NoActionBar"></activity>
+        <activity android:name=".MainScreen"></activity>
 
 
         <activity android:name=".Splash">

@@ -12,6 +12,11 @@ public class Trip {
     @PrimaryKey(autoGenerate = true)
     @NonNull
     private int id;
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     private String name;
     private String startLoacation;
     private String endLoacation;
@@ -33,6 +38,7 @@ public class Trip {
         this.isRepeated = isRepeated;
         this.isRound = isRound;
     }
+
 
     public void setId(int id) {
         this.id = id;

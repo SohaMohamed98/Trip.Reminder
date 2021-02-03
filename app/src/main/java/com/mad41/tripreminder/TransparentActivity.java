@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.mad41.tripreminder.constants.Constants;
 import com.mad41.tripreminder.room_database.MyRoomDataBase;
+import com.mad41.tripreminder.trip_ui.RoundTripDialogue;
 
 public class TransparentActivity extends AppCompatActivity {
     private AlertDialog.Builder builder;
@@ -123,4 +124,7 @@ public class TransparentActivity extends AppCompatActivity {
             notificationManager.notify(1,not);
         }
     }
+
+
+
 }

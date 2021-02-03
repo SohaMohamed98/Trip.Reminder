@@ -19,8 +19,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -34,6 +36,7 @@ import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.mad41.tripreminder.constants.Constants;
 import com.mad41.tripreminder.room_database.MyRoomDataBase;
 import com.mad41.tripreminder.room_database.trip.Trip;
+import com.mad41.tripreminder.trip_ui.RoundTripDialogue;
 import com.mad41.tripreminder.trip_ui.TripModel;
 
 import java.util.ArrayList;
@@ -49,6 +52,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class AddTripFragments extends Fragment {
 
     public static final String TAG = "room";
+
+    Switch roundSwitch;
     EditText txt_place;
     TextView txtDate;
     TextView txtTtime;
@@ -62,7 +67,12 @@ public class AddTripFragments extends Fragment {
     public final static String END = "END";
     public static final String ID = "ID";
 
+
     private int id;
+
+    //Return Date and Time
+    String round_date;
+    String round_time;
 
 
     int AUTOCOMPLETE_REQUEST_CODE_START = 1;
@@ -70,10 +80,11 @@ public class AddTripFragments extends Fragment {
     EditText txt_start;
     EditText txt_end;
     Button btn_place;
-Context context;
+    Context context;
     Fragment fragment;
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
+    RoundTripDialogue roundTripDialogue;
 
     private Communicator communicatorListener;
 
@@ -123,6 +134,8 @@ Context context;
         btnDate = (CircleImageView) view.findViewById(R.id.btn_date);
         btnTime = (CircleImageView) view.findViewById(R.id.btn_time);
         btn_place = (Button) view.findViewById(R.id.btn_addTrip);
+
+        roundSwitch = (Switch) view.findViewById(R.id.round_switch);
         dataBaseInstance = MyRoomDataBase.getUserDataBaseInstance(getContext().getApplicationContext());
 
         btn_place.setOnClickListener(new View.OnClickListener() {
@@ -130,23 +143,24 @@ Context context;
             public void onClick(View v) {
 
                 long alarmTime = getAlarmTime();
-                if(alarmTime>0){
-                    Trip myTrip=new Trip(txt_place.getText().toString(),txt_start.getText().toString(),txt_end.getText().toString(),
-                            txtTtime.getText().toString(),txtDate.getText().toString(), Constants.TRIP_UPCOMING,true,true);
-                    new Thread(){
+                if (alarmTime > 0) {
+                    Trip myTrip = new Trip(txt_place.getText().toString(), txt_start.getText().toString(), txt_end.getText().toString(),
+                            txtTtime.getText().toString(), txtDate.getText().toString(), Constants.TRIP_UPCOMING, true, true);
+                    new Thread() {
                         @Override
                         public void run() {
                             id = (int) dataBaseInstance.tripDao().insertTrip(myTrip);
-                            Log.i("room","id is: "+id);
+                            Log.i("room", "id is: " + id);
                             printTrip();
                         }
                     }.start();
-                    communicatorListener.respon(alarmTime,id, txt_end.getText().toString());
+                    communicatorListener.respon(alarmTime, id, txt_end.getText().toString());
                     myData();
-                }else{
+                } else {
                     Toast.makeText(getContext(), "Please enter a valid date & time", Toast.LENGTH_SHORT).show();
                 }
 
+                Toast.makeText(getContext(), round_date + round_time, Toast.LENGTH_LONG).show();
 
             }
         });
@@ -155,24 +169,46 @@ Context context;
         selectTime();
         Start_trip();
         End_trip();
+        setRound();
+
 
         return view;
     }
 
+    void setRound() {
+        roundSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+
+                    openDialog();
+
+                } else {
+
+                }
+            }
+        });
+    }
+
+    public void openDialog() {
+        RoundTripDialogue exampleDialog = new RoundTripDialogue();
+        exampleDialog.show(getActivity().getSupportFragmentManager(), "example dialog");
+    }
+
     private long getAlarmTime() {
         Calendar calendar1 = Calendar.getInstance();
-        calendar1.set(Calendar.YEAR,calendar1.get(Calendar.YEAR));
-        calendar1.set(Calendar.MONTH,calendar1.get(Calendar.MONTH));
-        calendar1.set(Calendar.DAY_OF_MONTH,calendar1.get(Calendar.DAY_OF_MONTH));
-        calendar1.set(Calendar.HOUR_OF_DAY,calendar1.get(Calendar.HOUR_OF_DAY));
-        calendar1.set(Calendar.MINUTE,calendar1.get(Calendar.MINUTE));
+        calendar1.set(Calendar.YEAR, calendar1.get(Calendar.YEAR));
+        calendar1.set(Calendar.MONTH, calendar1.get(Calendar.MONTH));
+        calendar1.set(Calendar.DAY_OF_MONTH, calendar1.get(Calendar.DAY_OF_MONTH));
+        calendar1.set(Calendar.HOUR_OF_DAY, calendar1.get(Calendar.HOUR_OF_DAY));
+        calendar1.set(Calendar.MINUTE, calendar1.get(Calendar.MINUTE));
         long l = calendar1.getTimeInMillis();
 
         Calendar calendar = Calendar.getInstance();
         //alarm time
-        calendar.set(mYear, mMonth,  mDay, t1Hour, t1Minuite);
-        long alarmTime = calendar.getTimeInMillis()-l;
-        Log.i("room"," check "+alarmTime);
+        calendar.set(mYear, mMonth, mDay, t1Hour, t1Minuite);
+        long alarmTime = calendar.getTimeInMillis() - l;
+        Log.i("room", " check " + alarmTime);
         return alarmTime;
     }
 
@@ -212,6 +248,7 @@ Context context;
         btnTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
 
                 //initialize TimePicker Dialogue
                 TimePickerDialog timePickerDialog = new TimePickerDialog(
@@ -275,7 +312,7 @@ Context context;
     @Override
     public void onAttach(@NonNull Activity activity) {
         super.onAttach(activity);
-        context=activity;
+        context = activity;
     }
 
     private void printTrip() {
@@ -325,16 +362,17 @@ Context context;
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    void getArrayList(ArrayList<Trip> arrayList)
-    {
-        this.arrayList=arrayList;
+    void getArrayList(ArrayList<Trip> arrayList) {
+        this.arrayList = arrayList;
     }
 
-public interface Communicator
-{
-    void respon(long alarmTime, int id, String end);
-    void sendArrayListToRecycleView(ArrayList<Trip> arrayList2);
-    void returnToOnGoingActivity();
-}
+
+    public interface Communicator {
+        void respon(long alarmTime, int id, String end);
+
+        void sendArrayListToRecycleView(ArrayList<Trip> arrayList2);
+
+        void returnToOnGoingActivity();
+    }
 
 }

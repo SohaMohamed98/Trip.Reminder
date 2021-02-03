@@ -23,11 +23,14 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.mad41.tripreminder.room_database.trip.Trip;
+import com.mad41.tripreminder.trip_ui.RoundTripDialogue;
 import com.mad41.tripreminder.trip_ui.TripModel;
 
 import java.util.ArrayList;
 
-public class MainScreen extends AppCompatActivity implements AddTripFragments.Communicator , OnGoingFrag.onGoingCommunicator{
+public class MainScreen extends AppCompatActivity implements AddTripFragments.Communicator ,
+        OnGoingFrag.onGoingCommunicator, RoundTripDialogue.DialogListener {
+
     private Toolbar toolbar;
     private DrawerLayout drawer;
     private OnGoingFrag frag1;
@@ -35,10 +38,14 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
     private FragmentManager mgr;
     private FragmentTransaction trns;
     private NavigationView drawerMenu;
+    private RoundTripDialogue roundTripDialogue;
     AddTripFragments fragment;
 
 
     String name, start, end, date, time;
+
+    String dateDialogue;
+    String timeDialogue;
 
 
     @Override
@@ -163,4 +170,12 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
     public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
+
+    @Override
+    public void applyData(String date, String time) {
+        dateDialogue=date;
+        timeDialogue=time;
+    }
+
+
 }

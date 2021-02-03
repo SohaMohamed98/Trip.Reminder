@@ -21,7 +21,9 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.mad41.tripreminder.room_database.trip.Trip;
 import com.mad41.tripreminder.trip_ui.TripModel;
 
@@ -104,9 +106,14 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
                     case R.id.btnLanguage:
                         Toast.makeText(MainScreen.this, "show language dialog", Toast.LENGTH_SHORT).show();
                         break;
-                    case R.id.btnExit:
+                    case R.id.btnExit: {
                         Toast.makeText(MainScreen.this, "show logout dialog", Toast.LENGTH_SHORT).show();
+                        FirebaseAuth.getInstance().signOut();
+                        LoginManager.getInstance().logOut();
+                        startActivity(new Intent(getApplicationContext(),Login_form.class));
+                        finish();
                         break;
+                    }
                 }
                 drawer.closeDrawer(GravityCompat.START);
                 return true;
@@ -122,6 +129,7 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
             drawer.closeDrawer(GravityCompat.START);
         }else{
             super.onBackPressed();
+            finishAffinity();
         }
     }
 

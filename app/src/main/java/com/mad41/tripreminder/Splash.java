@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.mad41.tripreminder.Login_form;
+import com.mad41.tripreminder.R;
+
 public class Splash extends AppCompatActivity {
 
     @Override
@@ -18,7 +21,7 @@ public class Splash extends AppCompatActivity {
                 super.run();
                 try {
                     sleep(2*1000);
-                    Intent i = new Intent(getApplicationContext(),Login_form.class);
+                    Intent i = new Intent(getApplicationContext(), Login_form.class);
                     startActivity(i);
                     //remove Activity
                     finish();

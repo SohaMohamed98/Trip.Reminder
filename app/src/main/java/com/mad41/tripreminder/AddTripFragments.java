@@ -189,8 +189,8 @@ public class AddTripFragments extends Fragment {
                     //openDialog();
                     btn_date_round.setVisibility(View.VISIBLE);
                     btn_time_round.setVisibility(View.VISIBLE);
-                    txt_date.setVisibility(View.VISIBLE);
-                    txt_time.setVisibility(View.VISIBLE);
+                    txt_date_round.setVisibility(View.VISIBLE);
+                    txt_time_round.setVisibility(View.VISIBLE);
 
                     btn_date_round.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -254,8 +254,8 @@ public class AddTripFragments extends Fragment {
 
                     btn_date_round.setVisibility(View.GONE);
                     btn_time_round.setVisibility(View.GONE);
-                    txt_date.setVisibility(View.GONE);
-                    txt_time.setVisibility(View.GONE);
+                    txt_date_round.setVisibility(View.GONE);
+                    txt_time_round.setVisibility(View.GONE);
                 }
             }
         });

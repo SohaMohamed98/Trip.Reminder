@@ -12,6 +12,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -23,6 +25,7 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -36,7 +39,10 @@ import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.mad41.tripreminder.constants.Constants;
 import com.mad41.tripreminder.room_database.MyRoomDataBase;
+import com.mad41.tripreminder.room_database.note.Note;
 import com.mad41.tripreminder.room_database.trip.Trip;
+import com.mad41.tripreminder.trip_ui.AddNoteAdapter;
+import com.mad41.tripreminder.trip_ui.NoteAdapter;
 import com.mad41.tripreminder.trip_ui.RoundTripDialogue;
 
 import java.util.ArrayList;
@@ -48,6 +54,15 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class AddTripFragments extends Fragment {
+
+    //Notes
+    ArrayList<String> myNotes;
+    RecyclerView recyclerViewNote;
+    RelativeLayout relativeLayoutNote;
+    AddNoteAdapter addNoteAdapter;
+    NoteAdapter noteAdapter;
+    RecyclerView.LayoutManager layoutManager;
+    ImageButton btn_add_note;
 
     public static final String TAG = "room";
     ImageButton btn_date_round;
@@ -117,6 +132,28 @@ public class AddTripFragments extends Fragment {
         btn_date_round = view.findViewById(R.id.btn_date_round);
         btn_time_round = view.findViewById(R.id.btn_time_round);
 
+        //Notes
+        btn_add_note = view.findViewById(R.id.btn_add_note);
+        recyclerViewNote= view.findViewById(R.id.recyclerNote);
+        relativeLayoutNote=view.findViewById(R.id.relativeLayout);
+        myNotes= new ArrayList<String>();
+        myNotes.add("ss");
+        myNotes.add("rr");
+        layoutManager= new LinearLayoutManager(context);
+        recyclerViewNote.setLayoutManager(layoutManager);
+        addNoteAdapter= new AddNoteAdapter(context, myNotes);
+      //  noteAdapter = new NoteAdapter(context, myNotes);
+        recyclerViewNote.setAdapter(addNoteAdapter);
+        btn_add_note.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myNotes.add("");
+                addNoteAdapter.notifyDataSetChanged();
+            }
+        });
+
+
+
         txt_date = (TextView) view.findViewById(R.id.txt_date);
         txt_time = (TextView) view.findViewById(R.id.txt_time);
         txt_place = (EditText) view.findViewById(R.id.txt_place);
@@ -157,18 +194,6 @@ public class AddTripFragments extends Fragment {
 
             }
         });
-
-
-    /*    if (getArguments() != null) {
-            round_date= getArguments().getString("return_date");
-            round_time= getArguments().getString("return_time");
-            txt_place.setText(getArguments().getString("replace"));
-           txt_start.setText((getArguments().getString("restart")));
-            txt_end.setText((getArguments().getString("reend")));
-            txt_date.setText((getArguments().getString("redate")));
-            txt_time.setText((getArguments().getString("retime")));
-        }*/
-
 
         selectDate();
         selectTime();

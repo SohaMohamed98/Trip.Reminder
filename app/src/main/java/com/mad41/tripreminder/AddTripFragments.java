@@ -103,6 +103,7 @@ public class AddTripFragments extends Fragment {
     FragmentTransaction fragmentTransaction;
     RoundTripDialogue roundTripDialogue;
 
+    int count = 0;
     private Communicator communicatorListener;
 
     ArrayList<Trip> arrayList;
@@ -134,16 +135,18 @@ public class AddTripFragments extends Fragment {
 
         //Notes
         btn_add_note = view.findViewById(R.id.btn_add_note);
-        recyclerViewNote= view.findViewById(R.id.recyclerNote);
-        relativeLayoutNote=view.findViewById(R.id.relativeLayout);
-        myNotes= new ArrayList<String>();
+        recyclerViewNote = view.findViewById(R.id.recyclerNote);
+        relativeLayoutNote = view.findViewById(R.id.relativeLayout);
+        myNotes = new ArrayList<String>();
         myNotes.add("ss");
         myNotes.add("rr");
-        layoutManager= new LinearLayoutManager(context);
-        recyclerViewNote.setLayoutManager(layoutManager);
-        addNoteAdapter= new AddNoteAdapter(context, myNotes);
-      //  noteAdapter = new NoteAdapter(context, myNotes);
+        layoutManager = new LinearLayoutManager(context);
+
+        addNoteAdapter = new AddNoteAdapter(context, myNotes);
+        //  noteAdapter = new NoteAdapter(context, myNotes);
         recyclerViewNote.setAdapter(addNoteAdapter);
+        recyclerViewNote.setLayoutManager(layoutManager);
+
         btn_add_note.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -151,7 +154,6 @@ public class AddTripFragments extends Fragment {
                 addNoteAdapter.notifyDataSetChanged();
             }
         });
-
 
 
         txt_date = (TextView) view.findViewById(R.id.txt_date);
@@ -189,8 +191,11 @@ public class AddTripFragments extends Fragment {
                 } else {
                     Toast.makeText(getContext(), "Please enter a valid date & time", Toast.LENGTH_SHORT).show();
                 }
+                for (int i = 0; i < myNotes.size(); i++) {
+                    Toast.makeText(getContext(), myNotes.get(i), Toast.LENGTH_LONG).show();
 
-                Toast.makeText(getContext(), round_date + round_time, Toast.LENGTH_LONG).show();
+                }
+
 
             }
         });

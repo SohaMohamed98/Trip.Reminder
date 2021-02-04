@@ -85,7 +85,7 @@ public class Login_form extends AppCompatActivity implements View.OnClickListene
                 super.handleMessage(msg);
                 TotalUserData = (ArrayList<User_Data>) msg.obj;
                 if(TotalUserData.size() == 0){
-                    System.out.println("from fireeeee"+TotalUserData.get(0).getTripName()+TotalUserData.get(0).getDate());
+//                    System.out.println("from fireeeee"+TotalUserData.get(0).getTripName()+TotalUserData.get(0).getDate());
                   /*  ArrayList<Trip> tripList=new ArrayList<>();
                     for(int i=0;i<TotalUserData.size();i++){
                         User_Data data=TotalUserData.get(i);

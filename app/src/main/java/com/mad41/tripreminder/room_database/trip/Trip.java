@@ -49,10 +49,6 @@ public class Trip {
         return name;
     }
 
-    public int getId() {
-        return id;
-    }
-
     public String getStartLoacation() {
         return startLoacation;
     }

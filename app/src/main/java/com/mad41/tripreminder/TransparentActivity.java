@@ -39,8 +39,8 @@ public class TransparentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transparent);
-        cardView = findViewById(R.id.card_notes);
-        cardView.clearDisappearingChildren();
+//        cardView = findViewById(R.id.card_notes);
+//        cardView.clearDisappearingChildren();
         incomingIntent = getIntent();
         myRoomDataBase = MyRoomDataBase.getUserDataBaseInstance(this);
 //        start = incomingIntent.getStringExtra(AddTripFragments.START);
@@ -50,7 +50,7 @@ public class TransparentActivity extends AppCompatActivity {
         if(repeated){interval = incomingIntent.getLongExtra(Constants.INTERVAL,0);}
         Log.i("location", incomingIntent.getAction() + "");
 //        Log.i("location", start);
-        Log.i("location", end);
+//        Log.i("location", end);
         Log.i("room", "incoming id " + tripId);
         showAlert();
 

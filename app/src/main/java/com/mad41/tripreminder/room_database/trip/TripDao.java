@@ -36,7 +36,7 @@ public interface TripDao extends MyGenericDao<Trip> {
     List<Trip> getUpcomingTrips();
 
     @Override
-    @Query("SELECT * FROM trips_table WHERE status!=1")
+    @Query("SELECT * FROM trips_table WHERE status!=2")
     List<Trip> getHistoryTrips();
 
 

@@ -16,7 +16,8 @@
         <activity
             android:name=".TransparentActivity"
             android:theme="@style/Theme.AppCompat.Transparent.NoActionBar"></activity>
-        <activity android:name=".MainScreen"></activity>
+        <activity android:name=".MainScreen"
+            android:theme="@style/Theme.TripReminder.NoActionBar"></activity>
 
 
         <activity android:name=".Splash">

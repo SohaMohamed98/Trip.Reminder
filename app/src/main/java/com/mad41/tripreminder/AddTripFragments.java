@@ -58,10 +58,6 @@ public class AddTripFragments extends Fragment {
     private int mYear, mMonth, mDay;
     private MyRoomDataBase dataBaseInstance;
 
-    public final static String START = "START";
-    public final static String END = "END";
-    public static final String ID = "ID";
-
     private int id;
 
 
@@ -130,7 +126,7 @@ Context context;
             public void onClick(View v) {
 
                 long alarmTime = getAlarmTime();
-                if(alarmTime>0){
+//                if(alarmTime>0){
                     Trip myTrip=new Trip(txt_place.getText().toString(),txt_start.getText().toString(),txt_end.getText().toString(),
                             txtTtime.getText().toString(),txtDate.getText().toString(), Constants.TRIP_UPCOMING,true,true);
                     new Thread(){
@@ -139,13 +135,13 @@ Context context;
                             id = (int) dataBaseInstance.tripDao().insertTrip(myTrip);
                             Log.i("room","id is: "+id);
                             printTrip();
+                            communicatorListener.respon(alarmTime,id, txt_start.getText().toString(),txt_end.getText().toString(),0,0);
                         }
                     }.start();
-                    communicatorListener.respon(alarmTime,id, txt_end.getText().toString());
                     myData();
-                }else{
-                    Toast.makeText(getContext(), "Please enter a valid date & time", Toast.LENGTH_SHORT).show();
-                }
+//                }else{
+//                    Toast.makeText(getContext(), "Please enter a valid date & time", Toast.LENGTH_SHORT).show();
+//                }
 
 
             }
@@ -330,9 +326,10 @@ Context context;
         this.arrayList=arrayList;
     }
 
+
 public interface Communicator
 {
-    void respon(long alarmTime, int id, String end);
+    void respon(long alarmTime, int id,String start, String end,int tripBack, int repeatInterval);
     void sendArrayListToRecycleView(ArrayList<Trip> arrayList2);
     void returnToOnGoingActivity();
 }

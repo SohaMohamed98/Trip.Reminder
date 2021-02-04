@@ -11,11 +11,11 @@ import com.mad41.tripreminder.room_database.trip.TripDao;
 
 import java.util.List;
 
-public class tripRepository {
+public class TripRepository {
     private TripDao tripDao;
     private LiveData<List<Trip>> allTrips;
 
-    public tripRepository(Application application) {
+    public TripRepository(Application application) {
         MyRoomDataBase database = MyRoomDataBase.getUserDataBaseInstance(application);
         tripDao = database.tripDao();
         allTrips=tripDao.getAllTrips();
@@ -24,7 +24,7 @@ public class tripRepository {
         new InsertTripAsyncTask(tripDao).execute(trip);
     }
 
-    
+
     public void updateTrip(Trip note) {
         new UpdateTripAsyncTask(tripDao).execute(note);
     }

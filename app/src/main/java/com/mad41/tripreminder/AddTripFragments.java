@@ -187,6 +187,7 @@ public class AddTripFragments extends Fragment {
                         }
                     }.start();
                     communicatorListener.respon(alarmTime, id, txt_end.getText().toString());
+                    communicatorListener.passingNotes(myNotes);
                     myData();
                 } else {
                     Toast.makeText(getContext(), "Please enter a valid date & time", Toast.LENGTH_SHORT).show();
@@ -481,6 +482,7 @@ public class AddTripFragments extends Fragment {
 
     public interface Communicator {
         void respon(long alarmTime, int id, String end);
+        void passingNotes(ArrayList<String> myNotes);
 
         void sendArrayListToRecycleView(ArrayList<Trip> arrayList2);
 

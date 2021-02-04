@@ -43,6 +43,7 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
 
 
     String name, start, end, date, time;
+    ArrayList<String> notes;
 
     String dateDialogue;
     String timeDialogue;
@@ -68,6 +69,12 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
+
+        notes= new ArrayList<String>();
+
+        for(int i=0;i<notes.size();i++){
+            Toast.makeText(getApplication().getBaseContext(), notes.get(i),Toast.LENGTH_SHORT).show();
+        }
 
         //we need the toolbar and drawer to show the menu button
         toolbar = findViewById(R.id.toolbar);
@@ -152,6 +159,16 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
     }
 
     @Override
+    public void passingNotes(ArrayList<String> myNotes) {
+        for (int i=0; i< myNotes.size();i++)
+        {
+            notes.add(i, myNotes.get(i));
+        }
+
+
+    }
+
+    @Override
     public void sendArrayListToRecycleView(ArrayList<Trip> arrayList2) {
         frag1.getArrayList(arrayList2);
     }
@@ -166,10 +183,6 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
         fragmentTransaction.commit();
     }
 
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-
-    }
 
 
 

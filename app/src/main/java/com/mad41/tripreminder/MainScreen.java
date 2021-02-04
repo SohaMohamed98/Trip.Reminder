@@ -9,6 +9,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.app.AlarmManager;
 import android.app.AlertDialog;
@@ -29,11 +32,15 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import com.mad41.tripreminder.constants.Constants;
+import com.mad41.tripreminder.Firebase.WriteHandler;
+
 import com.mad41.tripreminder.room_database.MyRoomDataBase;
 import com.mad41.tripreminder.room_database.trip.Trip;
+import com.mad41.tripreminder.room_database.view_model.TripViewModel;
 import com.mad41.tripreminder.trip_ui.TripModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainScreen extends AppCompatActivity implements AddTripFragments.Communicator , OnGoingFrag.onGoingCommunicator{
     private Toolbar toolbar;
@@ -44,7 +51,12 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
     private FragmentTransaction trns;
     private NavigationView drawerMenu;
     AddTripFragments fragment;
+
     public static Context context;
+
+    private TripViewModel noteViewModel;
+    List<Trip> trips;
+
 
 
     String name, start, end, date, time;
@@ -94,6 +106,9 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
             trns.commit();
             drawerMenu.setCheckedItem(R.id.btnOngoing);
         }
+        noteViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication())).get(TripViewModel.class);
+
+
 
 
     }
@@ -113,6 +128,25 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
                         getSupportFragmentManager().beginTransaction().replace(R.id.dynamicFrag,new HistoryFragment()).commit();
                         break;
                     case R.id.btnLanguage:
+                        //LiveData<List<Trip>> trips= MyRoomDataBase.getUserDataBaseInstance(getApplicationContext()).tripDao().getAllTrips();
+
+
+                        noteViewModel.getAllNotes().observe(MainScreen.this, new Observer<List<Trip>>() {
+                            @Override
+                            public void onChanged(List<Trip> trips) {
+                                System.out.println(trips.get(0));
+                                WriteHandler.WriteInfireBase(trips);
+
+
+                            }
+                        });
+
+
+
+
+
+
+
                         Toast.makeText(MainScreen.this, "show language dialog", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.btnExit:

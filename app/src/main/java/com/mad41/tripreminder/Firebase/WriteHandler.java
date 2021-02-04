@@ -1,24 +1,43 @@
 package com.mad41.tripreminder.Firebase;
 
+import androidx.lifecycle.LiveData;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.mad41.tripreminder.room_database.MyRoomDataBase;
+import com.mad41.tripreminder.room_database.trip.Trip;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class WriteHandler{
-    private DatabaseReference mDatabase;
 
-    public void WriteInfireBase() {
+
+    public static void  WriteInfireBase(List<Trip> trips) {
+          DatabaseReference mDatabase;
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid() ;
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
+        for(int i=0;i<trips.size();i++){
+            Trip trip=trips.get(i);
+            mDatabase.child(i+1+"").child("TripsInfo").child("Date").setValue(trip.getDate());
+            mDatabase.child(i+1+"").child("TripsInfo").child("Time").setValue(trip.getTime());
+            mDatabase.child(i+1+"").child("TripsInfo").child("Start").setValue(trip.getStartLoacation());
+            mDatabase.child(i+1+"").child("TripsInfo").child("End").setValue(trip.getEndLoacation());
+            mDatabase.child(i+1+"").child("TripsInfo").child("TripName").setValue(trip.getName());
+            mDatabase.child(i+1+"").child("TripsInfo").child("Status").setValue(trip.getStatus()+"");
+            mDatabase.child(i+1+"").child("TripsInfo").child("IsRound").setValue(trip.isRound()+"");
+            mDatabase.child(i+1+"").child("TripsInfo").child("IsRepeated").setValue(trip.isRepeated()+"");
+            int noteSize=trip.getNotes().size();
+            for(int j=0;j<noteSize;j++){
+                mDatabase.child(i+1+"").child("Notes").child(j+1+"").setValue(trip.getNotes().get(j));
 
-        mDatabase.child("1").child("TripsInfo").child("Date").setValue("12/2/2021");
-        mDatabase.child("1").child("TripsInfo").child("Time").setValue("11:22");
-        mDatabase.child("1").child("TripsInfo").child("Start").setValue("el salam");
-        mDatabase.child("1").child("TripsInfo").child("End").setValue("el mihwr");
-        mDatabase.child("1").child("TripsInfo").child("TripName").setValue("secondTRIP");
-        mDatabase.child("1").child("TripsInfo").child("Status").setValue("complete");
-        mDatabase.child("1").child("Notes").child("1").setValue("make me remember");
-        mDatabase.child("1").child("Notes").child("2").setValue("make me remember22");
+            }
+
+
+        }
+
+
 
     }
 }

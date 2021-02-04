@@ -38,7 +38,7 @@ public class ReadHandler implements Runnable{
                     };
                     ArrayList<String> TripNotes = DSnapshot.getValue(t);
                     user.setNotes(TripNotes);
-                    Log.i("user","notes value"+user.getNotes().get(1));
+                    Log.i("user","notes value"+user.getIsRound());
                     returnedData.add(user);
                 }
                 System.out.println("the result inside thread :  "+ returnedData.size()+"");

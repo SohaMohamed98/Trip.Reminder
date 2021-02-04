@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,6 +41,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.mad41.tripreminder.Firebase.ReadHandler;
 import com.mad41.tripreminder.Firebase.User_Data;
+import com.mad41.tripreminder.room_database.trip.Trip;
 
 import java.util.ArrayList;
 
@@ -83,8 +85,24 @@ public class Login_form extends AppCompatActivity implements View.OnClickListene
                 super.handleMessage(msg);
                 TotalUserData = (ArrayList<User_Data>) msg.obj;
                 if(TotalUserData.size() == 0){
+                    System.out.println("from fireeeee"+TotalUserData.get(0).getTripName()+TotalUserData.get(0).getDate());
+                  /*  ArrayList<Trip> tripList=new ArrayList<>();
+                    for(int i=0;i<TotalUserData.size();i++){
+                        User_Data data=TotalUserData.get(i);
+                        Trip trip =new Trip(data.getTripName(), data.getStart(), data.getEnd(),data.getTime(),data.getDate()
+                                , data.getNotes(), Integer.parseInt(data.getStatus()),true,true);
+                        Log.i("message", " from fireeeee"+TotalUserData.get(0).getTripName()+TotalUserData.get(0).getDate());
+                    }*/
                     Toast.makeText(getApplicationContext(), "You don't have data", Toast.LENGTH_SHORT).show();
                 }else {
+                       ArrayList<Trip> tripList=new ArrayList<>();
+                    for(int i=0;i<TotalUserData.size();i++){
+                        User_Data data=TotalUserData.get(i);
+                      /*  Trip trip =new Trip(data.getTripName(), data.getStart(), data.getEnd(),data.getTime(),data.getDate()
+                                , data.getNotes(),10,true,true);*/
+                        System.out.println("message"+ " from fireeeee"+TotalUserData.get(0).getTripName()+TotalUserData.get(0).getDate());
+                    }
+
                     System.out.println("the result after thread :  " + TotalUserData.size() + "");
                     // System.out.println("the first note of first element :  " + TotalUserData.get(1).getNotes().get(2) + "");
                 }

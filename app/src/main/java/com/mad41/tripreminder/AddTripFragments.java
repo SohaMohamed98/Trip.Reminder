@@ -127,8 +127,10 @@ Context context;
 
                 long alarmTime = getAlarmTime();
 //                if(alarmTime>0){
+                    ArrayList<String>strlist=new ArrayList<>();
+                    strlist.add("mmmm");
                     Trip myTrip=new Trip(txt_place.getText().toString(),txt_start.getText().toString(),txt_end.getText().toString(),
-                            txtTtime.getText().toString(),txtDate.getText().toString(), Constants.TRIP_UPCOMING,true,true);
+                            txtTtime.getText().toString(),txtDate.getText().toString(),strlist, Constants.TRIP_UPCOMING,true,true);
                     new Thread(){
                         @Override
                         public void run() {
@@ -323,12 +325,12 @@ Context context;
 
     void getArrayList(ArrayList<Trip> arrayList)
     {
+
         this.arrayList=arrayList;
     }
 
 
-public interface Communicator
-{
+public interface Communicator {
     void respon(long alarmTime, int id,String start, String end,int tripBack, int repeatInterval);
     void sendArrayListToRecycleView(ArrayList<Trip> arrayList2);
     void returnToOnGoingActivity();

@@ -24,7 +24,8 @@ public class Trip {
     private boolean isRepeated;
     private boolean isRound;
 
-    public Trip(String name, String startLoacation, String endLoacation, String time, String date, ArrayList<String> notes, int status, boolean isRepeated, boolean isRound) {
+    public Trip(String name, String startLoacation, String endLoacation, String time, String date
+            , ArrayList<String> notes, int status, boolean isRepeated, boolean isRound) {
         this.name = name;
         this.startLoacation = startLoacation;
         this.endLoacation = endLoacation;
@@ -46,6 +47,10 @@ public class Trip {
 
     public String getName() {
         return name;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getStartLoacation() {

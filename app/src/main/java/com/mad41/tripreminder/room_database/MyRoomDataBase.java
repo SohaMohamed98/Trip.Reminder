@@ -8,8 +8,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
 import com.mad41.tripreminder.constants.Constants;
-import com.mad41.tripreminder.room_database.note.Note;
-import com.mad41.tripreminder.room_database.note.NoteDao;
+
 import com.mad41.tripreminder.room_database.trip.Trip;
 import com.mad41.tripreminder.room_database.trip.TripDao;
 

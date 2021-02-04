@@ -11,7 +11,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,6 +27,9 @@ import android.widget.Toast;
 import com.facebook.login.LoginManager;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+
+import com.mad41.tripreminder.constants.Constants;
+import com.mad41.tripreminder.room_database.MyRoomDataBase;
 import com.mad41.tripreminder.room_database.trip.Trip;
 import com.mad41.tripreminder.trip_ui.TripModel;
 
@@ -38,9 +44,12 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
     private FragmentTransaction trns;
     private NavigationView drawerMenu;
     AddTripFragments fragment;
+    public static Context context;
 
 
     String name, start, end, date, time;
+
+
 
 
     @Override
@@ -63,7 +72,7 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
-
+        context = this;
         //we need the toolbar and drawer to show the menu button
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -106,19 +115,43 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
                     case R.id.btnLanguage:
                         Toast.makeText(MainScreen.this, "show language dialog", Toast.LENGTH_SHORT).show();
                         break;
-                    case R.id.btnExit: {
-                        Toast.makeText(MainScreen.this, "show logout dialog", Toast.LENGTH_SHORT).show();
-                        FirebaseAuth.getInstance().signOut();
-                        LoginManager.getInstance().logOut();
-                        startActivity(new Intent(getApplicationContext(),Login_form.class));
-                        finish();
+                    case R.id.btnExit:
+                        logOut();
                         break;
-                    }
+
                 }
                 drawer.closeDrawer(GravityCompat.START);
                 return true;
             }
         });
+    }
+
+    private void logOut() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainScreen.this);
+        builder.setMessage("Sure you want to log out?").setCancelable(false).setTitle("Log out")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //log out
+                        FirebaseAuth.getInstance().signOut();
+                        startActivity(new Intent(getApplicationContext(),Login_form.class));
+                        LoginManager.getInstance().logOut();
+                        //clear database
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                MyRoomDataBase myRoomDataBase = MyRoomDataBase.getUserDataBaseInstance(MainScreen.this);
+                                myRoomDataBase.tripDao().deleteAllTrips();
+                            }
+                        }).start();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
 
@@ -134,22 +167,42 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
     }
 
     @Override
-    public void respon(long alarmTime, int id, String end) {
+    public void respon(long alarmTime, int id,String start, String end,int tripBack, int repeatInterval) {
+        //one trip
+        if(tripBack==0 && repeatInterval==0){
+            setAlarm(alarmTime,id,end,false,0);
+        //two trips
+        }else if(tripBack!=0 && repeatInterval == 0){
+            setAlarm(alarmTime,id,end,false,0);
+            setAlarm(alarmTime + tripBack,id+1,start,false,0);
+        //one trip repeated
+        }else if (tripBack==0 && repeatInterval != 0){
+            setAlarm(alarmTime,id,end,true,repeatInterval);
+        //two trips repeated
+        }else{
+            setAlarm(alarmTime,id,end,true,repeatInterval);
+            setAlarm(alarmTime + tripBack,id+1,start,true,repeatInterval);
+        }
+    }
 
+    private void setAlarm(long alarmTime, int id, String end, boolean repeated,long interval) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Intent notifyIntent = new Intent(this, TransparentActivity.class);
 
-            notifyIntent.putExtra(AddTripFragments.END,end);
+            notifyIntent.putExtra(Constants.END,end);
             Log.i("room","id sent "+id);
-            notifyIntent.putExtra(AddTripFragments.ID,id);
+            notifyIntent.putExtra(Constants.ID,id);
             notifyIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            PendingIntent notifyPendingIntent = PendingIntent.getActivity(this,0,notifyIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent notifyPendingIntent = PendingIntent.getActivity(this,id,notifyIntent,PendingIntent.FLAG_UPDATE_CURRENT);
             AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-            alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime()+alarmTime,notifyPendingIntent);
-//            alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime()+5000,notifyPendingIntent);
+
+            if(repeated){
+                alarmManager.setRepeating(id,SystemClock.elapsedRealtime()+alarmTime,interval,notifyPendingIntent);
+            }else{
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime()+alarmTime,notifyPendingIntent);
+            }
             Log.i("alram what is this ",SystemClock.elapsedRealtime()+"");
         }
-
     }
 
     @Override

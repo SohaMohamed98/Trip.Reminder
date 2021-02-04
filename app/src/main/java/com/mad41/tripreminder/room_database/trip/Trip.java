@@ -36,6 +36,10 @@ public class Trip {
         this.isRound = isRound;
     }
 
+    public int getId() {
+        return id;
+    }
+
     public void setId(int id) {
         this.id = id;
     }

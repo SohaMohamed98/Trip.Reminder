@@ -44,8 +44,7 @@ public interface TripDao  {
     @Query("SELECT * FROM trips_table WHERE status=2")
     List<Trip> getUpcomingTrips();
 
-
-    @Query("SELECT * FROM trips_table WHERE status!=1")
+    @Query("SELECT * FROM trips_table WHERE status!=2")
     List<Trip> getHistoryTrips();
 
 

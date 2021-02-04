@@ -221,6 +221,7 @@
                     android:id="@+id/switch2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:onClick="show"
                     android:text="Round"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -265,6 +266,10 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/switchFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
         </androidx.cardview.widget.CardView>
 

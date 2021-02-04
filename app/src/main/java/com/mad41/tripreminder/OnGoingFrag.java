@@ -1,5 +1,6 @@
 package com.mad41.tripreminder;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -118,7 +119,7 @@ public class OnGoingFrag extends Fragment {
     void setRecyclerView() {
 
         recyclerView.setHasFixedSize(true);
-        adapter = new TripAdapter(tripModelArrayList);
+        adapter = new TripAdapter((Context) onGoingCommunicator1,tripModelArrayList);
         layoutManager = new LinearLayoutManager(getContext().getApplicationContext());
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext().getApplicationContext());
         layoutManager.setOrientation(RecyclerView.VERTICAL);

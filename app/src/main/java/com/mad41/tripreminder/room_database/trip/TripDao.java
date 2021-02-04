@@ -1,6 +1,8 @@
 package com.mad41.tripreminder.room_database.trip;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
@@ -32,6 +34,8 @@ public interface TripDao  {
 
     @Query("DELETE FROM trips_table WHERE id = :id")
     void deletTripById(int id);
+    @Delete
+    void deletTrip(Trip trip);
 
     @Query("DELETE  FROM trips_table")
     void deleteAllTrips();
@@ -46,6 +50,6 @@ public interface TripDao  {
 
 
     @Query("SELECT * FROM trips_table")
-    List<Trip> getAllTrips();
+    LiveData<List<Trip>> getAllTrips();
 
 }

@@ -26,6 +26,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+
 import com.mad41.tripreminder.AddTripFragments;
 import com.mad41.tripreminder.OnGoingFrag;
 import com.mad41.tripreminder.R;
@@ -38,19 +39,20 @@ public class RoundTripDialogue extends AppCompatDialogFragment {
     TextView txt_time_dialogue;
     ImageButton btn_date_dialogue;
     ImageButton btn_time_dialogue;
-    DialogListener listener;
-    AddTripFragments addTripFragments;
+
 
     String date, time;
 
     private int t1Hour, t1Minuite;
     private int mYear, mMonth, mDay;
 
+    String place,start,end, ftime,fdate;
 
 
     public RoundTripDialogue() {
         // Required empty public constructor
     }
+
 
 
     @NonNull
@@ -59,6 +61,16 @@ public class RoundTripDialogue extends AppCompatDialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.fragment_round_trip_dialogue, null);
+
+        if(getArguments()!=null){
+            place=getArguments().getString("savePlace");
+            start=getArguments().getString("saveStart");
+            end=getArguments().getString("saveEnd");
+            ftime=getArguments().getString("saveTime");
+            fdate=getArguments().getString("saveDate");
+
+
+        }
 
 
         txt_date_dialogue = view.findViewById(R.id.txt_date_dialogue);
@@ -83,17 +95,20 @@ public class RoundTripDialogue extends AppCompatDialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         date= txt_date_dialogue.getText().toString();
                         time= txt_date_dialogue.getText().toString();
-                        Bundle bundle = new Bundle();
+                   /*     Bundle bundle = new Bundle();
                         bundle.putString("return_date", date);
                         bundle.putString("return_time", time);
+                        bundle.putString("replace", place);
+                        bundle.putString("restart",start);
+                        bundle.putString("reend", end);
+                        bundle.putString("redate", fdate);
+                        bundle.putString("retime", ftime);
                         AddTripFragments addTripFragments = new AddTripFragments();
                         addTripFragments.setArguments(bundle);
                         FragmentManager fragmentManager =getActivity().getSupportFragmentManager();
                         FragmentTransaction  transaction = fragmentManager.beginTransaction();
-                        transaction.replace(R.id.dynamicFrag, addTripFragments);
-                        transaction.commit();
-
-                      //  listener.applyData(date, time);
+                        transaction.replace(R.id.dynamicFrag, addTripFragments,"frag");
+                        transaction.commit();*/
 
                     }
                 });
@@ -101,15 +116,11 @@ public class RoundTripDialogue extends AppCompatDialogFragment {
         return builder.create();
     }
 
-
     @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        try {
-            listener = (DialogListener) context;
-        }catch (ClassCastException e){
-            throw  new ClassCastException(context.toString()+
-                    "Impement dialogue");}
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("myDate", date);
+        outState.putString("myTime", time);
     }
 
     void setDate(){
@@ -171,8 +182,10 @@ public class RoundTripDialogue extends AppCompatDialogFragment {
         });
    }
 
-
-    public interface DialogListener {
-        void applyData(String date, String time);
+    @Override
+    public void onAttachFragment(@NonNull Fragment childFragment) {
+        super.onAttachFragment(childFragment);
+       // listener = (DialogListener) childFragment;
     }
+
 }

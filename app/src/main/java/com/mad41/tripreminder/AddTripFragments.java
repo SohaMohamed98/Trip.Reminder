@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -37,14 +38,11 @@ import com.mad41.tripreminder.constants.Constants;
 import com.mad41.tripreminder.room_database.MyRoomDataBase;
 import com.mad41.tripreminder.room_database.trip.Trip;
 import com.mad41.tripreminder.trip_ui.RoundTripDialogue;
-import com.mad41.tripreminder.trip_ui.TripModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
-
-import javax.xml.namespace.QName;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -52,11 +50,15 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class AddTripFragments extends Fragment {
 
     public static final String TAG = "room";
+    ImageButton btn_date_round;
+    ImageButton btn_time_round;
+    TextView txt_date_round;
+    TextView txt_time_round;
 
     Switch roundSwitch;
     EditText txt_place;
-    TextView txtDate;
-    TextView txtTtime;
+    TextView txt_date;
+    TextView txt_time;
     CircleImageView btnDate;
     CircleImageView btnTime;
     int t1Hour, t1Minuite;
@@ -94,20 +96,6 @@ public class AddTripFragments extends Fragment {
         // Required empty public constructor
     }
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-
-
-        }
-    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -124,8 +112,13 @@ public class AddTripFragments extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add_trip_fragments, container, false);
         Places.initialize(getContext().getApplicationContext(), "AIzaSyA7dH75J8SZ0-GkeHqHANbflPhdpbfU5yI");
 
-        txtDate = (TextView) view.findViewById(R.id.txt_date);
-        txtTtime = (TextView) view.findViewById(R.id.txt_time);
+        txt_date_round = view.findViewById(R.id.txt_date_round);
+        txt_time_round = view.findViewById(R.id.txt_time_round);
+        btn_date_round = view.findViewById(R.id.btn_date_round);
+        btn_time_round = view.findViewById(R.id.btn_time_round);
+
+        txt_date = (TextView) view.findViewById(R.id.txt_date);
+        txt_time = (TextView) view.findViewById(R.id.txt_time);
         txt_place = (EditText) view.findViewById(R.id.txt_place);
 
         txt_start = (EditText) view.findViewById(R.id.txt_startPlace);
@@ -145,7 +138,7 @@ public class AddTripFragments extends Fragment {
                 long alarmTime = getAlarmTime();
                 if (alarmTime > 0) {
                     Trip myTrip = new Trip(txt_place.getText().toString(), txt_start.getText().toString(), txt_end.getText().toString(),
-                            txtTtime.getText().toString(), txtDate.getText().toString(), Constants.TRIP_UPCOMING, true, true);
+                            txt_time.getText().toString(), txt_date.getText().toString(), Constants.TRIP_UPCOMING, true, true);
                     new Thread() {
                         @Override
                         public void run() {
@@ -165,6 +158,18 @@ public class AddTripFragments extends Fragment {
             }
         });
 
+
+    /*    if (getArguments() != null) {
+            round_date= getArguments().getString("return_date");
+            round_time= getArguments().getString("return_time");
+            txt_place.setText(getArguments().getString("replace"));
+           txt_start.setText((getArguments().getString("restart")));
+            txt_end.setText((getArguments().getString("reend")));
+            txt_date.setText((getArguments().getString("redate")));
+            txt_time.setText((getArguments().getString("retime")));
+        }*/
+
+
         selectDate();
         selectTime();
         Start_trip();
@@ -181,10 +186,76 @@ public class AddTripFragments extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
 
-                    openDialog();
+                    //openDialog();
+                    btn_date_round.setVisibility(View.VISIBLE);
+                    btn_time_round.setVisibility(View.VISIBLE);
+                    txt_date.setVisibility(View.VISIBLE);
+                    txt_time.setVisibility(View.VISIBLE);
+
+                    btn_date_round.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            // Get Current Date
+                            final Calendar c = Calendar.getInstance();
+                            mYear = c.get(Calendar.YEAR);
+                            mMonth = c.get(Calendar.MONTH);
+                            mDay = c.get(Calendar.DAY_OF_MONTH);
+
+
+                            DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
+                                    new DatePickerDialog.OnDateSetListener() {
+
+                                        @Override
+                                        public void onDateSet(DatePicker view, int year,
+                                                              int monthOfYear, int dayOfMonth) {
+                                            mYear = year;
+                                            mMonth = monthOfYear;
+                                            mDay = dayOfMonth;
+                                            txt_date_round.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+
+                                        }
+                                    }, mYear, mMonth, mDay);
+                            datePickerDialog.show();
+
+                        }
+                    });
+
+                    btn_time_round.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //initialize TimePicker Dialogue
+                            TimePickerDialog timePickerDialog = new TimePickerDialog(
+                                    getContext(), new TimePickerDialog.OnTimeSetListener() {
+                                @Override
+                                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                                    //Intialize Hour and Minute
+                                    t1Hour = hourOfDay;
+                                    t1Minuite = minute;
+                                    //initialize Calender
+                                    Calendar calendar = Calendar.getInstance();
+                                    calendar.set(0, 0, 0, t1Hour, t1Minuite);
+
+                                    txt_time_round.setText(DateFormat.format("hh:mm:aa", calendar));
+
+
+                                }
+                            }, 12, 0, false
+                            );
+
+                            //Displayed previous Selected time
+                            timePickerDialog.updateTime(t1Hour, t1Minuite);
+                            timePickerDialog.show();
+
+                        }
+                    });
+
 
                 } else {
 
+                    btn_date_round.setVisibility(View.GONE);
+                    btn_time_round.setVisibility(View.GONE);
+                    txt_date.setVisibility(View.GONE);
+                    txt_time.setVisibility(View.GONE);
                 }
             }
         });
@@ -192,7 +263,17 @@ public class AddTripFragments extends Fragment {
 
     public void openDialog() {
         RoundTripDialogue exampleDialog = new RoundTripDialogue();
-        exampleDialog.show(getActivity().getSupportFragmentManager(), "example dialog");
+        Bundle bundle = new Bundle();
+        bundle.putString("savePlace", txt_place.getText().toString());
+        bundle.putString("saveStart", txt_start.getText().toString());
+        bundle.putString("saveEnd", txt_end.getText().toString());
+        bundle.putString("saveDate", txt_date.getText().toString());
+        bundle.putString("saveTime", txt_time.getText().toString());
+        exampleDialog.setArguments(bundle);
+        exampleDialog.show(getActivity().getSupportFragmentManager(), "frag");
+        Toast.makeText(getContext(), round_date + round_time, Toast.LENGTH_LONG).show();
+
+
     }
 
     private long getAlarmTime() {
@@ -230,11 +311,11 @@ public class AddTripFragments extends Fragment {
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
 
-                                txtDate.setText("Date: " + dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                                txt_date.setText("Date: " + dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
                                 mYear = year;
                                 mMonth = monthOfYear;
                                 mDay = dayOfMonth;
-                                txtDate.setText("Date: " + dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                                txt_date.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
 
                             }
                         }, mYear, mMonth, mDay);
@@ -262,7 +343,7 @@ public class AddTripFragments extends Fragment {
                         Calendar calendar = Calendar.getInstance();
                         calendar.set(0, 0, 0, t1Hour, t1Minuite);
 
-                        txtTtime.setText("Time:" + DateFormat.format("hh:mm:aa", calendar));
+                        txt_time.setText(DateFormat.format("hh:mm:aa", calendar));
 
 
                     }
@@ -308,6 +389,7 @@ public class AddTripFragments extends Fragment {
     void myData() {
         communicatorListener.returnToOnGoingActivity();
     }
+
 
     @Override
     public void onAttach(@NonNull Activity activity) {

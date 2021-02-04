@@ -215,22 +215,66 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp">
 
                 <Switch
                     android:id="@+id/round_switch"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Round"
                     android:checked="false"
+                    android:text="Round"
                     android:textOff="OFF"
                     android:textOn="ON"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0" />
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/btn_time_round"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="32dp"
+                    android:minWidth="100dp"
+                    android:minHeight="100dp"
+                    android:src="@drawable/ic_time"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/round_switch" />
+
+                <TextView
+                    android:id="@+id/txt_date_round"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Time"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/btn_date_round"
+                    app:layout_constraintTop_toTopOf="@+id/txt_time_round" />
+
+                <ImageButton
+                    android:id="@+id/btn_date_round"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="50dp"
+                    android:minWidth="100dp"
+                    android:minHeight="100dp"
+                    android:src="@drawable/ic_date"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toStartOf="@+id/btn_time_round"
+                    app:layout_constraintTop_toTopOf="@+id/btn_time_round" />
+
+                <TextView
+                    android:id="@+id/txt_time_round"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Date"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/btn_time_round"
+                    app:layout_constraintTop_toBottomOf="@+id/btn_time_round" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
@@ -244,7 +288,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:padding="8dp">
 
                 <TextView
@@ -280,7 +324,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
 
                 <Button

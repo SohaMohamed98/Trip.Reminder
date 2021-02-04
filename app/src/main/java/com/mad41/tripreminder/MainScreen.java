@@ -29,7 +29,7 @@ import com.mad41.tripreminder.trip_ui.TripModel;
 import java.util.ArrayList;
 
 public class MainScreen extends AppCompatActivity implements AddTripFragments.Communicator ,
-        OnGoingFrag.onGoingCommunicator, RoundTripDialogue.DialogListener {
+        OnGoingFrag.onGoingCommunicator{
 
     private Toolbar toolbar;
     private DrawerLayout drawer;
@@ -171,11 +171,7 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
 
     }
 
-    @Override
-    public void applyData(String date, String time) {
-        dateDialogue=date;
-        timeDialogue=time;
-    }
+
 
 
 }

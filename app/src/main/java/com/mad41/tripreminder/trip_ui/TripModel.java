@@ -11,7 +11,6 @@ public class TripModel {
     private boolean isRepeated;
     private boolean isRound;
 
-
     public TripModel(String name, String startLoacation, String endLoacation,
                      String time, String date, int status, boolean isRepeated, boolean isRound) {
         this.name = name;

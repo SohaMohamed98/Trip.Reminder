@@ -106,6 +106,7 @@ public class OnGoingFrag extends Fragment {
             time = getArguments().getString("time");
 //            tripModelArrayList.add(new TripModel(name, start, end, time, date, 1, true, true));
           //  adapter.notifyItemInserted(count);
+           
 
             setRecyclerView();
 

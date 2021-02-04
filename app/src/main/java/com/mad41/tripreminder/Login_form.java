@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -43,7 +44,7 @@ import com.mad41.tripreminder.Firebase.User_Data;
 import java.util.ArrayList;
 
 
-public class Login_form extends AppCompatActivity {
+public class Login_form extends AppCompatActivity implements View.OnClickListener {
     public static final String PREFS_NAME = "PreFile";
     private FirebaseAuth mAuth;
     private CallbackManager mCallbackManager;
@@ -51,6 +52,7 @@ public class Login_form extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener authStateListener;
     private AccessTokenTracker accessTokenTracker;
     private static final String TAG = "EmailPassword";
+    TextView forgetPassword;
     GoogleSignInClient googleSignInClient;
     private int RC_SIGN_IN = 1;
     EditText Email , Password ;
@@ -67,6 +69,7 @@ public class Login_form extends AppCompatActivity {
         Email = findViewById(R.id.EmailTxt);
         Password = findViewById(R.id.PasswordTxt);
         Registeration = findViewById(R.id.RegisterationButton);
+        forgetPassword = findViewById(R.id.forgetPassword);
         Login = findViewById(R.id.LoginButton);
         loginButton = findViewById(R.id.login_button);
         signInButton = (SignInButton)findViewById(R.id.googleBtn);
@@ -279,5 +282,14 @@ public class Login_form extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         finishAffinity();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.forgetPassword:
+                startActivity(new Intent(Login_form.this,ResetPassword.class));
+                break;
+        }
     }
 }

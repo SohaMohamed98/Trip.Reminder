@@ -13,15 +13,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TripReminder">
-
+        <activity android:name=".ResetPassword"></activity>
         <activity
             android:name=".TransparentActivity"
-            android:theme="@style/Theme.AppCompat.Transparent.NoActionBar"></activity>
-        <activity android:name=".MainScreen"></activity>
-
-        <activity android:name=".Registration_Form"></activity>
-
-
+            android:theme="@style/Theme.AppCompat.Transparent.NoActionBar" />
+        <activity android:name=".MainScreen" />
+        <activity android:name=".Registration_Form" />
         <activity android:name=".Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,13 +26,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Login_form"> </activity>
+        <activity android:name=".Login_form"></activity>
         <activity android:name=".SecondActivity" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
-            android:value ="@string/facebook_app_id" />
-
+            android:value="@string/facebook_app_id" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyA7dH75J8SZ0-GkeHqHANbflPhdpbfU5yI" />

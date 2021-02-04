@@ -27,7 +27,8 @@
             android:id="@+id/dynamicFrag"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            />
+            tools:ignore="MissingClass" />
+
     </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView
@@ -37,6 +38,8 @@
         android:layout_gravity="start"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/drawer_menu" />
+
+
 
 
 </androidx.drawerlayout.widget.DrawerLayout>

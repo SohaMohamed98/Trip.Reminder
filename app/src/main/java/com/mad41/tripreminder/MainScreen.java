@@ -42,7 +42,7 @@ import com.mad41.tripreminder.trip_ui.TripModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainScreen extends AppCompatActivity implements AddTripFragments.Communicator , OnGoingFrag.onGoingCommunicator{
+public class MainScreen extends AppCompatActivity implements AddTripFragments.Communicator, OnGoingFrag.onGoingCommunicator {
     private Toolbar toolbar;
     private DrawerLayout drawer;
     private OnGoingFrag frag1;
@@ -51,36 +51,12 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
     private FragmentTransaction trns;
     private NavigationView drawerMenu;
     AddTripFragments fragment;
-
     public static Context context;
-
-    private TripViewModel noteViewModel;
+    private TripViewModel tripViewModel;
     List<Trip> trips;
-
-
-
     String name, start, end, date, time;
 
-
-
-
-    @Override
-    public void saveArrayList(ArrayList<Trip> arr) {
-        fragment.getArrayList(arr);
-    }
-
-    @Override
-    public void startAddTripFragment() {
-        fragment = new AddTripFragments();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.dynamicFrag, fragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-    }
-
-
-    @Override
+     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
@@ -91,26 +67,39 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
         drawer = findViewById(R.id.drawer_layout);
 
         //this will show the menu button
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         drawerMenu = findViewById(R.id.drawerMenu);
         setListener();
 
-        if(savedInstanceState==null){
+        if (savedInstanceState == null) {
             mgr = getSupportFragmentManager();
             trns = mgr.beginTransaction();
             frag1 = new OnGoingFrag();
-            trns.replace(R.id.dynamicFrag,frag1);
+            trns.replace(R.id.dynamicFrag, frag1);
             trns.commit();
             drawerMenu.setCheckedItem(R.id.btnOngoing);
         }
-        noteViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication())).get(TripViewModel.class);
+        tripViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication())).get(TripViewModel.class);
 
 
+    }
+    @Override
+    public void saveArrayList(ArrayList<Trip> arr) {
+        fragment.getArrayList(arr);
+    }
 
-
+    @Override
+    public void startAddTripFragment(Bundle bundle) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        AddTripFragments fragment = new AddTripFragments();
+        fragment.setArguments(bundle);
+        fragmentTransaction.replace(R.id.dynamicFrag, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
 
@@ -118,34 +107,24 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
         drawerMenu.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
 
                     case R.id.btnOngoing:
                         //if I used mgr from above it will crash if I rotated and then changed fragment, and if I used trns it will crash anyway because it's outside the listener
-                        getSupportFragmentManager().beginTransaction().replace(R.id.dynamicFrag,new OnGoingFrag()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.dynamicFrag, new OnGoingFrag()).commit();
                         break;
                     case R.id.btnHistory:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.dynamicFrag,new HistoryFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.dynamicFrag, new HistoryFragment()).commit();
                         break;
                     case R.id.btnLanguage:
                         //LiveData<List<Trip>> trips= MyRoomDataBase.getUserDataBaseInstance(getApplicationContext()).tripDao().getAllTrips();
-
-
-                        noteViewModel.getAllNotes().observe(MainScreen.this, new Observer<List<Trip>>() {
+                        tripViewModel.getAllNotes().observe(MainScreen.this, new Observer<List<Trip>>() {
                             @Override
                             public void onChanged(List<Trip> trips) {
                                 System.out.println(trips.get(0));
                                 WriteHandler.WriteInfireBase(trips);
-
-
                             }
                         });
-
-
-
-
-
-
 
                         Toast.makeText(MainScreen.this, "show language dialog", Toast.LENGTH_SHORT).show();
                         break;
@@ -167,7 +146,7 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
                     public void onClick(DialogInterface dialog, int id) {
                         //log out
                         FirebaseAuth.getInstance().signOut();
-                        startActivity(new Intent(getApplicationContext(),Login_form.class));
+                        startActivity(new Intent(getApplicationContext(), Login_form.class));
                         LoginManager.getInstance().logOut();
                         //clear database
                         new Thread(new Runnable() {
@@ -188,60 +167,58 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
         alert.show();
     }
 
-
     @Override
     public void onBackPressed() {
         //check if the drawer is open then the back button close the drawer first and not exit the activity directly
-        if(drawer.isDrawerOpen(GravityCompat.START)){
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        }else{
+        } else {
             super.onBackPressed();
             finishAffinity();
         }
     }
-
     @Override
-    public void respon(long alarmTime, int id,String start, String end,int tripBack, int repeatInterval) {
+    public void respon(long alarmTime, int id, String start, String end, int tripBack, int repeatInterval) {
         //one trip
-        if(tripBack==0 && repeatInterval==0){
-            setAlarm(alarmTime,id,end,false,0);
-        //two trips
-        }else if(tripBack!=0 && repeatInterval == 0){
-            setAlarm(alarmTime,id,end,false,0);
-            setAlarm(alarmTime + tripBack,id+1,start,false,0);
-        //one trip repeated
-        }else if (tripBack==0 && repeatInterval != 0){
-            setAlarm(alarmTime,id,end,true,repeatInterval);
-        //two trips repeated
-        }else{
-            setAlarm(alarmTime,id,end,true,repeatInterval);
-            setAlarm(alarmTime + tripBack,id+1,start,true,repeatInterval);
+        if (tripBack == 0 && repeatInterval == 0) {
+            setAlarm(alarmTime, id, end, false, 0);
+            //two trips
+        } else if (tripBack != 0 && repeatInterval == 0) {
+            setAlarm(alarmTime, id, end, false, 0);
+            setAlarm(alarmTime + tripBack, id + 1, start, false, 0);
+            //one trip repeated
+        } else if (tripBack == 0 && repeatInterval != 0) {
+            setAlarm(alarmTime, id, end, true, repeatInterval);
+            //two trips repeated
+        } else {
+            setAlarm(alarmTime, id, end, true, repeatInterval);
+            setAlarm(alarmTime + tripBack, id + 1, start, true, repeatInterval);
         }
     }
 
-    private void setAlarm(long alarmTime, int id, String end, boolean repeated,long interval) {
+    private void setAlarm(long alarmTime, int id, String end, boolean repeated, long interval) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Intent notifyIntent = new Intent(this, TransparentActivity.class);
 
-            notifyIntent.putExtra(Constants.END,end);
-            Log.i("room","id sent "+id);
-            notifyIntent.putExtra(Constants.ID,id);
+            notifyIntent.putExtra(Constants.END, end);
+            Log.i("room", "id sent " + id);
+            notifyIntent.putExtra(Constants.ID, id);
             notifyIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            PendingIntent notifyPendingIntent = PendingIntent.getActivity(this,id,notifyIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent notifyPendingIntent = PendingIntent.getActivity(this, id, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
-            if(repeated){
-                alarmManager.setRepeating(id,SystemClock.elapsedRealtime()+alarmTime,interval,notifyPendingIntent);
-            }else{
-                alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime()+alarmTime,notifyPendingIntent);
+            if (repeated) {
+                alarmManager.setRepeating(id, SystemClock.elapsedRealtime() + alarmTime, interval, notifyPendingIntent);
+            } else {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + alarmTime, notifyPendingIntent);
             }
-            Log.i("alram what is this ",SystemClock.elapsedRealtime()+"");
+            Log.i("alram what is this ", SystemClock.elapsedRealtime() + "");
         }
     }
 
     @Override
     public void sendArrayListToRecycleView(ArrayList<Trip> arrayList2) {
-        frag1.getArrayList(arrayList2);
+       // frag1.getArrayList(arrayList2);
     }
 
     @Override

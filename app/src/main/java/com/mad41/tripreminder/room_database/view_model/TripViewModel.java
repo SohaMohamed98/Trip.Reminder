@@ -13,26 +13,41 @@ import java.util.List;
 public class TripViewModel extends AndroidViewModel {
     private TripRepository repository;
     private LiveData<List<Trip>> allTrips;
+    private LiveData<List<Trip>> upComingTrips;
+    private LiveData<List<Trip>> historyTrips;
 
     public TripViewModel(@NonNull Application application) {
         super(application);
         repository = new TripRepository(application);
         allTrips = repository.getAllNotes();
+        historyTrips = repository.getHistoryNotes();
+        upComingTrips = repository.getUpcomingNotes();
     }
-    public void insert(Trip trip) {
-        repository.insertTrip(trip);
+    public long insert(Trip trip) {
+        return repository.insertTrip(trip);
     }
     public void update(Trip trip) {
         repository.updateTrip(trip);
     }
+    public void deleteTripById(int id) {
+        repository.deleteTripById(id);
+    }
+    public void updateStatus(int id,int status) {
+        repository.updateStatus(id,status);
+    }
     public void delete(Trip trip) {
         repository.deleteTrip(trip);
     }
-    public void deleteAllNotes() {
+    public void deleteAllTrips() {
         repository.deleteAllTrips();
     }
     public LiveData<List<Trip>> getAllNotes() {
-
         return allTrips;
+    }
+    public LiveData<List<Trip>> getUpcomingNotes() {
+        return upComingTrips;
+    }
+    public LiveData<List<Trip>> getHistoryNotes() {
+        return historyTrips;
     }
 }

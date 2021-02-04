@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -34,6 +35,7 @@ import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.mad41.tripreminder.constants.Constants;
 import com.mad41.tripreminder.room_database.MyRoomDataBase;
 import com.mad41.tripreminder.room_database.trip.Trip;
+import com.mad41.tripreminder.room_database.view_model.TripViewModel;
 import com.mad41.tripreminder.trip_ui.TripModel;
 
 import java.util.ArrayList;
@@ -47,7 +49,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class AddTripFragments extends Fragment {
-
     public static final String TAG = "room";
     EditText txt_place;
     TextView txtDate;
@@ -56,50 +57,39 @@ public class AddTripFragments extends Fragment {
     CircleImageView btnTime;
     int t1Hour, t1Minuite;
     private int mYear, mMonth, mDay;
-    private MyRoomDataBase dataBaseInstance;
-
     private int id;
-
+    private int updatedID;
 
     int AUTOCOMPLETE_REQUEST_CODE_START = 1;
     int AUTOCOMPLETE_REQUEST_CODE2_END = 2;
     EditText txt_start;
     EditText txt_end;
     Button btn_place;
-Context context;
-    Fragment fragment;
-    FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
-
+    Context context;
     private Communicator communicatorListener;
-
     ArrayList<Trip> arrayList;
+    private TripViewModel tripViewModel;
 
-    public AddTripFragments() {
-        // Required empty public constructor
-    }
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
 
-
         }
     }
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+    }
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         communicatorListener = (Communicator) getActivity();
-
     }
 
     @Override
@@ -119,7 +109,21 @@ Context context;
         btnDate = (CircleImageView) view.findViewById(R.id.btn_date);
         btnTime = (CircleImageView) view.findViewById(R.id.btn_time);
         btn_place = (Button) view.findViewById(R.id.btn_addTrip);
-        dataBaseInstance = MyRoomDataBase.getUserDataBaseInstance(getContext().getApplicationContext());
+        tripViewModel = ViewModelProviders.of(requireActivity()).get(TripViewModel.class);
+       Bundle bundle= getArguments();
+
+       if(bundle!=null){
+           btn_place.setText("update Trip");
+           Trip trip=bundle.getParcelable("trip");
+           updatedID=trip.getId();
+           txtDate.setText(trip.getDate());
+           txtTtime.setText(trip.getTime());
+           txt_place.setText(trip.getName());
+           txt_start.setText(trip.getStartLoacation());
+           txt_end.setText(trip.getStartLoacation());
+
+       }
+
 
         btn_place.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,19 +135,17 @@ Context context;
                     strlist.add("mmmm");
                     Trip myTrip=new Trip(txt_place.getText().toString(),txt_start.getText().toString(),txt_end.getText().toString(),
                             txtTtime.getText().toString(),txtDate.getText().toString(),strlist, Constants.TRIP_UPCOMING,true,true);
-                    new Thread(){
-                        @Override
-                        public void run() {
-                            id = (int) dataBaseInstance.tripDao().insertTrip(myTrip);
+                         if (getArguments()==null){
+                             id=(int)tripViewModel.insert(myTrip);
+                         }
+                         else{
+                             myTrip.setId(updatedID);
+                             tripViewModel.update(myTrip);
+                          id=updatedID;
+                         }
                             Log.i("room","id is: "+id);
-                            printTrip();
                             communicatorListener.respon(alarmTime,id, txt_start.getText().toString(),txt_end.getText().toString(),0,0);
-                        }
-                    }.start();
                     myData();
-//                }else{
-//                    Toast.makeText(getContext(), "Please enter a valid date & time", Toast.LENGTH_SHORT).show();
-//                }
 
 
             }
@@ -276,16 +278,6 @@ Context context;
         context=activity;
     }
 
-    private void printTrip() {
-
-        new Thread() {
-            @Override
-            public void run() {
-                ArrayList<Trip> trips = (ArrayList<Trip>) dataBaseInstance.tripDao().getUpcomingTrips();
-            }
-        }.start();
-
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

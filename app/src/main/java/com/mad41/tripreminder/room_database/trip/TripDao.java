@@ -42,10 +42,10 @@ public interface TripDao  {
 
 
     @Query("SELECT * FROM trips_table WHERE status=2")
-    List<Trip> getUpcomingTrips();
+    LiveData<List<Trip>> getUpcomingTrips();
 
     @Query("SELECT * FROM trips_table WHERE status!=2")
-    List<Trip> getHistoryTrips();
+    LiveData<List<Trip>>getHistoryTrips();
 
 
     @Query("SELECT * FROM trips_table")

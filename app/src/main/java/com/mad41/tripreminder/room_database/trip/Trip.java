@@ -1,5 +1,8 @@
 package com.mad41.tripreminder.room_database.trip;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -10,7 +13,7 @@ import java.util.ArrayList;
 
 
 @Entity(tableName = Constants.TRIP_TABLE_NAME)
-public class Trip {
+public class Trip implements Parcelable {
     @PrimaryKey(autoGenerate = true)
     @NonNull
     private int id;
@@ -79,5 +82,15 @@ public class Trip {
 
     public boolean isRound() {
         return isRound;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
     }
 }

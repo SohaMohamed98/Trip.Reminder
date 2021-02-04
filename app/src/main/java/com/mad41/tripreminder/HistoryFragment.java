@@ -6,6 +6,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,6 +19,7 @@ import android.view.ViewGroup;
 
 import com.mad41.tripreminder.room_database.MyRoomDataBase;
 import com.mad41.tripreminder.room_database.trip.Trip;
+import com.mad41.tripreminder.room_database.view_model.TripViewModel;
 import com.mad41.tripreminder.trip_ui.TripAdapter;
 
 import java.util.ArrayList;
@@ -26,18 +29,11 @@ public class HistoryFragment extends Fragment {
     RecyclerView recyclerView;
     TripAdapter adapter;
     RecyclerView.LayoutManager layoutManager;
-
     String name, start, end, time, date;
     Boolean status, round;
-
+    private TripViewModel tripViewModel;
     OnGoingFrag.onGoingCommunicator onGoingCommunicator1;
     List<Trip> tripModelArrayList;
-
-    int count = 0;
-
-    public HistoryFragment() {
-        // Required empty public constructor
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,39 +45,27 @@ public class HistoryFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View fragment =  inflater.inflate(R.layout.fragment_history, container, false);
-        MyHandler mh = new MyHandler();
-        tripModelArrayList = new ArrayList<>();
         recyclerView = (RecyclerView) fragment.findViewById(R.id.recyclerView);
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                tripModelArrayList = MyRoomDataBase.getUserDataBaseInstance(getContext().getApplicationContext()).tripDao().getHistoryTrips();
-                mh.sendEmptyMessage(0);
-            }
-        }).start();
-
-
-        return fragment;
-    }
-    void setRecyclerView(){
-
         recyclerView.setHasFixedSize(true);
-        adapter = new TripAdapter((Context) onGoingCommunicator1,tripModelArrayList);
+        adapter = new TripAdapter();
         layoutManager = new LinearLayoutManager(getContext().getApplicationContext());
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext().getApplicationContext());
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+        tripViewModel = ViewModelProviders.of(requireActivity()).get(TripViewModel.class);
+        tripViewModel.getHistoryNotes().observe(requireActivity(), new Observer<List<Trip>>() {
+            @Override
+            public void onChanged(List<Trip> trips) {
+                tripModelArrayList=trips;
+                adapter.setList(trips);
+            }
+        });
 
+
+        return fragment;
     }
-    class MyHandler extends Handler{
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-            setRecyclerView();
-        }
-    }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);

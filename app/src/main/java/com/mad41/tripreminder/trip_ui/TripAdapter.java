@@ -27,21 +27,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TripAdapter extends RecyclerView.Adapter<com.mad41.tripreminder.trip_ui.TripAdapter.ExampleViewHolder> {
-    private List<Trip> tripModels;
-    private final Context context;
+    private List<Trip> tripModels=new ArrayList<>();
+    private static OnMenuClickListener listener;
 
-    public TripAdapter(Context context,List<Trip> exampleList) {
-        this.context = context;
-        tripModels = exampleList;
-    }
-
-    @Override
+   @Override
     public ExampleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_row, parent, false);
         ExampleViewHolder evh = new ExampleViewHolder(v);
         return evh;
     }
-
+    public void setList(List<Trip>trips){
+        this.tripModels=trips;
+        notifyDataSetChanged();
+    }
 
     @Override
     public void onBindViewHolder(ExampleViewHolder holder, int position) {
@@ -80,54 +78,23 @@ public class TripAdapter extends RecyclerView.Adapter<com.mad41.tripreminder.tri
             txt_start = itemView.findViewById(R.id.txt_start2);
             txt_state = itemView.findViewById(R.id.txt_state);
             txt_end = itemView.findViewById(R.id.txt_end2);
-
             btn_menu_card = itemView.findViewById(R.id.btn_menu_card);
             btn_menu_card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    showPopupMenu(view, id);
+                    listener.onItemClick(view, id);
                 }
             });
-        }
-
-        public void showPopupMenu(View view,int id){
-            PopupMenu popupMenu = new PopupMenu(view.getContext(),view);
-            popupMenu.inflate(R.menu.popup_menu);
-            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    switch (item.getItemId()){
-                        case R.id.btnEditTrip:
-                            Toast.makeText(view.getContext(), "item: "+id+" trip "+getAdapterPosition(), Toast.LENGTH_SHORT).show();
-                            break;
-                        case R.id.btnEditNotes:
-                            Toast.makeText(view.getContext(), "item: "+item+" trip "+getAdapterPosition(), Toast.LENGTH_SHORT).show();
-                            break;
-                        case R.id.btnCancel:
-                            updateDatabase(0,id);
-                            Toast.makeText(view.getContext(), "item: "+item+" trip "+getAdapterPosition(), Toast.LENGTH_SHORT).show();
-                            break;
-                        case R.id.btnDelete:
-                            updateDatabase(1,id);
-                            Toast.makeText(view.getContext(), "item: "+item+" trip "+getAdapterPosition(), Toast.LENGTH_SHORT).show();
-                            break;
-                    }
-                    return false;
-                }
-            });
-            popupMenu.show();
-        }
-
-        private void updateDatabase(int i,int id) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    MyRoomDataBase myRoomDataBase = MyRoomDataBase.getUserDataBaseInstance(itemView.getContext());
-                    if(i==0){myRoomDataBase.tripDao().updateStatus(id, Constants.TRIP_CANCELED);}else{myRoomDataBase.tripDao().deletTripById(id);}
-                }
-            }).start();
-            //cancel alarm
         }
     }
+  public interface OnMenuClickListener {
+        void onItemClick(View view,int id);
+    }
+    public void setOnItemClickListener(OnMenuClickListener listener) {
+        this.listener = listener;
+    }
+
+
+
 }
 

@@ -50,7 +50,7 @@ public class OnGoingFrag extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        onGoingCommunicator1= (onGoingCommunicator) getActivity();
+        onGoingCommunicator1 = (onGoingCommunicator) getActivity();
     }
 
     @Override
@@ -58,7 +58,7 @@ public class OnGoingFrag extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    class MyHandler extends Handler{
+    class MyHandler extends Handler {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
@@ -91,11 +91,10 @@ public class OnGoingFrag extends Fragment {
             @Override
             public void onClick(View v) {
                 count++;
-               onGoingCommunicator1.startAddTripFragment();
+                onGoingCommunicator1.startAddTripFragment();
 //               onGoingCommunicator1.saveArrayList(tripModelArrayList);
             }
         });
-
 
 
         if (getArguments() != null) {
@@ -105,8 +104,8 @@ public class OnGoingFrag extends Fragment {
             date = getArguments().getString("date");
             time = getArguments().getString("time");
 //            tripModelArrayList.add(new TripModel(name, start, end, time, date, 1, true, true));
-          //  adapter.notifyItemInserted(count);
-           
+            //  adapter.notifyItemInserted(count);
+
 
             setRecyclerView();
 
@@ -128,7 +127,7 @@ public class OnGoingFrag extends Fragment {
 
     }
 
-    public void getArrayList(ArrayList<Trip> arrayList2){
+    public void getArrayList(ArrayList<Trip> arrayList2) {
 //        this.tripModelArrayList=arrayList2;
 //        setRecyclerView();
     }
@@ -136,12 +135,12 @@ public class OnGoingFrag extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-      //  outState.putStringArrayList("list", (ArrayList<String>) tripModelArrayList);
+        //  outState.putStringArrayList("list", (ArrayList<String>) tripModelArrayList);
     }
 
-   public interface onGoingCommunicator
-    {
+    public interface onGoingCommunicator {
         void saveArrayList(ArrayList<Trip> arr);
+
         void startAddTripFragment();
     }
 }

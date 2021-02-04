@@ -46,13 +46,12 @@ public class RoundTripDialogue extends AppCompatDialogFragment {
     private int t1Hour, t1Minuite;
     private int mYear, mMonth, mDay;
 
-    String place,start,end, ftime,fdate;
+    String place, start, end, ftime, fdate;
 
 
     public RoundTripDialogue() {
         // Required empty public constructor
     }
-
 
 
     @NonNull
@@ -62,12 +61,12 @@ public class RoundTripDialogue extends AppCompatDialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.fragment_round_trip_dialogue, null);
 
-        if(getArguments()!=null){
-            place=getArguments().getString("savePlace");
-            start=getArguments().getString("saveStart");
-            end=getArguments().getString("saveEnd");
-            ftime=getArguments().getString("saveTime");
-            fdate=getArguments().getString("saveDate");
+        if (getArguments() != null) {
+            place = getArguments().getString("savePlace");
+            start = getArguments().getString("saveStart");
+            end = getArguments().getString("saveEnd");
+            ftime = getArguments().getString("saveTime");
+            fdate = getArguments().getString("saveDate");
 
 
         }
@@ -93,8 +92,8 @@ public class RoundTripDialogue extends AppCompatDialogFragment {
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        date= txt_date_dialogue.getText().toString();
-                        time= txt_date_dialogue.getText().toString();
+                        date = txt_date_dialogue.getText().toString();
+                        time = txt_date_dialogue.getText().toString();
                    /*     Bundle bundle = new Bundle();
                         bundle.putString("return_date", date);
                         bundle.putString("return_time", time);
@@ -123,7 +122,7 @@ public class RoundTripDialogue extends AppCompatDialogFragment {
         outState.putString("myTime", time);
     }
 
-    void setDate(){
+    void setDate() {
         btn_date_dialogue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,9 +148,9 @@ public class RoundTripDialogue extends AppCompatDialogFragment {
             }
         });
 
-            }
+    }
 
-   void setTime(){
+    void setTime() {
         btn_time_dialogue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -180,12 +179,12 @@ public class RoundTripDialogue extends AppCompatDialogFragment {
 
             }
         });
-   }
+    }
 
     @Override
     public void onAttachFragment(@NonNull Fragment childFragment) {
         super.onAttachFragment(childFragment);
-       // listener = (DialogListener) childFragment;
+        // listener = (DialogListener) childFragment;
     }
 
 }

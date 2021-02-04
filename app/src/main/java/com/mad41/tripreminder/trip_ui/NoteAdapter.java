@@ -21,10 +21,10 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
     RecyclerView.ViewHolder vh;
 
 
-    public NoteAdapter(Context context, ArrayList<String> myNotes){
+    public NoteAdapter(Context context, ArrayList<String> myNotes) {
 
-        this.context=context;
-        this.myNotes=myNotes;
+        this.context = context;
+        this.myNotes = myNotes;
     }
 
 
@@ -34,7 +34,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
 
 
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_note, parent, false);
-        vh =new ViewHolder(v);
+        vh = new ViewHolder(v);
 
         return (ViewHolder) vh;
     }
@@ -56,7 +56,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            txt_note= (TextView)itemView.findViewById(R.id.txt_note);
+            txt_note = (TextView) itemView.findViewById(R.id.txt_note);
 
         }
     }

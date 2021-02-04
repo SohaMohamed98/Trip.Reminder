@@ -23,16 +23,16 @@ public class AddNoteAdapter extends RecyclerView.Adapter<AddNoteAdapter.ViewHold
     ArrayList<String> noteList;
 
 
-    public AddNoteAdapter(Context context, ArrayList<String> noteList){
-        this.context=context;
-        this.noteList=noteList;
+    public AddNoteAdapter(Context context, ArrayList<String> noteList) {
+        this.context = context;
+        this.noteList = noteList;
     }
 
     @NonNull
     @Override
     public AddNoteAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view =  LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_add_note, parent, false);
-        EditText editText =  view.findViewById(R.id.et_note_name);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_add_note, parent, false);
+        EditText editText = view.findViewById(R.id.et_note_name);
         editText.setText("");
         return new ViewHolder(view);
     }
@@ -40,13 +40,13 @@ public class AddNoteAdapter extends RecyclerView.Adapter<AddNoteAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        int i= holder.getLayoutPosition();
+        int i = holder.getLayoutPosition();
         holder.et_note_name.setText(noteList.get(i).toString());
 
     }
 
-    public ArrayList<String> getNoteList(){
-        return  noteList;
+    public ArrayList<String> getNoteList() {
+        return noteList;
     }
 
     @Override
@@ -71,7 +71,7 @@ public class AddNoteAdapter extends RecyclerView.Adapter<AddNoteAdapter.ViewHold
                         noteList.remove(position);
                         notifyItemRemoved(position);
                         et_note_name.setText("");
-                    }catch (ArrayIndexOutOfBoundsException e){
+                    } catch (ArrayIndexOutOfBoundsException e) {
                         e.printStackTrace();
                     }
                 }

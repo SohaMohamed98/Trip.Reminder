@@ -138,8 +138,8 @@ public class AddTripFragments extends Fragment {
         recyclerViewNote = view.findViewById(R.id.recyclerNote);
         relativeLayoutNote = view.findViewById(R.id.relativeLayout);
         myNotes = new ArrayList<String>();
-        myNotes.add("ss");
-        myNotes.add("rr");
+       //  myNotes.add("ss");
+       // myNotes.add("rr");
         layoutManager = new LinearLayoutManager(context);
 
         addNoteAdapter = new AddNoteAdapter(context, myNotes);
@@ -482,6 +482,7 @@ public class AddTripFragments extends Fragment {
 
     public interface Communicator {
         void respon(long alarmTime, int id, String end);
+
         void passingNotes(ArrayList<String> myNotes);
 
         void sendArrayListToRecycleView(ArrayList<Trip> arrayList2);

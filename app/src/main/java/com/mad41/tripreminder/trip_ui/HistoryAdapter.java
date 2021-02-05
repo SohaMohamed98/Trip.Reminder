@@ -125,6 +125,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<com.mad41.tripreminder.
             public void onClick(View v) {
               HistoryFragment h = new HistoryFragment();
               h.changeFragment();
+             // loadingDailogFragment.newInstance("marwa");
             }
         });
         holder.delete.setOnClickListener(new View.OnClickListener() {

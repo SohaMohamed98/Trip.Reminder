@@ -19,7 +19,7 @@ import android.view.ViewGroup;
 import com.mad41.tripreminder.room_database.MyRoomDataBase;
 import com.mad41.tripreminder.room_database.trip.Trip;
 import com.mad41.tripreminder.trip_ui.HistoryAdapter;
-
+import
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,9 +99,10 @@ public class HistoryFragment extends Fragment {
     public  void changeFragment()
     {
         HistoryNotes HN = new HistoryNotes();
-        FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.HNotes, HN); 
+        fragmentTransaction.replace(R.id.HNotes, HN);
+
 
         fragmentTransaction.commit();
 

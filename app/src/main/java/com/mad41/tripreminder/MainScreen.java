@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -18,14 +17,12 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.mad41.tripreminder.room_database.trip.Trip;
-import com.mad41.tripreminder.trip_ui.TripModel;
 
 import java.util.ArrayList;
 
@@ -53,7 +50,7 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
         fragment = new AddTripFragments();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.dynamicFrag, fragment);
+        fragmentTransaction.replace(R.id.HNotes, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
@@ -81,7 +78,7 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
             mgr = getSupportFragmentManager();
             trns = mgr.beginTransaction();
             frag1 = new OnGoingFrag();
-            trns.replace(R.id.dynamicFrag,frag1);
+            trns.replace(R.id.HNotes,frag1);
             trns.commit();
             drawerMenu.setCheckedItem(R.id.btnOngoing);
         }
@@ -98,10 +95,10 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
 
                     case R.id.btnOngoing:
                         //if I used mgr from above it will crash if I rotated and then changed fragment, and if I used trns it will crash anyway because it's outside the listener
-                        getSupportFragmentManager().beginTransaction().replace(R.id.dynamicFrag,new OnGoingFrag()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.HNotes,new OnGoingFrag()).commit();
                         break;
                     case R.id.btnHistory:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.dynamicFrag,new HistoryFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.HNotes,new HistoryFragment()).commit();
                         break;
                     case R.id.btnLanguage:
                         Toast.makeText(MainScreen.this, "show language dialog", Toast.LENGTH_SHORT).show();
@@ -162,7 +159,7 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
         FragmentManager fragmentManager = getSupportFragmentManager();
         frag1 = new OnGoingFrag();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.dynamicFrag, frag1);
+        fragmentTransaction.replace(R.id.HNotes, frag1);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }

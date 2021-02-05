@@ -29,6 +29,8 @@ import com.mad41.tripreminder.constants.Constants;
 import com.mad41.tripreminder.room_database.MyRoomDataBase;
 import com.mad41.tripreminder.room_database.trip.Trip;
 import com.mad41.tripreminder.room_database.view_model.TripViewModel;
+import com.mad41.tripreminder.trip_ui.NoteReviewDialogue;
+import com.mad41.tripreminder.trip_ui.RoundTripDialogue;
 import com.mad41.tripreminder.trip_ui.TripAdapter;
 import com.mad41.tripreminder.trip_ui.TripModel;
 
@@ -91,6 +93,14 @@ public class OnGoingFrag extends Fragment {
             }
         });
 
+        adapter.setOnNoteClickListener(new TripAdapter.NoteReview() {
+            @Override
+            public void onNoteClick(View view) {
+                NoteReviewDialogue round_dialogue = new NoteReviewDialogue();
+                round_dialogue.show(getActivity().getSupportFragmentManager(), "frag");
+            }
+        });
+
         adapter.setOnItemClickListener(new TripAdapter.OnMenuClickListener() {
             @Override
 
@@ -127,11 +137,12 @@ public class OnGoingFrag extends Fragment {
         });
 
 
+
         btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onGoingCommunicator1.startAddTripFragment(null);
-//               onGoingCommunicator1.saveArrayList(tripModelArrayList);
+//              onGoingCommunicator1.saveArrayList(tripModelArrayList);
 
             }
         });

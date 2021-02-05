@@ -40,7 +40,6 @@ import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.mad41.tripreminder.constants.Constants;
 import com.mad41.tripreminder.room_database.MyRoomDataBase;
-import com.mad41.tripreminder.room_database.note.Note;
 import com.mad41.tripreminder.room_database.trip.Trip;
 import com.mad41.tripreminder.trip_ui.AddNoteAdapter;
 import com.mad41.tripreminder.trip_ui.NoteAdapter;
@@ -94,7 +93,7 @@ public class AddTripFragments extends Fragment {
     String round_date;
     String round_time;
 
-   // private int id;
+    // private int id;
     private int updatedID;
 
     int AUTOCOMPLETE_REQUEST_CODE_START = 1;
@@ -148,10 +147,7 @@ public class AddTripFragments extends Fragment {
         recyclerViewNote = view.findViewById(R.id.recyclerNote);
         relativeLayoutNote = view.findViewById(R.id.relativeLayout);
         myNotes = new ArrayList<String>();
-       //  myNotes.add("ss");
-       // myNotes.add("rr");
         layoutManager = new LinearLayoutManager(context);
-
         addNoteAdapter = new AddNoteAdapter(context, myNotes);
         //  noteAdapter = new NoteAdapter(context, myNotes);
         recyclerViewNote.setAdapter(addNoteAdapter);
@@ -181,19 +177,19 @@ public class AddTripFragments extends Fragment {
         dataBaseInstance = MyRoomDataBase.getUserDataBaseInstance(getContext().getApplicationContext());
 
         tripViewModel = ViewModelProviders.of(requireActivity()).get(TripViewModel.class);
-       Bundle bundle= getArguments();
+        Bundle bundle = getArguments();
 
-      if(bundle!=null){
-           btn_place.setText("update Trip");
-           Trip trip=bundle.getParcelable("trip");
-           updatedID=trip.getId();
-           txt_date.setText(trip.getDate());
-           txt_time.setText(trip.getTime());
-           txt_place.setText(trip.getName());
-           txt_start.setText(trip.getStartLoacation());
-           txt_end.setText(trip.getStartLoacation());
+        if (bundle != null) {
+            btn_place.setText("update Trip");
+            Trip trip = bundle.getParcelable("trip");
+            updatedID = trip.getId();
+            txt_date.setText(trip.getDate());
+            txt_time.setText(trip.getTime());
+            txt_place.setText(trip.getName());
+            txt_start.setText(trip.getStartLoacation());
+            txt_end.setText(trip.getStartLoacation());
 
-       }
+        }
 
 
         btn_place.setOnClickListener(new View.OnClickListener() {
@@ -201,37 +197,18 @@ public class AddTripFragments extends Fragment {
             public void onClick(View v) {
 
                 long alarmTime = getAlarmTime();
-      /*          if (alarmTime > 0) {
-                    Trip myTrip = new Trip(txt_place.getText().toString(), txt_start.getText().toString(), txt_end.getText().toString(),
-                            txt_time.getText().toString(), txt_date.getText().toString(), Constants.TRIP_UPCOMING, true, true);
-                    new Thread() {
-                        @Override
-                        public void run() {
-                            id = (int) dataBaseInstance.tripDao().insertTrip(myTrip);
-                            Log.i("room", "id is: " + id);
-                            printTrip();
-                        }
-                    }.start();
-                  //  communicatorListener.respon(alarmTime, id, txt_end.getText().toString());
-                    communicatorListener.passingNotes(myNotes);
-                    myData();
-                } else {
-                    Toast.makeText(getContext(), "Please enter a valid date & time", Toast.LENGTH_SHORT).show();
-                }*/
-
                 if (alarmTime > 0) {
                     ArrayList<String> strlist = new ArrayList<>();
                     strlist.add("mmmm");
                     Trip myTrip = new Trip(txt_place.getText().toString(), txt_start.getText().toString(), txt_end.getText().toString(),
                             txt_time.getText().toString(), txt_date.getText().toString(), strlist, Constants.TRIP_UPCOMING, true, true);
-                    new Thread() {
+                 /*   new Thread() {
                         @Override
                         public void run() {
                             id = (int) dataBaseInstance.tripDao().insertTrip(myTrip);
                             Log.i("room", "id is: " + id);
-                        //   printTrip();
                         }
-                    }.start();
+                    }.start();*/
 
                     if (getArguments() == null) {
                         id = (int) tripViewModel.insert(myTrip);
@@ -241,11 +218,10 @@ public class AddTripFragments extends Fragment {
                         id = updatedID;
                     }
                     Log.i("room", "id is: " + id);
-                  //  communicatorListener.respon(alarmTime, id, txt_start.getText().toString(), txt_end.getText().toString(), 0, 0);
                     communicatorListener.passingNotes(myNotes);
                     myData();
 
-                }else {
+                } else {
                     Toast.makeText(getContext(), "Please enter a valid date & time", Toast.LENGTH_SHORT).show();
                 }
                 //print_Notes
@@ -382,7 +358,7 @@ public class AddTripFragments extends Fragment {
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
 
-                                txt_date.setText("Date: " + dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                                txt_date.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
                                 mYear = year;
                                 mMonth = monthOfYear;
                                 mDay = dayOfMonth;
@@ -509,24 +485,14 @@ public class AddTripFragments extends Fragment {
         this.arrayList = arrayList;
     }
 
+    public interface Communicator {
+        void respon(long alarmTime, int id, String start, String end, int tripBack, int repeatInterval);
 
-  //  public interface Communicator {
-       // void respon(long alarmTime, int id, String end);
+        void passingNotes(ArrayList<String> myNotes);
 
-      //  void passingNotes(ArrayList<String> myNotes);
+        void sendArrayListToRecycleView(ArrayList<Trip> arrayList2);
 
-      //  void sendArrayListToRecycleView(ArrayList<Trip> arrayList2);
-
-     //   void returnToOnGoingActivity();
-  //  }
-
-
-
-public interface Communicator {
-    void respon(long alarmTime, int id,String start, String end,int tripBack, int repeatInterval);
-    void passingNotes(ArrayList<String> myNotes);
-    void sendArrayListToRecycleView(ArrayList<Trip> arrayList2);
-    void returnToOnGoingActivity();
-}
+        void returnToOnGoingActivity();
+    }
 
 }

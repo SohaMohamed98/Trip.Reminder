@@ -22,9 +22,6 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="ok">OK</string>
-    <string name="cancel">CANCEL</string>
-
     <string name="edit_menu">Edit Menu</string>
     <string name="edit_notes">Edit Notes</string>
     <string name="cancel">Cancel</string>

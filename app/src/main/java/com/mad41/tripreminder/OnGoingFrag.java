@@ -55,15 +55,15 @@ public class OnGoingFrag extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        this.context=context;
+        this.context = context;
     }
 
-  /*  class MyHandler extends Handler {
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-            setRecyclerView();
-        }*/
+    /*  class MyHandler extends Handler {
+          @Override
+          public void handleMessage(@NonNull Message msg) {
+              super.handleMessage(msg);
+              setRecyclerView();
+          }*/
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,7 +86,7 @@ public class OnGoingFrag extends Fragment {
         tripViewModel.getUpcomingNotes().observe(requireActivity(), new Observer<List<Trip>>() {
             @Override
             public void onChanged(List<Trip> trips) {
-                tripModelArrayList=trips;
+                tripModelArrayList = trips;
                 adapter.setList(trips);
             }
         });
@@ -123,42 +123,40 @@ public class OnGoingFrag extends Fragment {
                 });
                 popupMenu.show();
             }
-        }
-        //});
+
+        });
 
 
-     btn_add.setOnClickListener(new View.OnClickListener() {
+        btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // count++;
-               onGoingCommunicator1.startAddTripFragment(null);
+                onGoingCommunicator1.startAddTripFragment(null);
 //               onGoingCommunicator1.saveArrayList(tripModelArrayList);
 
             }
         });
 
 
-
         return fragment;
     }
 
-    private void editTrip(int id){
-        Trip trip=null;
-        for(int i=0;i<tripModelArrayList.size();i++){
-            if (tripModelArrayList.get(i).getId()==id){
-                trip=tripModelArrayList.get(i);
+    private void editTrip(int id) {
+        Trip trip = null;
+        for (int i = 0; i < tripModelArrayList.size(); i++) {
+            if (tripModelArrayList.get(i).getId() == id) {
+                trip = tripModelArrayList.get(i);
             }
         }
-        Bundle bundle=new Bundle();
-        bundle.putParcelable("trip",trip);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("trip", trip);
         onGoingCommunicator1.startAddTripFragment(bundle);
 
-/*    public void getArrayList(ArrayList<Trip> arrayList2) {
-//        this.tripModelArrayList=arrayList2;
-//        setRecyclerView();
-    }*/
-
     }
+
+    /*    public void getArrayList(ArrayList<Trip> arrayList2) {
+             this.tripModelArrayList=arrayList2;
+             setRecyclerView();
+    }*/
 
 
     public interface onGoingCommunicator {

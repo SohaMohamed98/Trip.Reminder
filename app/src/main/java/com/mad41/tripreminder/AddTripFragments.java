@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -44,6 +45,8 @@ import com.mad41.tripreminder.room_database.trip.Trip;
 import com.mad41.tripreminder.trip_ui.AddNoteAdapter;
 import com.mad41.tripreminder.trip_ui.NoteAdapter;
 import com.mad41.tripreminder.trip_ui.RoundTripDialogue;
+import com.mad41.tripreminder.room_database.view_model.TripViewModel;
+import com.mad41.tripreminder.trip_ui.TripModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -91,6 +94,8 @@ public class AddTripFragments extends Fragment {
     String round_date;
     String round_time;
 
+   // private int id;
+    private int updatedID;
 
     int AUTOCOMPLETE_REQUEST_CODE_START = 1;
     int AUTOCOMPLETE_REQUEST_CODE2_END = 2;
@@ -98,27 +103,32 @@ public class AddTripFragments extends Fragment {
     EditText txt_end;
     Button btn_place;
     Context context;
-    Fragment fragment;
-    FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
-    RoundTripDialogue roundTripDialogue;
 
-    int count = 0;
+
     private Communicator communicatorListener;
-
     ArrayList<Trip> arrayList;
+    private TripViewModel tripViewModel;
+
 
     public AddTripFragments() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
     }
 
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         communicatorListener = (Communicator) getActivity();
-
     }
 
     @Override
@@ -170,12 +180,28 @@ public class AddTripFragments extends Fragment {
         roundSwitch = (Switch) view.findViewById(R.id.round_switch);
         dataBaseInstance = MyRoomDataBase.getUserDataBaseInstance(getContext().getApplicationContext());
 
+        tripViewModel = ViewModelProviders.of(requireActivity()).get(TripViewModel.class);
+       Bundle bundle= getArguments();
+
+      if(bundle!=null){
+           btn_place.setText("update Trip");
+           Trip trip=bundle.getParcelable("trip");
+           updatedID=trip.getId();
+           txt_date.setText(trip.getDate());
+           txt_time.setText(trip.getTime());
+           txt_place.setText(trip.getName());
+           txt_start.setText(trip.getStartLoacation());
+           txt_end.setText(trip.getStartLoacation());
+
+       }
+
+
         btn_place.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 long alarmTime = getAlarmTime();
-                if (alarmTime > 0) {
+      /*          if (alarmTime > 0) {
                     Trip myTrip = new Trip(txt_place.getText().toString(), txt_start.getText().toString(), txt_end.getText().toString(),
                             txt_time.getText().toString(), txt_date.getText().toString(), Constants.TRIP_UPCOMING, true, true);
                     new Thread() {
@@ -186,18 +212,46 @@ public class AddTripFragments extends Fragment {
                             printTrip();
                         }
                     }.start();
-                    communicatorListener.respon(alarmTime, id, txt_end.getText().toString());
+                  //  communicatorListener.respon(alarmTime, id, txt_end.getText().toString());
                     communicatorListener.passingNotes(myNotes);
                     myData();
                 } else {
                     Toast.makeText(getContext(), "Please enter a valid date & time", Toast.LENGTH_SHORT).show();
+                }*/
+
+                if (alarmTime > 0) {
+                    ArrayList<String> strlist = new ArrayList<>();
+                    strlist.add("mmmm");
+                    Trip myTrip = new Trip(txt_place.getText().toString(), txt_start.getText().toString(), txt_end.getText().toString(),
+                            txt_time.getText().toString(), txt_date.getText().toString(), strlist, Constants.TRIP_UPCOMING, true, true);
+                    new Thread() {
+                        @Override
+                        public void run() {
+                            id = (int) dataBaseInstance.tripDao().insertTrip(myTrip);
+                            Log.i("room", "id is: " + id);
+                        //   printTrip();
+                        }
+                    }.start();
+
+                    if (getArguments() == null) {
+                        id = (int) tripViewModel.insert(myTrip);
+                    } else {
+                        myTrip.setId(updatedID);
+                        tripViewModel.update(myTrip);
+                        id = updatedID;
+                    }
+                    Log.i("room", "id is: " + id);
+                  //  communicatorListener.respon(alarmTime, id, txt_start.getText().toString(), txt_end.getText().toString(), 0, 0);
+                    communicatorListener.passingNotes(myNotes);
+                    myData();
+
+                }else {
+                    Toast.makeText(getContext(), "Please enter a valid date & time", Toast.LENGTH_SHORT).show();
                 }
+                //print_Notes
                 for (int i = 0; i < myNotes.size(); i++) {
                     Toast.makeText(getContext(), myNotes.get(i), Toast.LENGTH_LONG).show();
-
                 }
-
-
             }
         });
 
@@ -292,20 +346,6 @@ public class AddTripFragments extends Fragment {
         });
     }
 
-    public void openDialog() {
-        RoundTripDialogue exampleDialog = new RoundTripDialogue();
-        Bundle bundle = new Bundle();
-        bundle.putString("savePlace", txt_place.getText().toString());
-        bundle.putString("saveStart", txt_start.getText().toString());
-        bundle.putString("saveEnd", txt_end.getText().toString());
-        bundle.putString("saveDate", txt_date.getText().toString());
-        bundle.putString("saveTime", txt_time.getText().toString());
-        exampleDialog.setArguments(bundle);
-        exampleDialog.show(getActivity().getSupportFragmentManager(), "frag");
-        Toast.makeText(getContext(), round_date + round_time, Toast.LENGTH_LONG).show();
-
-
-    }
 
     private long getAlarmTime() {
         Calendar calendar1 = Calendar.getInstance();
@@ -428,16 +468,6 @@ public class AddTripFragments extends Fragment {
         context = activity;
     }
 
-    private void printTrip() {
-
-        new Thread() {
-            @Override
-            public void run() {
-                ArrayList<Trip> trips = (ArrayList<Trip>) dataBaseInstance.tripDao().getUpcomingTrips();
-            }
-        }.start();
-
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -480,14 +510,23 @@ public class AddTripFragments extends Fragment {
     }
 
 
-    public interface Communicator {
-        void respon(long alarmTime, int id, String end);
+  //  public interface Communicator {
+       // void respon(long alarmTime, int id, String end);
 
-        void passingNotes(ArrayList<String> myNotes);
+      //  void passingNotes(ArrayList<String> myNotes);
 
-        void sendArrayListToRecycleView(ArrayList<Trip> arrayList2);
+      //  void sendArrayListToRecycleView(ArrayList<Trip> arrayList2);
 
-        void returnToOnGoingActivity();
-    }
+     //   void returnToOnGoingActivity();
+  //  }
+
+
+
+public interface Communicator {
+    void respon(long alarmTime, int id,String start, String end,int tripBack, int repeatInterval);
+    void passingNotes(ArrayList<String> myNotes);
+    void sendArrayListToRecycleView(ArrayList<Trip> arrayList2);
+    void returnToOnGoingActivity();
+}
 
 }

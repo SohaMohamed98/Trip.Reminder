@@ -2,9 +2,7 @@
     <string name="app_name">Trip.Reminder</string>
     <string name="facebook_app_id">861440641315611</string>
     <string name="fb_login_protocol_scheme">fb861440641315611</string>
-    <string name="facebook_application_id" translatable="false">861440641315611</string>
-    <!-- Facebook Application ID, prefixed by 'fb'. Enables Chrome Custom tabs. -->
-    <string name="facebook_login_protocol_scheme" translatable="false">fb861440641315611</string>
+
     <string name="TripName">TripName</string>
     <string name="Place">Place</string>
     <string name="Start">Start</string>
@@ -23,8 +21,21 @@
     <!--for the menu drawer-->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
     <string name="ok">OK</string>
     <string name="cancel">CANCEL</string>
 
+    <string name="edit_menu">Edit Menu</string>
+    <string name="edit_notes">Edit Notes</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="edit_trip">Edit Trip</string>
+
+    <string-array name="spinner">
+        <item>Edit Trip</item>
+        <item>Edit Notes</item>
+        <item>Cancel</item>
+        <item>Delete</item>
+    </string-array>
 
 </resources>

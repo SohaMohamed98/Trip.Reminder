@@ -1,27 +1,34 @@
 package com.mad41.tripreminder;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
 import android.os.Message;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.mad41.tripreminder.constants.Constants;
 import com.mad41.tripreminder.room_database.MyRoomDataBase;
 import com.mad41.tripreminder.room_database.trip.Trip;
+import com.mad41.tripreminder.room_database.view_model.TripViewModel;
 import com.mad41.tripreminder.trip_ui.TripAdapter;
 import com.mad41.tripreminder.trip_ui.TripModel;
 
@@ -30,22 +37,14 @@ import java.util.List;
 
 public class OnGoingFrag extends Fragment {
     private FloatingActionButton btn_add;
-
+    Context context;
     RecyclerView recyclerView;
     TripAdapter adapter;
     RecyclerView.LayoutManager layoutManager;
 
-    String name, start, end, time, date;
-    Boolean status, round;
-
     onGoingCommunicator onGoingCommunicator1;
-    List<Trip> tripModelArrayList;
-
-    int count = 0;
-
-    public OnGoingFrag() {
-        // Required empty public constructor
-    }
+    private static List<Trip> tripModelArrayList;
+    private TripViewModel tripViewModel;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -54,93 +53,117 @@ public class OnGoingFrag extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.context=context;
     }
 
-    class MyHandler extends Handler {
+  /*  class MyHandler extends Handler {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             setRecyclerView();
-        }
+        }*/
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
-        MyHandler h = new MyHandler();
-//        tripModelArrayList = new ArrayList<>();
         View fragment = inflater.inflate(R.layout.fragment_on_going2, container, false);
         btn_add = fragment.findViewById(R.id.btnf_add);
-        tripModelArrayList = new ArrayList<>();
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                tripModelArrayList = MyRoomDataBase.getUserDataBaseInstance(getContext().getApplicationContext()).tripDao().getUpcomingTrips();
-                h.sendEmptyMessage(0);
-            }
-        }).start();
-
         recyclerView = (RecyclerView) fragment.findViewById(R.id.recyclerView);
-
-        btn_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                count++;
-                onGoingCommunicator1.startAddTripFragment();
-//               onGoingCommunicator1.saveArrayList(tripModelArrayList);
-            }
-        });
-
-
-        if (getArguments() != null) {
-            name = getArguments().getString("name");
-            start = getArguments().getString("start");
-            end = getArguments().getString("end");
-            date = getArguments().getString("date");
-            time = getArguments().getString("time");
-//            tripModelArrayList.add(new TripModel(name, start, end, time, date, 1, true, true));
-            //  adapter.notifyItemInserted(count);
-
-
-            setRecyclerView();
-
-        }
-
-
-        return fragment;
-    }
-
-    void setRecyclerView() {
-
         recyclerView.setHasFixedSize(true);
-        adapter = new TripAdapter(tripModelArrayList);
+        adapter = new TripAdapter();
         layoutManager = new LinearLayoutManager(getContext().getApplicationContext());
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext().getApplicationContext());
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+        tripViewModel = ViewModelProviders.of(requireActivity()).get(TripViewModel.class);
+        tripViewModel.getUpcomingNotes().observe(requireActivity(), new Observer<List<Trip>>() {
+            @Override
+            public void onChanged(List<Trip> trips) {
+                tripModelArrayList=trips;
+                adapter.setList(trips);
+            }
+        });
 
+        adapter.setOnItemClickListener(new TripAdapter.OnMenuClickListener() {
+            @Override
+
+            public void onItemClick(View view, int id) {
+
+                PopupMenu popupMenu = new PopupMenu(view.getContext(), view);
+                popupMenu.inflate(R.menu.popup_menu);
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.btnEditTrip:
+                                editTrip(id);
+                                Toast.makeText(view.getContext(), "item: " + id + " trip ", Toast.LENGTH_SHORT).show();
+                                break;
+                            case R.id.btnEditNotes:
+                                Toast.makeText(view.getContext(), "item: " + item + " trip ", Toast.LENGTH_SHORT).show();
+                                break;
+                            case R.id.btnCancel:
+                                tripViewModel.updateStatus(id, Constants.TRIP_CANCELED);
+                                Toast.makeText(view.getContext(), "item: " + item + " trip ", Toast.LENGTH_SHORT).show();
+                                break;
+                            case R.id.btnDelete:
+                                tripViewModel.deleteTripById(id);
+                                Toast.makeText(view.getContext(), "item: " + item + " trip ", Toast.LENGTH_SHORT).show();
+                                break;
+                        }
+                        return false;
+                    }
+                });
+                popupMenu.show();
+            }
+        }
+        //});
+
+
+     btn_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               // count++;
+               onGoingCommunicator1.startAddTripFragment(null);
+//               onGoingCommunicator1.saveArrayList(tripModelArrayList);
+
+            }
+        });
+
+
+
+        return fragment;
     }
 
-    public void getArrayList(ArrayList<Trip> arrayList2) {
+    private void editTrip(int id){
+        Trip trip=null;
+        for(int i=0;i<tripModelArrayList.size();i++){
+            if (tripModelArrayList.get(i).getId()==id){
+                trip=tripModelArrayList.get(i);
+            }
+        }
+        Bundle bundle=new Bundle();
+        bundle.putParcelable("trip",trip);
+        onGoingCommunicator1.startAddTripFragment(bundle);
+
+/*    public void getArrayList(ArrayList<Trip> arrayList2) {
 //        this.tripModelArrayList=arrayList2;
 //        setRecyclerView();
+    }*/
+
     }
 
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        //  outState.putStringArrayList("list", (ArrayList<String>) tripModelArrayList);
-    }
 
     public interface onGoingCommunicator {
         void saveArrayList(ArrayList<Trip> arr);
 
-        void startAddTripFragment();
+        void startAddTripFragment(Bundle bundle);
     }
 }

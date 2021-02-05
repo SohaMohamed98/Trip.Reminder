@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/btnEditTrip"
+        android:title="@string/edit_trip" />
+    <item
+        android:id="@+id/btnEditNotes"
+        android:title="@string/edit_notes" />
+    <item
+        android:id="@+id/btnCancel"
+        android:title="@android:string/cancel" />
+    <item
+        android:id="@+id/btnDelete"
+        android:title="@string/delete" />
+</menu>

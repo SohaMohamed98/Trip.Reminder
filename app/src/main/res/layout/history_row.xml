@@ -11,25 +11,6 @@
     app:cardCornerRadius="15dp"
     app:cardElevation="22dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/HNotes"
-            android:layout_width="266dp"
-            android:layout_height="204dp"
-            android:layout_marginStart="200dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="133dp"
-            android:layout_marginBottom="114dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="MissingClass" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -211,4 +192,5 @@
         </LinearLayout>
 
     </LinearLayout>
+
 </androidx.cardview.widget.CardView>

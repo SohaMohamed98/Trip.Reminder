@@ -13,10 +13,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentContainerView;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.mad41.tripreminder.HistoryFragment;
+import com.mad41.tripreminder.historyListner;
 import com.mad41.tripreminder.R;
 import com.mad41.tripreminder.room_database.trip.Trip;
 
@@ -28,7 +26,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<com.mad41.tripreminder.
     Animation slideDown , slideUp;
     private Context context;
     private static View view;
-    private FragmentManager manager;
+    public final historyListner lis;
     private FragmentContainerView contenr;
     public static class ExampleViewHolder extends RecyclerView.ViewHolder {
         public TextView txt_date;
@@ -54,15 +52,15 @@ public class HistoryAdapter extends RecyclerView.Adapter<com.mad41.tripreminder.
             delete = itemView.findViewById(R.id.delete);
             to = itemView.findViewById(R.id.to);
             Notes = itemView.findViewById(R.id.DNotes);
-            contenr = itemView.findViewById(R.id.HNotes);
+            contenr = itemView.findViewById(R.id.dynamicFrag);
 
             view = itemView;
         }
     }
 
-    public HistoryAdapter(List<Trip> exampleList , FragmentManager mgr) {
+    public HistoryAdapter(List<Trip> exampleList , historyListner listen  ) {
         tripModels = exampleList;
-        manager = mgr;
+        lis = listen;
 
     }
 
@@ -120,14 +118,9 @@ public class HistoryAdapter extends RecyclerView.Adapter<com.mad41.tripreminder.
 
             }
         });
-        holder.Notes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-              HistoryFragment h = new HistoryFragment();
-              h.changeFragment();
-             // loadingDailogFragment.newInstance("marwa");
-            }
-        });
+        tripModels.add(1,new Trip("marwa",
+                "yuy","yruyuy","yhfhk","yihfh",1,true,true));
+        holder.Notes.setOnClickListener(v -> lis.showNotes(tripModels));
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

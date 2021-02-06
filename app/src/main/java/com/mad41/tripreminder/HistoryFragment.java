@@ -1,9 +1,11 @@
 package com.mad41.tripreminder;
 
+import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -19,7 +21,8 @@ import android.view.ViewGroup;
 import com.mad41.tripreminder.room_database.MyRoomDataBase;
 import com.mad41.tripreminder.room_database.trip.Trip;
 import com.mad41.tripreminder.trip_ui.HistoryAdapter;
-import
+
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +32,9 @@ public class HistoryFragment extends Fragment {
     RecyclerView.LayoutManager layoutManager;
     List<Trip> tripModelArrayList;
     Handler handler;
-    FragmentManager mgr = getFragmentManager();
+    historyListner listner;
+
+    public static Dialog dialog;
 
     public HistoryFragment() {
         // Required empty public constructor
@@ -47,6 +52,7 @@ public class HistoryFragment extends Fragment {
         // Inflate the layout for this fragment
         View fragment =  inflater.inflate(R.layout.fragment_history, container, false);
         tripModelArrayList = new ArrayList<>();
+
         recyclerView = (RecyclerView) fragment.findViewById(R.id.HistoryRecycleView);
 
         recyclerView.setHasFixedSize(true);
@@ -63,7 +69,13 @@ public class HistoryFragment extends Fragment {
             public void handleMessage(@NonNull Message msg) {
                 super.handleMessage(msg);
                 tripModelArrayList = (List<Trip>) msg.obj;
-                adapter = new HistoryAdapter(tripModelArrayList , mgr);
+                listner = new historyListner() {
+                    @Override
+                    public void showNotes(List<Trip> notes) {
+
+                    }
+                };
+                adapter = new HistoryAdapter(tripModelArrayList , listner);
                 recyclerView.setAdapter(adapter);
                 ItemTouchHelper.SimpleCallback itemTouchHelper = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT|ItemTouchHelper.LEFT) {
                     @Override
@@ -78,6 +90,7 @@ public class HistoryFragment extends Fragment {
                     }
                 };
                 new ItemTouchHelper(itemTouchHelper).attachToRecyclerView(recyclerView);
+
 
 
             }
@@ -96,15 +109,8 @@ public class HistoryFragment extends Fragment {
 
         return fragment;
     }
-    public  void changeFragment()
-    {
-        HistoryNotes HN = new HistoryNotes();
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.HNotes, HN);
 
-
-        fragmentTransaction.commit();
+    public void showDialog(FragmentActivity activity , List<Trip> TripNotes){
 
     }
 

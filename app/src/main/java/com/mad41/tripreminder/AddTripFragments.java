@@ -38,9 +38,12 @@ import com.mad41.tripreminder.room_database.trip.Trip;
 import com.mad41.tripreminder.room_database.view_model.TripViewModel;
 import com.mad41.tripreminder.trip_ui.TripModel;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.xml.namespace.QName;
@@ -110,19 +113,36 @@ public class AddTripFragments extends Fragment {
         btnTime = (CircleImageView) view.findViewById(R.id.btn_time);
         btn_place = (Button) view.findViewById(R.id.btn_addTrip);
         tripViewModel = ViewModelProviders.of(requireActivity()).get(TripViewModel.class);
-       Bundle bundle= getArguments();
+        Bundle bundle= getArguments();
 
-       if(bundle!=null){
-           btn_place.setText("update Trip");
-           Trip trip=bundle.getParcelable("trip");
-           updatedID=trip.getId();
-           txtDate.setText(trip.getDate());
-           txtTtime.setText(trip.getTime());
-           txt_place.setText(trip.getName());
-           txt_start.setText(trip.getStartLoacation());
-           txt_end.setText(trip.getStartLoacation());
+        if(bundle!=null){
+            btn_place.setText("update Trip");
+            Trip trip=bundle.getParcelable("trip");
+            updatedID=trip.getId();
+            txtDate.setText(trip.getDate());
+            txtTtime.setText(trip.getTime());
+            txt_place.setText(trip.getName());
+            txt_start.setText(trip.getStartLoacation());
+            txt_end.setText(trip.getStartLoacation());
 
-       }
+            String time = txtTtime.getText().toString();
+            String day = txtDate.getText().toString();
+            String[] timee = time.split(":");
+            t1Hour = Integer.parseInt(timee[1]);
+            t1Minuite = Integer.parseInt(timee[2]);
+            String amPm = timee[3];
+            if(amPm.equals("PM")){t1Hour=t1Hour+12;}
+            String[] datee = day.split(" ");
+            datee = datee[1].split("-");
+            mYear=Integer.parseInt(datee[0]);
+            mMonth=Integer.parseInt(datee[1])-1;
+            mDay=Integer.parseInt(datee[2]);
+            Log.i("room"," time returned "+mYear+" "+mMonth+" "+mDay+" "+t1Hour+" "+t1Minuite);
+//            Log.i("room"," time returned "+'"'+datee[0]+'"'+"  "+'"'+datee[1]+'"'+"  "+'"'+datee[2]+'"');
+            Log.i("room","string time: "+time);
+            Log.i("room","string time: "+day);
+
+        }
 
 
         btn_place.setOnClickListener(new View.OnClickListener() {
@@ -146,6 +166,9 @@ public class AddTripFragments extends Fragment {
                             Log.i("room","id is: "+id);
                             communicatorListener.respon(alarmTime,id, txt_start.getText().toString(),txt_end.getText().toString(),0,0);
                     myData();
+//                }else{
+//                    Toast.makeText(getContext(), "Please enter a valid date & time", Toast.LENGTH_SHORT).show();
+//                }
 
 
             }
@@ -161,11 +184,12 @@ public class AddTripFragments extends Fragment {
 
     private long getAlarmTime() {
         Calendar calendar1 = Calendar.getInstance();
-        calendar1.set(Calendar.YEAR,calendar1.get(Calendar.YEAR));
-        calendar1.set(Calendar.MONTH,calendar1.get(Calendar.MONTH));
-        calendar1.set(Calendar.DAY_OF_MONTH,calendar1.get(Calendar.DAY_OF_MONTH));
-        calendar1.set(Calendar.HOUR_OF_DAY,calendar1.get(Calendar.HOUR_OF_DAY));
-        calendar1.set(Calendar.MINUTE,calendar1.get(Calendar.MINUTE));
+        Log.i("room","time before edit "+ calendar1.getTime());
+//        calendar1.set(Calendar.YEAR,calendar1.get(Calendar.YEAR));
+//        calendar1.set(Calendar.MONTH,calendar1.get(Calendar.MONTH));
+//        calendar1.set(Calendar.DAY_OF_MONTH,calendar1.get(Calendar.DAY_OF_MONTH));
+//        calendar1.set(Calendar.HOUR_OF_DAY,calendar1.get(Calendar.HOUR_OF_DAY));
+//        calendar1.set(Calendar.MINUTE,calendar1.get(Calendar.MINUTE));
         long l = calendar1.getTimeInMillis();
 
         Calendar calendar = Calendar.getInstance();
@@ -173,6 +197,7 @@ public class AddTripFragments extends Fragment {
         calendar.set(mYear, mMonth,  mDay, t1Hour, t1Minuite);
         long alarmTime = calendar.getTimeInMillis()-l;
         Log.i("room"," check "+alarmTime);
+        Log.i("room"," number used "+mYear+" "+mMonth+" "+mDay+" "+t1Hour+" "+t1Minuite);
         return alarmTime;
     }
 

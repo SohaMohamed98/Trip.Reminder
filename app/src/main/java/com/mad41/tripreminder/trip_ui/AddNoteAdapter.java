@@ -45,6 +45,12 @@ public class AddNoteAdapter extends RecyclerView.Adapter<AddNoteAdapter.ViewHold
 
     }
 
+    public void setNotes(ArrayList<String> notes){
+        this.noteList=notes;
+
+        notifyDataSetChanged();
+    }
+
     public ArrayList<String> getNoteList() {
         return noteList;
     }

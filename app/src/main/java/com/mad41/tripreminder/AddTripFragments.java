@@ -130,6 +130,7 @@ public class AddTripFragments extends Fragment {
         communicatorListener = (Communicator) getActivity();
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -189,6 +190,11 @@ public class AddTripFragments extends Fragment {
             txt_start.setText(trip.getStartLoacation());
             txt_end.setText(trip.getStartLoacation());
 
+              addNoteAdapter.setNotes(trip.getNotes());
+
+            //  addNoteAdapter = new AddNoteAdapter(getContext(), trip.getNotes());
+           // recyclerViewNote.setAdapter(addNoteAdapter);
+
         }
 
 
@@ -201,7 +207,7 @@ public class AddTripFragments extends Fragment {
                     ArrayList<String> strlist = new ArrayList<>();
                     strlist.add("mmmm");
                     Trip myTrip = new Trip(txt_place.getText().toString(), txt_start.getText().toString(), txt_end.getText().toString(),
-                            txt_time.getText().toString(), txt_date.getText().toString(), strlist, Constants.TRIP_UPCOMING, true, true);
+                            txt_time.getText().toString(), txt_date.getText().toString(), myNotes, Constants.TRIP_UPCOMING, true, true);
                  /*   new Thread() {
                         @Override
                         public void run() {
@@ -219,6 +225,7 @@ public class AddTripFragments extends Fragment {
                     }
                     Log.i("room", "id is: " + id);
                     communicatorListener.passingNotes(myNotes);
+                    communicatorListener.respon(alarmTime,id, txt_start.getText().toString(),txt_end.getText().toString(),0,0);
                     myData();
 
                 } else {

@@ -78,11 +78,18 @@ public class HistoryAdapter extends RecyclerView.Adapter<com.mad41.tripreminder.
     @Override
     public void onBindViewHolder(HistoryAdapter.ExampleViewHolder holder, int position) {
         Trip currentItem = tripModels.get(position);
+        String Status = null;
+        if(currentItem.getStatus() == 0){
+            Status = "Canceled";
+        }
+        else if(currentItem.getStatus() == 1){
+            Status = "Completed";
+        }
         holder.txt_date.setText(currentItem.getDate());
         holder.txt_time.setText(currentItem.getTime());
         holder.txt_start.setText(currentItem.getStartLoacation());
         holder.txt_end.setText(currentItem.getEndLoacation());
-        holder.txt_state.setText(String.valueOf(currentItem.getStatus()));
+        holder.txt_state.setText(Status);
         holder.txt_place.setText(currentItem.getName());
 
 
@@ -118,8 +125,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<com.mad41.tripreminder.
 
             }
         });
-        tripModels.add(1,new Trip("marwa",
-                "yuy","yruyuy","yhfhk","yihfh",1,true,true));
+
         holder.Notes.setOnClickListener(v -> lis.showNotes(tripModels));
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override

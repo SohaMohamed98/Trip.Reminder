@@ -1,36 +1,28 @@
 package com.mad41.tripreminder;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Handler;
-import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mad41.tripreminder.constants.Constants;
-import com.mad41.tripreminder.room_database.MyRoomDataBase;
 import com.mad41.tripreminder.room_database.trip.Trip;
 import com.mad41.tripreminder.room_database.view_model.TripViewModel;
 import com.mad41.tripreminder.trip_ui.TripAdapter;
-import com.mad41.tripreminder.trip_ui.TripModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +66,7 @@ public class OnGoingFrag extends Fragment {
                              Bundle savedInstanceState) {
         View fragment = inflater.inflate(R.layout.fragment_on_going2, container, false);
         btn_add = fragment.findViewById(R.id.btnf_add);
-        recyclerView = (RecyclerView) fragment.findViewById(R.id.recyclerView);
+        recyclerView = (RecyclerView) fragment.findViewById(R.id.HistoryRecyclerView);
         recyclerView.setHasFixedSize(true);
         adapter = new TripAdapter();
         layoutManager = new LinearLayoutManager(getContext().getApplicationContext());

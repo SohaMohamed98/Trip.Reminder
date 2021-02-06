@@ -26,6 +26,8 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -57,6 +59,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AddTripFragments extends Fragment {
 
+    //Radio
+    RadioGroup radioGroup;
+    RadioButton radio_btn_day;
+    RadioButton radio_btn_month;
+    RadioButton radio_btn_year;
+
     //Notes
     ArrayList<String> myNotes;
     RecyclerView recyclerViewNote;
@@ -65,6 +73,7 @@ public class AddTripFragments extends Fragment {
     NoteAdapter noteAdapter;
     RecyclerView.LayoutManager layoutManager;
     ImageButton btn_add_note;
+
 
     public static final String TAG = "room";
     ImageButton btn_date_round;
@@ -130,12 +139,19 @@ public class AddTripFragments extends Fragment {
         communicatorListener = (Communicator) getActivity();
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_add_trip_fragments, container, false);
         Places.initialize(getContext().getApplicationContext(), "AIzaSyA7dH75J8SZ0-GkeHqHANbflPhdpbfU5yI");
+
+        //radio buttons
+        radioGroup =view.findViewById(R.id.radio_group);
+        radio_btn_day = view.findViewById(R.id.radio_btn_day);
+        radio_btn_month = view.findViewById(R.id.radio_btn_month);
+        radio_btn_year = view.findViewById(R.id.radio_btn_year);
 
         txt_date_round = view.findViewById(R.id.txt_date_round);
         txt_time_round = view.findViewById(R.id.txt_time_round);
@@ -189,6 +205,11 @@ public class AddTripFragments extends Fragment {
             txt_start.setText(trip.getStartLoacation());
             txt_end.setText(trip.getStartLoacation());
 
+              addNoteAdapter.setNotes(trip.getNotes());
+
+              //addNoteAdapter = new AddNoteAdapter(getContext(), trip.getNotes());
+              //recyclerViewNote.setAdapter(addNoteAdapter);
+
         }
 
 
@@ -201,7 +222,7 @@ public class AddTripFragments extends Fragment {
                     ArrayList<String> strlist = new ArrayList<>();
                     strlist.add("mmmm");
                     Trip myTrip = new Trip(txt_place.getText().toString(), txt_start.getText().toString(), txt_end.getText().toString(),
-                            txt_time.getText().toString(), txt_date.getText().toString(), strlist, Constants.TRIP_UPCOMING, true, true);
+                            txt_time.getText().toString(), txt_date.getText().toString(), myNotes, Constants.TRIP_UPCOMING, true, true);
                  /*   new Thread() {
                         @Override
                         public void run() {
@@ -219,6 +240,7 @@ public class AddTripFragments extends Fragment {
                     }
                     Log.i("room", "id is: " + id);
                     communicatorListener.passingNotes(myNotes);
+                    communicatorListener.respon(alarmTime,id, txt_start.getText().toString(),txt_end.getText().toString(),0,0);
                     myData();
 
                 } else {

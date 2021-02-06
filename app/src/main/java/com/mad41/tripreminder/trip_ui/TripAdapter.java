@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.PopupMenu;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mad41.tripreminder.MainScreen;
@@ -29,6 +30,7 @@ import java.util.List;
 public class TripAdapter extends RecyclerView.Adapter<com.mad41.tripreminder.trip_ui.TripAdapter.ExampleViewHolder> {
     private List<Trip> tripModels=new ArrayList<>();
     private static OnMenuClickListener listener;
+   private static NoteReview noteReview;
 
    @Override
     public ExampleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -66,6 +68,7 @@ public class TripAdapter extends RecyclerView.Adapter<com.mad41.tripreminder.tri
         public TextView txt_state;
         public TextView txt_start;
         public TextView txt_end;
+        ImageView btn_note_review;
         public int id;
         ImageView btn_menu_card;
 
@@ -79,10 +82,19 @@ public class TripAdapter extends RecyclerView.Adapter<com.mad41.tripreminder.tri
             txt_state = itemView.findViewById(R.id.txt_state);
             txt_end = itemView.findViewById(R.id.txt_end2);
             btn_menu_card = itemView.findViewById(R.id.btn_menu_card);
+            btn_note_review = itemView.findViewById(R.id.btn_noteCard);
+
             btn_menu_card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     listener.onItemClick(view, id);
+                }
+            });
+
+            btn_note_review.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    noteReview.onNoteClick(v);
                 }
             });
         }
@@ -94,6 +106,12 @@ public class TripAdapter extends RecyclerView.Adapter<com.mad41.tripreminder.tri
         this.listener = listener;
     }
 
+    public void setOnNoteClickListener(NoteReview noteReview){
+       this.noteReview=noteReview;
+    }
+    public interface NoteReview{
+     void onNoteClick(View view);
+    }
 
 
 }

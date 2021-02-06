@@ -1,5 +1,7 @@
 package com.mad41.tripreminder.trip_ui;
 
+import java.util.ArrayList;
+
 public class TripModel {
     private int id;
     private String name;
@@ -10,6 +12,7 @@ public class TripModel {
     private int status;
     private boolean isRepeated;
     private boolean isRound;
+    private ArrayList<String> myNotes;
 
     public TripModel(String name, String startLoacation, String endLoacation,
                      String time, String date, int status, boolean isRepeated, boolean isRound) {
@@ -58,6 +61,10 @@ public class TripModel {
 
     public boolean isRound() {
         return isRound;
+    }
+
+    public ArrayList<String> getMyNotes() {
+        return myNotes;
     }
 
 }

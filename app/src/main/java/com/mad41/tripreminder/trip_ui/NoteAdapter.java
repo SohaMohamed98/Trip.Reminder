@@ -1,6 +1,7 @@
 package com.mad41.tripreminder.trip_ui;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,15 +11,20 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.mad41.tripreminder.AddTripFragments;
 import com.mad41.tripreminder.R;
+import com.mad41.tripreminder.room_database.trip.Trip;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
+public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> implements AddTripFragments.Communicator {
 
+    Trip trip;
     Context context;
     ArrayList<String> myNotes;
     RecyclerView.ViewHolder vh;
+    private List<Trip> tripModels = new ArrayList<>();
 
 
     public NoteAdapter(Context context, ArrayList<String> myNotes) {
@@ -27,7 +33,6 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
         this.myNotes = myNotes;
     }
 
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -35,7 +40,6 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
 
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_note, parent, false);
         vh = new ViewHolder(v);
-
         return (ViewHolder) vh;
     }
 
@@ -50,6 +54,16 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
         return myNotes.size();
     }
 
+    @Override
+    public void respon(long alarmTime, int id, String start, String end, int tripBack, int repeatInterval) {
+
+    }
+
+    @Override
+    public void returnToOnGoingActivity() {
+    }
+
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView txt_note;
 
@@ -60,4 +74,6 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
 
         }
     }
+
+
 }

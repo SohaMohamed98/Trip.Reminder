@@ -10,16 +10,24 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.mad41.tripreminder.AddTripFragments;
 import com.mad41.tripreminder.R;
+import com.mad41.tripreminder.room_database.MyRoomDataBase;
+import com.mad41.tripreminder.room_database.trip.Trip;
+import com.mad41.tripreminder.room_database.view_model.TripViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class NoteReviewDialogue extends DialogFragment {
 
@@ -28,9 +36,13 @@ public class NoteReviewDialogue extends DialogFragment {
     NoteAdapter noteAdapter;
     RecyclerView.LayoutManager layoutManager;
     ArrayList<String> myNote;
+    AddTripFragments addTripFragments;
 
-    public NoteReviewDialogue() {
-        // Required empty public constructor
+    Trip trip;
+
+    public NoteReviewDialogue(Trip trip) {
+
+        this.trip = trip;
     }
 
 
@@ -40,21 +52,12 @@ public class NoteReviewDialogue extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.fragment_note_review_dialogue, null);
-        myNote= new ArrayList<String>();
-        myNote.add("Soha");
-        myNote.add("Marwa");
-        myNote.add("Moataz");
-        myNote.add("Mahmoud");
-        myNote.add("Soha");
-        myNote.add("Marwa");
-        myNote.add("Moataz");
-        myNote.add("Mahmoud");
-
+        addTripFragments = new AddTripFragments();
 
         recyclerView = view.findViewById(R.id.recyclerView_note_review);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getContext().getApplicationContext());
-        noteAdapter = new NoteAdapter(getContext(), myNote);
+        noteAdapter = new NoteAdapter(context, trip.getNotes());
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext().getApplicationContext());
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
@@ -66,12 +69,12 @@ public class NoteReviewDialogue extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
+                        Log.i("note", "From Dialogue:" + trip.getNotes().get(0));
                     }
                 });
 
         return builder.create();
     }
-
 
 
 }

@@ -45,8 +45,8 @@ public class AddNoteAdapter extends RecyclerView.Adapter<AddNoteAdapter.ViewHold
 
     }
 
-    public void setNotes(ArrayList<String> notes){
-        this.noteList=notes;
+    public void setNotes(ArrayList<String> notes) {
+        this.noteList = notes;
 
         notifyDataSetChanged();
     }
@@ -61,8 +61,8 @@ public class AddNoteAdapter extends RecyclerView.Adapter<AddNoteAdapter.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageButton btn_note_delete;
         public EditText et_note_name;
+        ImageButton btn_note_delete;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -103,6 +103,5 @@ public class AddNoteAdapter extends RecyclerView.Adapter<AddNoteAdapter.ViewHold
 
         }
     }
-
 
 }

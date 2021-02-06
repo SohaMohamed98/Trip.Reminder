@@ -20,20 +20,17 @@ import java.util.List;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> implements AddTripFragments.Communicator {
 
+    Trip trip;
     Context context;
     ArrayList<String> myNotes;
     RecyclerView.ViewHolder vh;
-    private List<Trip> tripModels=new ArrayList<>();
+    private List<Trip> tripModels = new ArrayList<>();
 
 
     public NoteAdapter(Context context, ArrayList<String> myNotes) {
 
         this.context = context;
         this.myNotes = myNotes;
-    }
-    public void setList(List<Trip> trips){
-        this.tripModels=trips;
-        notifyDataSetChanged();
     }
 
     @NonNull
@@ -43,7 +40,6 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
 
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_note, parent, false);
         vh = new ViewHolder(v);
-
         return (ViewHolder) vh;
     }
 
@@ -64,24 +60,9 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
     }
 
     @Override
-    public void passingNotes(ArrayList<String> myNotes) {
-
-       this.myNotes=myNotes;
-        Bundle bundle=new Bundle();
-        bundle.putStringArrayList("note",myNotes);
-        NoteReviewDialogue noteReviewDialogue=new NoteReviewDialogue();
-        noteReviewDialogue.setArguments(bundle);
-    }
-
-    @Override
-    public void sendArrayListToRecycleView(ArrayList<Trip> arrayList2) {
-
-    }
-
-    @Override
     public void returnToOnGoingActivity() {
-
     }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView txt_note;
@@ -93,4 +74,6 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
 
         }
     }
+
+
 }

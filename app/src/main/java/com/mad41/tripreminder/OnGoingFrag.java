@@ -1,51 +1,42 @@
 package com.mad41.tripreminder;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Handler;
-import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mad41.tripreminder.constants.Constants;
-import com.mad41.tripreminder.room_database.MyRoomDataBase;
 import com.mad41.tripreminder.room_database.trip.Trip;
 import com.mad41.tripreminder.room_database.view_model.TripViewModel;
 import com.mad41.tripreminder.trip_ui.NoteReviewDialogue;
-import com.mad41.tripreminder.trip_ui.RoundTripDialogue;
 import com.mad41.tripreminder.trip_ui.TripAdapter;
-import com.mad41.tripreminder.trip_ui.TripModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class OnGoingFrag extends Fragment {
-    private FloatingActionButton btn_add;
+    private static List<Trip> tripModelArrayList;
     Context context;
     RecyclerView recyclerView;
     TripAdapter adapter;
     RecyclerView.LayoutManager layoutManager;
 
     onGoingCommunicator onGoingCommunicator1;
-    private static List<Trip> tripModelArrayList;
+    private FloatingActionButton btn_add;
     private TripViewModel tripViewModel;
 
     @Override
@@ -60,12 +51,6 @@ public class OnGoingFrag extends Fragment {
         this.context = context;
     }
 
-    /*  class MyHandler extends Handler {
-          @Override
-          public void handleMessage(@NonNull Message msg) {
-              super.handleMessage(msg);
-              setRecyclerView();
-          }*/
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,9 +80,16 @@ public class OnGoingFrag extends Fragment {
 
         adapter.setOnNoteClickListener(new TripAdapter.NoteReview() {
             @Override
-            public void onNoteClick(View view) {
-                NoteReviewDialogue round_dialogue = new NoteReviewDialogue();
-                round_dialogue.show(getActivity().getSupportFragmentManager(), "frag");
+            public void onNoteClick(View view, int id) {
+                Trip trip = null;
+                for (int i = 0; i < tripModelArrayList.size(); i++) {
+                    if (tripModelArrayList.get(i).getId() == id) {
+                        trip = tripModelArrayList.get(i);
+                    }
+                }
+                NoteReviewDialogue noteReviewDialogue = new NoteReviewDialogue(trip);
+                noteReviewDialogue.show(getActivity().getSupportFragmentManager(), "frag");
+                Log.i("note", "Notes are: " + trip.getNotes().get(0));
             }
         });
 
@@ -137,12 +129,10 @@ public class OnGoingFrag extends Fragment {
         });
 
 
-
         btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onGoingCommunicator1.startAddTripFragment(null);
-//              onGoingCommunicator1.saveArrayList(tripModelArrayList);
 
             }
         });
@@ -164,15 +154,8 @@ public class OnGoingFrag extends Fragment {
 
     }
 
-    /*    public void getArrayList(ArrayList<Trip> arrayList2) {
-             this.tripModelArrayList=arrayList2;
-             setRecyclerView();
-    }*/
-
 
     public interface onGoingCommunicator {
-        void saveArrayList(ArrayList<Trip> arr);
-
         void startAddTripFragment(Bundle bundle);
     }
 }

@@ -31,9 +31,9 @@ public class HistoryFragment extends Fragment {
     RecyclerView.LayoutManager layoutManager;
     String name, start, end, time, date;
     Boolean status, round;
-    private TripViewModel tripViewModel;
     OnGoingFrag.onGoingCommunicator onGoingCommunicator1;
     List<Trip> tripModelArrayList;
+    private TripViewModel tripViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,7 +44,7 @@ public class HistoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View fragment =  inflater.inflate(R.layout.fragment_history, container, false);
+        View fragment = inflater.inflate(R.layout.fragment_history, container, false);
         recyclerView = (RecyclerView) fragment.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         adapter = new TripAdapter();
@@ -57,7 +57,7 @@ public class HistoryFragment extends Fragment {
         tripViewModel.getHistoryNotes().observe(requireActivity(), new Observer<List<Trip>>() {
             @Override
             public void onChanged(List<Trip> trips) {
-                tripModelArrayList=trips;
+                tripModelArrayList = trips;
                 adapter.setList(trips);
             }
         });
@@ -69,6 +69,6 @@ public class HistoryFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        onGoingCommunicator1= (OnGoingFrag.onGoingCommunicator) getActivity();
+        onGoingCommunicator1 = (OnGoingFrag.onGoingCommunicator) getActivity();
     }
 }

@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mad41.tripreminder.historyListner;
 import com.mad41.tripreminder.R;
 import com.mad41.tripreminder.room_database.trip.Trip;
+import com.mad41.tripreminder.room_database.view_model.TripViewModel;
 
 import java.util.List;
 
@@ -27,7 +28,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<com.mad41.tripreminder.
     private Context context;
     private static View view;
     public final historyListner lis;
-    private FragmentContainerView contenr;
     public static class ExampleViewHolder extends RecyclerView.ViewHolder {
         public TextView txt_date;
         public TextView txt_time;
@@ -37,6 +37,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<com.mad41.tripreminder.
         public TextView txt_end , to;
         public Button Details , delete;
         public ImageButton Notes;
+        public int id;
         public FragmentContainerView contenr;
 
 
@@ -53,6 +54,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<com.mad41.tripreminder.
             to = itemView.findViewById(R.id.to);
             Notes = itemView.findViewById(R.id.DNotes);
             contenr = itemView.findViewById(R.id.dynamicFrag);
+
 
             view = itemView;
         }
@@ -71,6 +73,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<com.mad41.tripreminder.
         slideUp = AnimationUtils.loadAnimation(parent.getContext(), R.anim.slide_up);
         slideDown = AnimationUtils.loadAnimation(parent.getContext(), R.anim.slide_down);
         context = parent.getContext();
+
 
         return evh;
     }
@@ -91,6 +94,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<com.mad41.tripreminder.
         holder.txt_end.setText(currentItem.getEndLoacation());
         holder.txt_state.setText(Status);
         holder.txt_place.setText(currentItem.getName());
+        holder.id = currentItem.getId();
+        lis.getID(currentItem.getId());
 
 
         holder.Details.setOnClickListener(new View.OnClickListener() {
@@ -126,26 +131,10 @@ public class HistoryAdapter extends RecyclerView.Adapter<com.mad41.tripreminder.
             }
         });
 
-        holder.Notes.setOnClickListener(v -> lis.showNotes(tripModels));
-        holder.delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new AlertDialog.Builder(context)
-                        .setTitle("Delete entry")
-                        .setMessage("Are you sure you want to delete this entry?")
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                tripModels.remove(tripModels.get(position));
-                                notifyDataSetChanged();
-                            }
-                        })
-                        .setNegativeButton(android.R.string.no, null)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
-            }
-        });
-    }
+        holder.Notes.setOnClickListener(v -> lis.showNotes(tripModels , holder.id));
+        holder.delete.setOnClickListener(v -> lis.DeleteTrip(tripModels,holder.id));
 
+}
     @Override
     public int getItemCount() {
         return tripModels.size();

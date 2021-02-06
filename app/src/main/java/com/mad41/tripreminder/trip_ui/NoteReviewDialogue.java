@@ -69,7 +69,6 @@ public class NoteReviewDialogue extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        Log.i("note", "From Dialogue:" + trip.getNotes().get(0));
                     }
                 });
 

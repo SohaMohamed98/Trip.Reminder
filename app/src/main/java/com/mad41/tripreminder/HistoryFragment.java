@@ -1,9 +1,11 @@
 package com.mad41.tripreminder;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -16,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +41,7 @@ public class HistoryFragment extends Fragment {
     RecyclerView.LayoutManager layoutManager;
     List<Trip> tripModelArrayList;
     historyListner listner;
-
+    int ID;
 
     public HistoryFragment() {
         // Required empty public constructor
@@ -70,9 +73,39 @@ public class HistoryFragment extends Fragment {
                 tripModelArrayList=trips;
                 listner = new historyListner() {
                     @Override
-                    public void showNotes(List<Trip> notes) {
-                        NoteReviewDialogue round_dialogue = new NoteReviewDialogue();
-                        round_dialogue.show(getActivity().getSupportFragmentManager(), "frag");
+                    public void showNotes(List<Trip> notes , int id) {
+
+                        Trip trip = null;
+                        for (int i = 0; i < notes.size(); i++) {
+                            if (notes.get(i).getId() == id) {
+                                trip = notes.get(i);
+                            }
+                        }
+                        NoteReviewDialogue noteReviewDialogue = new NoteReviewDialogue(trip);
+                        noteReviewDialogue.show(getActivity().getSupportFragmentManager(), "frag");
+
+                    }
+
+                    @Override
+                    public void DeleteTrip(List<Trip> Trips, int id) {
+                        new AlertDialog.Builder(getContext())
+                                .setTitle("Delete entry")
+                                .setMessage("Are you sure you want to delete this entry?")
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                       // Trips.remove(Trips.get(id));
+                                        adapter.notifyDataSetChanged();
+                                        tripViewModel.deleteTripById(id);
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.no, null)
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    }
+
+                    @Override
+                    public void getID(int id) {
+                        ID = id;
                     }
                 };
                 adapter = new HistoryAdapter(tripModelArrayList , listner);
@@ -87,6 +120,7 @@ public class HistoryFragment extends Fragment {
                     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                         tripModelArrayList.remove(viewHolder.getAdapterPosition());
                         adapter.notifyDataSetChanged();
+                        tripViewModel.deleteTripById(ID);
                         Toast.makeText(getContext().getApplicationContext(), "Trip is Deleted From Hisrory", Toast.LENGTH_LONG).show();
                     }
                 };

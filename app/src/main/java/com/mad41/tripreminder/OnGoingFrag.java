@@ -91,7 +91,7 @@ public class OnGoingFrag extends Fragment {
                 }
                 NoteReviewDialogue noteReviewDialogue = new NoteReviewDialogue(trip);
                 noteReviewDialogue.show(getActivity().getSupportFragmentManager(), "frag");
-                Log.i("note", "Notes are: " + trip.getNotes().get(0));
+
             }
         });
 

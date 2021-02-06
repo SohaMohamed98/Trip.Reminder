@@ -16,12 +16,14 @@ import com.mad41.tripreminder.R;
 import com.mad41.tripreminder.room_database.trip.Trip;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> implements AddTripFragments.Communicator {
 
     Context context;
     ArrayList<String> myNotes;
     RecyclerView.ViewHolder vh;
+    private List<Trip> tripModels=new ArrayList<>();
 
 
     public NoteAdapter(Context context, ArrayList<String> myNotes) {
@@ -29,7 +31,10 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
         this.context = context;
         this.myNotes = myNotes;
     }
-
+    public void setList(List<Trip> trips){
+        this.tripModels=trips;
+        notifyDataSetChanged();
+    }
 
     @NonNull
     @Override

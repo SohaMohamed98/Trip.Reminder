@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,9 +22,11 @@ import android.view.ViewGroup;
 import com.mad41.tripreminder.AddTripFragments;
 import com.mad41.tripreminder.R;
 import com.mad41.tripreminder.room_database.MyRoomDataBase;
+import com.mad41.tripreminder.room_database.trip.Trip;
 import com.mad41.tripreminder.room_database.view_model.TripViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class NoteReviewDialogue extends DialogFragment {
 
@@ -32,6 +36,7 @@ public class NoteReviewDialogue extends DialogFragment {
     RecyclerView.LayoutManager layoutManager;
     ArrayList<String> myNote;
     AddTripFragments addTripFragments;
+    List<Trip> tripModelArrayList;
     private MyRoomDataBase dataBaseInstance;
     private TripViewModel tripViewModel;
 
@@ -73,6 +78,16 @@ public class NoteReviewDialogue extends DialogFragment {
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(noteAdapter);
+        tripViewModel = ViewModelProviders.of(requireActivity()).get(TripViewModel.class);
+        tripViewModel.getAllNotes().observe(requireActivity(), new Observer<List<Trip>>() {
+            @Override
+            public void onChanged(List<Trip> trips) {
+
+                tripModelArrayList = trips;
+                noteAdapter.setList(trips);
+            }
+        });
+
 
         builder.setView(view)
                 .setTitle("My Notes")

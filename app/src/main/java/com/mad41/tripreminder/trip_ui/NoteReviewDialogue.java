@@ -49,7 +49,7 @@ public class NoteReviewDialogue extends DialogFragment {
         myNote.add("Marwa");
         myNote.add("Moataz");
         myNote.add("Mahmoud");
-       
+
 
         recyclerView = view.findViewById(R.id.recyclerView_note_review);
         recyclerView.setHasFixedSize(true);

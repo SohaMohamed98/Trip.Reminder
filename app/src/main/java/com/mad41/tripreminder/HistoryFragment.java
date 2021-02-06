@@ -25,6 +25,7 @@ import com.mad41.tripreminder.room_database.MyRoomDataBase;
 import com.mad41.tripreminder.room_database.trip.Trip;
 import com.mad41.tripreminder.room_database.view_model.TripViewModel;
 import com.mad41.tripreminder.trip_ui.HistoryAdapter;
+import com.mad41.tripreminder.trip_ui.NoteReviewDialogue;
 
 
 import java.util.ArrayList;
@@ -70,7 +71,8 @@ public class HistoryFragment extends Fragment {
                 listner = new historyListner() {
                     @Override
                     public void showNotes(List<Trip> notes) {
-
+                        NoteReviewDialogue round_dialogue = new NoteReviewDialogue();
+                        round_dialogue.show(getActivity().getSupportFragmentManager(), "frag");
                     }
                 };
                 adapter = new HistoryAdapter(tripModelArrayList , listner);

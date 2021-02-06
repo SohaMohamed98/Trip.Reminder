@@ -10,6 +10,17 @@ public class User_Data {
     private String Date;
     private String Status;
     private ArrayList<String> Notes;
+    private String IsRepeated;
+
+    public String getIsRepeated() {
+        return IsRepeated;
+    }
+
+    public String getIsRound() {
+        return IsRound;
+    }
+
+    private String IsRound;
 
     public User_Data(){
         Notes = new ArrayList<>();

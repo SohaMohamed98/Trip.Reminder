@@ -1,14 +1,19 @@
 package com.mad41.tripreminder.room_database.trip;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import com.mad41.tripreminder.constants.Constants;
 
+import java.util.ArrayList;
+
 
 @Entity(tableName = Constants.TRIP_TABLE_NAME)
-public class Trip {
+public class Trip implements Parcelable {
     @PrimaryKey(autoGenerate = true)
     @NonNull
     private int id;
@@ -17,29 +22,30 @@ public class Trip {
     private String endLoacation;
     private String time;
     private String date;
+    private ArrayList<String> notes;
     private int status;
     private boolean isRepeated;
     private boolean isRound;
 
-    public Trip(String name, String startLoacation, String endLoacation,
-                String time, String date, int status, boolean isRepeated, boolean isRound)
-    {
+    public Trip(String name, String startLoacation, String endLoacation, String time, String date
+            , ArrayList<String> notes, int status, boolean isRepeated, boolean isRound) {
         this.name = name;
         this.startLoacation = startLoacation;
         this.endLoacation = endLoacation;
         this.time = time;
         this.date = date;
+        this.notes = notes;
         this.status = status;
         this.isRepeated = isRepeated;
         this.isRound = isRound;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -62,6 +68,10 @@ public class Trip {
         return date;
     }
 
+    public ArrayList<String> getNotes() {
+        return notes;
+    }
+
     public int getStatus() {
         return status;
     }
@@ -75,17 +85,12 @@ public class Trip {
     }
 
     @Override
-    public String toString() {
-        return "Trip{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", startLoacation='" + startLoacation + '\'' +
-                ", endLoacation='" + endLoacation + '\'' +
-                ", time='" + time + '\'' +
-                ", date='" + date + '\'' +
-                ", status=" + status +
-                ", isRepeated=" + isRepeated +
-                ", isRound=" + isRound +
-                '}';
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
     }
 }

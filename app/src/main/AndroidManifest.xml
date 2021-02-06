@@ -16,9 +16,12 @@
         <activity android:name=".ResetPassword"></activity>
         <activity
             android:name=".TransparentActivity"
-            android:theme="@style/Theme.AppCompat.Transparent.NoActionBar" />
-        <activity android:name=".MainScreen" />
-        <activity android:name=".Registration_Form" />
+            android:theme="@style/Theme.AppCompat.Transparent.NoActionBar"></activity>
+        <activity android:name=".MainScreen"
+            android:theme="@style/Theme.TripReminder.NoActionBar"></activity>
+    <activity android:name=".Registration_Form" />
+
+
         <activity android:name=".Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

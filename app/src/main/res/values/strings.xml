@@ -22,5 +22,17 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <string name="edit_menu">Edit Menu</string>
+    <string name="edit_notes">Edit Notes</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="edit_trip">Edit Trip</string>
+
+    <string-array name="spinner">
+        <item>Edit Trip</item>
+        <item>Edit Notes</item>
+        <item>Cancel</item>
+        <item>Delete</item>
+    </string-array>
 
 </resources>

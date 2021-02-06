@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".trip_ui.RoundTripDialogue">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        app:cardCornerRadius="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp">
+
+            <TextView
+                android:id="@+id/txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_marginTop="16dp"
+                android:text="What time will you return"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_editor_absoluteX="119dp" />
+
+            <ImageButton
+                android:id="@+id/img_date_dialogue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="96dp"
+                android:minWidth="100dp"
+                android:minHeight="100dp"
+                android:src="@drawable/ic_date"
+                app:layout_constraintEnd_toStartOf="@+id/img_time_dialogue"
+                app:layout_constraintTop_toBottomOf="@+id/txt" />
+
+            <TextView
+                android:id="@+id/txt_date_dialogue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Date"
+                app:layout_constraintStart_toStartOf="@+id/img_date_dialogue"
+                app:layout_constraintTop_toTopOf="@+id/txt_time_dialogue" />
+
+            <ImageButton
+                android:id="@+id/img_time_dialogue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="20dp"
+                android:minWidth="100dp"
+                android:minHeight="100dp"
+                android:src="@drawable/ic_time"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txt" />
+
+            <TextView
+                android:id="@+id/txt_time_dialogue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:hint="Time"
+                app:layout_constraintStart_toStartOf="@+id/img_time_dialogue"
+                app:layout_constraintTop_toBottomOf="@+id/img_time_dialogue" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

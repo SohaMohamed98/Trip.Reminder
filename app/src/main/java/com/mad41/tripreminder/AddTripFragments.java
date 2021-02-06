@@ -74,6 +74,8 @@ public class AddTripFragments extends Fragment {
     RecyclerView.LayoutManager layoutManager;
     ImageButton btn_add_note;
 
+    private static NotesArray notesArray;
+
 
     public static final String TAG = "room";
     ImageButton btn_date_round;
@@ -94,6 +96,7 @@ public class AddTripFragments extends Fragment {
     public final static String START = "START";
     public final static String END = "END";
     public static final String ID = "ID";
+
 
 
     private int id;
@@ -515,6 +518,13 @@ public class AddTripFragments extends Fragment {
         void sendArrayListToRecycleView(ArrayList<Trip> arrayList2);
 
         void returnToOnGoingActivity();
+    }
+
+    void noteFunc(NotesArray notesArray){this.notesArray = notesArray;}
+
+   public interface  NotesArray
+    {
+        void dataNote(ArrayList<String> myNotes);
     }
 
 }

@@ -17,7 +17,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.mad41.tripreminder.AddTripFragments;
 import com.mad41.tripreminder.R;
+import com.mad41.tripreminder.room_database.MyRoomDataBase;
+import com.mad41.tripreminder.room_database.view_model.TripViewModel;
 
 import java.util.ArrayList;
 
@@ -28,10 +31,14 @@ public class NoteReviewDialogue extends DialogFragment {
     NoteAdapter noteAdapter;
     RecyclerView.LayoutManager layoutManager;
     ArrayList<String> myNote;
+    AddTripFragments addTripFragments;
+    private MyRoomDataBase dataBaseInstance;
+    private TripViewModel tripViewModel;
 
     public NoteReviewDialogue() {
         // Required empty public constructor
     }
+
 
 
     @NonNull
@@ -40,16 +47,23 @@ public class NoteReviewDialogue extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.fragment_note_review_dialogue, null);
+       addTripFragments= new AddTripFragments();
         myNote= new ArrayList<String>();
-        myNote.add("Soha");
+       /* myNote.add("Soha");
         myNote.add("Marwa");
         myNote.add("Moataz");
         myNote.add("Mahmoud");
         myNote.add("Soha");
         myNote.add("Marwa");
         myNote.add("Moataz");
-        myNote.add("Mahmoud");
+        myNote.add("Mahmoud");*/
 
+
+        dataBaseInstance = MyRoomDataBase.getUserDataBaseInstance(getContext().getApplicationContext());
+
+        if(getArguments()!=null){
+          myNote = getArguments().getStringArrayList("note");
+        }
 
         recyclerView = view.findViewById(R.id.recyclerView_note_review);
         recyclerView.setHasFixedSize(true);

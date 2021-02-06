@@ -1,6 +1,7 @@
 package com.mad41.tripreminder.trip_ui;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +11,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.mad41.tripreminder.AddTripFragments;
 import com.mad41.tripreminder.R;
+import com.mad41.tripreminder.room_database.trip.Trip;
 
 import java.util.ArrayList;
 
-public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
+public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> implements AddTripFragments.Communicator {
 
     Context context;
     ArrayList<String> myNotes;
@@ -48,6 +51,31 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
     @Override
     public int getItemCount() {
         return myNotes.size();
+    }
+
+    @Override
+    public void respon(long alarmTime, int id, String start, String end, int tripBack, int repeatInterval) {
+
+    }
+
+    @Override
+    public void passingNotes(ArrayList<String> myNotes) {
+
+       this.myNotes=myNotes;
+        Bundle bundle=new Bundle();
+        bundle.putStringArrayList("note",myNotes);
+        NoteReviewDialogue noteReviewDialogue=new NoteReviewDialogue();
+        noteReviewDialogue.setArguments(bundle);
+    }
+
+    @Override
+    public void sendArrayListToRecycleView(ArrayList<Trip> arrayList2) {
+
+    }
+
+    @Override
+    public void returnToOnGoingActivity() {
+
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

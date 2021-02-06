@@ -37,6 +37,7 @@ import com.mad41.tripreminder.Firebase.WriteHandler;
 import com.mad41.tripreminder.room_database.MyRoomDataBase;
 import com.mad41.tripreminder.room_database.trip.Trip;
 import com.mad41.tripreminder.room_database.view_model.TripViewModel;
+import com.mad41.tripreminder.trip_ui.NoteReviewDialogue;
 import com.mad41.tripreminder.trip_ui.TripModel;
 
 import java.util.ArrayList;
@@ -243,12 +244,14 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
 
     @Override
     public void passingNotes(ArrayList<String> myNotes) {
-        for (int i=0; i< myNotes.size();i++)
+        for (int i=0; i< myNotes.size(); i++)
         {
             notes.add(i, myNotes.get(i));
+            Bundle bundle=new Bundle();
+            bundle.putStringArrayList("note",notes);
+            NoteReviewDialogue noteReviewDialogue=new NoteReviewDialogue();
+            noteReviewDialogue.setArguments(bundle);
         }
-
-
     }
 
     @Override

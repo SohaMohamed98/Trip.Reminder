@@ -45,6 +45,7 @@ import java.util.List;
 
 public class MainScreen extends AppCompatActivity implements AddTripFragments.Communicator,
         OnGoingFrag.onGoingCommunicator {
+
     private Toolbar toolbar;
     private DrawerLayout drawer;
     private OnGoingFrag frag1;
@@ -52,6 +53,7 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
     private FragmentManager mgr;
     private FragmentTransaction trns;
     private NavigationView drawerMenu;
+
     AddTripFragments fragment;
     public static Context context;
     private TripViewModel tripViewModel;
@@ -66,6 +68,8 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
+
+        frag2= new HistoryFragment();
 
         notes= new ArrayList<String>();
 
@@ -106,9 +110,9 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
 
     @Override
     public void startAddTripFragment(Bundle bundle) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        AddTripFragments fragment = new AddTripFragments();
+        mgr = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = mgr.beginTransaction();
+         fragment = new AddTripFragments();
         fragment.setArguments(bundle);
         fragmentTransaction.replace(R.id.dynamicFrag, fragment);
         fragmentTransaction.addToBackStack(null);
@@ -127,7 +131,7 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
                         getSupportFragmentManager().beginTransaction().replace(R.id.dynamicFrag, new OnGoingFrag()).commit();
                         break;
                     case R.id.btnHistory:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.dynamicFrag, new HistoryFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.dynamicFrag, frag2).commit();
                         break;
                     case R.id.btnLanguage:
                         //LiveData<List<Trip>> trips= MyRoomDataBase.getUserDataBaseInstance(getApplicationContext()).tripDao().getAllTrips();
@@ -186,8 +190,16 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
-            finishAffinity();
+
+
+           if(fragment.isVisible() || frag2.isVisible()){
+              returnToOnGoingActivity();
+               //mgr.popBackStack();
+
+           }else{
+               super.onBackPressed();
+               finishAffinity();
+           }
         }
     }
     @Override

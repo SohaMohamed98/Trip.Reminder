@@ -154,7 +154,7 @@ public class AddTripFragments extends Fragment {
                     ArrayList<String>strlist=new ArrayList<>();
                     strlist.add("mmmm");
                     Trip myTrip=new Trip(txt_place.getText().toString(),txt_start.getText().toString(),txt_end.getText().toString(),
-                            txtTtime.getText().toString(),txtDate.getText().toString(),strlist, Constants.TRIP_UPCOMING,true,true);
+                            txtTtime.getText().toString(),txtDate.getText().toString(),strlist, Constants.TRIP_UPCOMING,true,1);
                          if (getArguments()==null){
                              id=(int)tripViewModel.insert(myTrip);
                          }

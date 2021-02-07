@@ -260,8 +260,6 @@ public class Login_form extends AppCompatActivity implements View.OnClickListene
                     FirebaseUser user = mAuth.getCurrentUser();
                     readFireBase.start();
                     startActivity(new Intent(getApplicationContext(), MainScreen.class));
-
-
                 }
                 else
                 {

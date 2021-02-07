@@ -121,7 +121,7 @@ public class HistoryFragment extends Fragment {
                         tripModelArrayList.remove(viewHolder.getAdapterPosition());
                         adapter.notifyDataSetChanged();
                         tripViewModel.deleteTripById(ID);
-                        Toast.makeText(getContext().getApplicationContext(), "Trip is Deleted From Hisrory", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext().getApplicationContext(),  "Trip is Deleted From Hisrory", Toast.LENGTH_LONG).show();
                     }
                 };
                 new ItemTouchHelper(itemTouchHelper).attachToRecyclerView(recyclerView);

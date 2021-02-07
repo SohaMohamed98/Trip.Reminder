@@ -17,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -42,6 +43,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.mad41.tripreminder.Firebase.ReadHandler;
 import com.mad41.tripreminder.Firebase.User_Data;
 import com.mad41.tripreminder.room_database.trip.Trip;
+import com.mad41.tripreminder.room_database.view_model.TripViewModel;
 
 import java.util.ArrayList;
 
@@ -55,6 +57,7 @@ public class Login_form extends AppCompatActivity implements View.OnClickListene
     private AccessTokenTracker accessTokenTracker;
     private static final String TAG = "EmailPassword";
     TextView forgetPassword;
+    private TripViewModel tripViewModel;
     GoogleSignInClient googleSignInClient;
     private int RC_SIGN_IN = 1;
     EditText Email , Password ;
@@ -77,6 +80,7 @@ public class Login_form extends AppCompatActivity implements View.OnClickListene
         signInButton = (SignInButton)findViewById(R.id.googleBtn);
         mAuth = FirebaseAuth.getInstance();
         mCallbackManager = CallbackManager.Factory.create();
+        tripViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication())).get(TripViewModel.class);
 
         readFireBase = new Thread(new ReadHandler());
         fireBaseReadHandler = new Handler(){
@@ -98,8 +102,9 @@ public class Login_form extends AppCompatActivity implements View.OnClickListene
                        ArrayList<Trip> tripList=new ArrayList<>();
                     for(int i=0;i<TotalUserData.size();i++){
                         User_Data data=TotalUserData.get(i);
-                      /*  Trip trip =new Trip(data.getTripName(), data.getStart(), data.getEnd(),data.getTime(),data.getDate()
-                                , data.getNotes(),10,true,true);*/
+                        Trip trip =new Trip(data.getTripName(), data.getStart(), data.getEnd(),data.getTime(),data.getDate()
+                                , data.getNotes(),Integer.parseInt(data.getStatus()),true,true);
+                        tripViewModel.insert(trip);
                         System.out.println("message"+ " from fireeeee"+TotalUserData.get(0).getTripName()+TotalUserData.get(0).getDate());
                     }
 

@@ -70,7 +70,7 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
         setContentView(R.layout.activity_main_screen);
 
         frag2 = new HistoryFragment();
-
+        fragment = new AddTripFragments();
         notes = new ArrayList<String>();
 
         for (int i = 0; i < notes.size(); i++) {
@@ -109,7 +109,7 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
     public void startAddTripFragment(Bundle bundle) {
         mgr = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = mgr.beginTransaction();
-        fragment = new AddTripFragments();
+
         fragment.setArguments(bundle);
         fragmentTransaction.replace(R.id.dynamicFrag, fragment);
         fragmentTransaction.addToBackStack(null);

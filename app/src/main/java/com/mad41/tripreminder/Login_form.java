@@ -103,7 +103,7 @@ public class Login_form extends AppCompatActivity implements View.OnClickListene
                     for(int i=0;i<TotalUserData.size();i++){
                         User_Data data=TotalUserData.get(i);
                         Trip trip =new Trip(data.getTripName(), data.getStart(), data.getEnd(),data.getTime(),data.getDate()
-                                , data.getNotes(),Integer.parseInt(data.getStatus()),true,true);
+                                , data.getNotes(),Integer.parseInt(data.getStatus()),true,0);
                         tripViewModel.insert(trip);
                         System.out.println("message"+ " from fireeeee"+TotalUserData.get(0).getTripName()+TotalUserData.get(0).getDate());
                     }

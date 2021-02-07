@@ -18,10 +18,14 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.mad41.tripreminder.constants.Constants;
+import com.mad41.tripreminder.floating_bubble.FloatingViewService;
 import com.mad41.tripreminder.room_database.MyRoomDataBase;
 import com.mad41.tripreminder.room_database.trip.Trip;
 import com.mad41.tripreminder.room_database.view_model.TripViewModel;
@@ -49,6 +53,10 @@ public class TransparentActivity extends AppCompatActivity {
     private int mYear, mMonth, mDay;
     private String time, date;
 
+    Button showBubble;
+    private static final int CODE_DRAW_OVER_OTHER_APP_PERMISSION = 2084;
+
+
 
 
     @Override
@@ -57,6 +65,8 @@ public class TransparentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_transparent);
         incomingIntent = getIntent();
         myRoomDataBase = MyRoomDataBase.getUserDataBaseInstance(this);
+
+
 
         tripViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication())).get(TripViewModel.class);
 //        Trip finishedTrip = (Trip) Parcels.unwrap(incomingIntent.getParcelableExtra(Constants.TRIP));
@@ -69,14 +79,14 @@ public class TransparentActivity extends AppCompatActivity {
         if(repeated!=0){
             ArrayList<String> strlist = new ArrayList<>();
             strlist.add("mmmm");
-            Trip trip = new Trip("fake trip","fake trip","fake trip","12:00:AM","7-2-2021",strlist,2,false,false);
+            Trip trip = new Trip("fake trip","fake trip","fake trip","12:00:AM","7-2-2021",strlist,2,false,0);
             String name = trip.getName();
             String start = trip.getStartLoacation();
             String end = trip.getEndLoacation();
             time = trip.getTime();
             date = trip.getDate();
             ArrayList<String> strlis2 = trip.getNotes();
-            Trip realTrip = new Trip(name,start,end,time,date,strlis2,2,false,false);
+            Trip realTrip = new Trip(name,start,end,time,date,strlis2,2,false,0);
 
             addNextTrip(repeated,realTrip);
         }
@@ -161,7 +171,9 @@ public class TransparentActivity extends AppCompatActivity {
         builder.setMessage("Do you want to start your trip now?").setCancelable(false).setTitle("Reminder")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+
                         startTrip();
+                        startBubble();
 //                        if(repeated){
 //                            updateDate(interval);
 //                        }
@@ -204,6 +216,8 @@ public class TransparentActivity extends AppCompatActivity {
 //    }
 
     private void startTrip() {
+
+
         // Create a Uri from an intent string. Use the result to create an Intent.
         Uri openMaps = Uri.parse("http://maps.google.com/maps?daddr=" + Uri.encode(end) + " &dirflg=d");
         // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
@@ -223,6 +237,38 @@ public class TransparentActivity extends AppCompatActivity {
                 myRoomDataBase.tripDao().updateStatus(tripId, Constants.TRIP_DONE);
             }
         }).start();
+    }
+
+    private void startBubble(){
+        //Check if the application has draw over other apps permission or not?
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
+            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:" + getPackageName()));
+            startActivityForResult(intent, CODE_DRAW_OVER_OTHER_APP_PERMISSION);
+        } else {
+            Toast.makeText(this,"Hello Button cliced", Toast.LENGTH_LONG).show();
+            initializeView();
+        }
+    }
+
+    private void initializeView() {
+        startService(new Intent(this, FloatingViewService.class));
+        finish();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CODE_DRAW_OVER_OTHER_APP_PERMISSION) {
+            //Check if the permission is granted or not.
+            if (resultCode == RESULT_OK) {
+                initializeView();
+            } else { //Permission is not available
+                Toast.makeText(this,"Draw over other app permission not available. Closing the application",Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     private void showNotification() {

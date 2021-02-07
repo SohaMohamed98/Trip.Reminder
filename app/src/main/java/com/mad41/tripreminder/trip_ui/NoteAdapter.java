@@ -55,7 +55,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
     }
 
     @Override
-    public void respon(long alarmTime, int id, String start, String end, int tripBack, int repeatInterval) {
+    public void setAlarm(long alarmTime, int id, String end, int repeatInterval,Trip trip) {
 
     }
 

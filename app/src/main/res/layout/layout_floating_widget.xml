@@ -45,7 +45,7 @@
             android:id="@+id/expanded_container"
             android:layout_width="400dp"
             android:layout_height="400dp"
-            android:visibility="visible"
+            android:visibility="gone"
             android:background="#F8BBD0"
 
             android:padding="8dp">

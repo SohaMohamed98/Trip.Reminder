@@ -21,6 +21,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.MenuItem;
@@ -38,6 +39,8 @@ import com.mad41.tripreminder.room_database.MyRoomDataBase;
 import com.mad41.tripreminder.room_database.trip.Trip;
 import com.mad41.tripreminder.room_database.view_model.TripViewModel;
 import com.mad41.tripreminder.trip_ui.TripModel;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -138,7 +141,6 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
                         tripViewModel.getAllNotes().observe(MainScreen.this, new Observer<List<Trip>>() {
                             @Override
                             public void onChanged(List<Trip> trips) {
-                                System.out.println(trips.get(0));
                                 WriteHandler.WriteInfireBase(trips);
                             }
                         });
@@ -161,6 +163,7 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
         builder.setMessage("Sure you want to log out?").setCancelable(false).setTitle("Log out")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+
                         //log out
                         FirebaseAuth.getInstance().signOut();
                         startActivity(new Intent(getApplicationContext(), Login_form.class));
@@ -184,6 +187,7 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
         alert.show();
     }
 
+
     @Override
     public void onBackPressed() {
         //check if the drawer is open then the back button close the drawer first and not exit the activity directly
@@ -203,43 +207,82 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
         }
     }
     @Override
-    public void respon(long alarmTime, int id, String start, String end, int tripBack, int repeatInterval) {
-        //one trip
-        if (tripBack == 0 && repeatInterval == 0) {
-            setAlarm(alarmTime, id, end, false, 0);
-            //two trips
-        } else if (tripBack != 0 && repeatInterval == 0) {
-            setAlarm(alarmTime, id, end, false, 0);
-            setAlarm(alarmTime + tripBack, id + 1, start, false, 0);
-            //one trip repeated
-        } else if (tripBack == 0 && repeatInterval != 0) {
-            setAlarm(alarmTime, id, end, true, repeatInterval);
-            //two trips repeated
-        } else {
-            setAlarm(alarmTime, id, end, true, repeatInterval);
-            setAlarm(alarmTime + tripBack, id + 1, start, true, repeatInterval);
-        }
-    }
-
-    private void setAlarm(long alarmTime, int id, String end, boolean repeated, long interval) {
+    public void setAlarm(long alarmTime, int id, String end, int repeatInterval,Trip trip) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Intent notifyIntent = new Intent(this, TransparentActivity.class);
-
+//            notifyIntent.putExtra(Constants.TRIP, Parcels.wrap(trip));
             notifyIntent.putExtra(Constants.END, end);
             Log.i("room", "id sent " + id);
             notifyIntent.putExtra(Constants.ID, id);
+            notifyIntent.putExtra(Constants.REPEATED, repeatInterval);
+
             notifyIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             PendingIntent notifyPendingIntent = PendingIntent.getActivity(this, id, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
-            if (repeated) {
-                alarmManager.setRepeating(id, SystemClock.elapsedRealtime() + alarmTime, interval, notifyPendingIntent);
-            } else {
-                alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + alarmTime, notifyPendingIntent);
-            }
+//            alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + alarmTime, notifyPendingIntent);
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + alarmTime, notifyPendingIntent);
             Log.i("alram what is this ", SystemClock.elapsedRealtime() + "");
         }
+
+
+
+
+//        //one trip
+//        if (tripBack == 0 && repeatInterval == 0) {
+//            setAlarm(alarmTime, id, end, false, 0);
+//            //two trips
+//        } else if (tripBack != 0 && repeatInterval == 0) {
+//            setAlarm(alarmTime, id, end, false, 0);
+//            setAlarm(alarmTime + tripBack, id + 1, start, false, 0);
+//            //one trip repeated
+//        } else if (tripBack == 0 && repeatInterval != 0) {
+////            setAlarm(alarmTime, id, end, true, repeatInterval);
+//            //two trips repeated
+//        } else {
+//            setAlarm(alarmTime, id, end, true, repeatInterval);
+//            setAlarm(alarmTime + tripBack, id + 1, start, true, repeatInterval);
+//        }
     }
+
+    public void cancelAlarm(int id, String end, int repeatInterval){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Intent notifyIntent = new Intent(this, TransparentActivity.class);
+
+            notifyIntent.putExtra(Constants.END, end);
+            notifyIntent.putExtra(Constants.ID, id);
+            notifyIntent.putExtra(Constants.REPEATED, repeatInterval);
+
+            notifyIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            PendingIntent notifyPendingIntent = PendingIntent.getActivity(this, id, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+            alarmManager.cancel(notifyPendingIntent);
+            Log.i("alram what is this ", SystemClock.elapsedRealtime() + "");
+        }
+
+    }
+
+//    private void setAlarm(long alarmTime, int id, String end, boolean repeated, long interval) {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            Intent notifyIntent = new Intent(this, TransparentActivity.class);
+//
+//            notifyIntent.putExtra(Constants.END, end);
+//            Log.i("room", "id sent " + id);
+//            notifyIntent.putExtra(Constants.ID, id);
+//
+//            notifyIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            PendingIntent notifyPendingIntent = PendingIntent.getActivity(this, id, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+//
+//            if (repeated) {
+//                alarmManager.setRepeating(id, SystemClock.elapsedRealtime() + alarmTime, interval, notifyPendingIntent);
+//            } else {
+//                alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + alarmTime, notifyPendingIntent);
+//            }
+//            Log.i("alram what is this ", SystemClock.elapsedRealtime() + "");
+//        }
+//    }
 
     @Override
     public void passingNotes(ArrayList<String> myNotes) {

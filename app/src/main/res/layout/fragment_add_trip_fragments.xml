@@ -324,16 +324,17 @@
                     android:text="Daily" />
 
                 <RadioButton
+                    android:id="@+id/radio_btn_week"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Weekly" />
+
+                <RadioButton
                     android:id="@+id/radio_btn_month"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Monthly" />
 
-                <RadioButton
-                    android:id="@+id/radio_btn_year"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="yearly" />
             </RadioGroup>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

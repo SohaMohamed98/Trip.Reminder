@@ -78,6 +78,10 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
 
+    //parceler to send objects via intent
+    implementation 'org.parceler:parceler-api:1.1.12'
+    annotationProcessor 'org.parceler:parceler:1.1.12'
+
     //Dynamic fragment
     implementation "androidx.fragment:fragment:1.2.5"
     //Circle img view

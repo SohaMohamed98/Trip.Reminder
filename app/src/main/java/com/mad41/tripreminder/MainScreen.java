@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.LiveData;
@@ -25,7 +24,6 @@ import android.os.Parcel;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
@@ -37,10 +35,12 @@ import com.mad41.tripreminder.Firebase.WriteHandler;
 
 import com.mad41.tripreminder.room_database.MyRoomDataBase;
 import com.mad41.tripreminder.room_database.trip.Trip;
+
+
 import com.mad41.tripreminder.room_database.view_model.TripViewModel;
+import com.mad41.tripreminder.trip_ui.NoteReviewDialogue;
 import com.mad41.tripreminder.trip_ui.TripModel;
 
-import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +49,13 @@ import java.util.List;
 public class MainScreen extends AppCompatActivity implements AddTripFragments.Communicator,
         OnGoingFrag.onGoingCommunicator {
 
+    public static Context context;
+    AddTripFragments fragment;
+    List<Trip> trips;
+    String name, start, end, date, time;
+    ArrayList<String> notes;
+    String dateDialogue;
+    String timeDialogue;
     private Toolbar toolbar;
     private DrawerLayout drawer;
     private OnGoingFrag frag1;
@@ -56,28 +63,19 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
     private FragmentManager mgr;
     private FragmentTransaction trns;
     private NavigationView drawerMenu;
-
-    AddTripFragments fragment;
-    public static Context context;
     private TripViewModel tripViewModel;
-    List<Trip> trips;
-    String name, start, end, date, time;
-    ArrayList<String> notes;
 
-    String dateDialogue;
-    String timeDialogue;
-
-     @Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
 
-        frag2= new HistoryFragment();
+        frag2 = new HistoryFragment();
 
-        notes= new ArrayList<String>();
+        notes = new ArrayList<String>();
 
-        for(int i=0;i<notes.size();i++){
-            Toast.makeText(getApplication().getBaseContext(), notes.get(i),Toast.LENGTH_SHORT).show();
+        for (int i = 0; i < notes.size(); i++) {
+            Toast.makeText(getApplication().getBaseContext(), notes.get(i), Toast.LENGTH_SHORT).show();
         }
 
         context = this;
@@ -106,16 +104,13 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
 
 
     }
-    @Override
-    public void saveArrayList(ArrayList<Trip> arr) {
-        fragment.getArrayList(arr);
-    }
+
 
     @Override
     public void startAddTripFragment(Bundle bundle) {
         mgr = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = mgr.beginTransaction();
-         fragment = new AddTripFragments();
+        fragment = new AddTripFragments();
         fragment.setArguments(bundle);
         fragmentTransaction.replace(R.id.dynamicFrag, fragment);
         fragmentTransaction.addToBackStack(null);
@@ -196,16 +191,17 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
         } else {
 
 
-           if(fragment.isVisible() || frag2.isVisible()){
-              returnToOnGoingActivity();
-               //mgr.popBackStack();
+            if (fragment.isVisible() || frag2.isVisible()) {
+                returnToOnGoingActivity();
+                //mgr.popBackStack();
 
-           }else{
-               super.onBackPressed();
-               finishAffinity();
-           }
+            } else {
+                super.onBackPressed();
+                finishAffinity();
+            }
         }
     }
+
     @Override
     public void setAlarm(long alarmTime, int id, String end, int repeatInterval,Trip trip) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -283,21 +279,6 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
 //            Log.i("alram what is this ", SystemClock.elapsedRealtime() + "");
 //        }
 //    }
-
-    @Override
-    public void passingNotes(ArrayList<String> myNotes) {
-        for (int i=0; i< myNotes.size();i++)
-        {
-            notes.add(i, myNotes.get(i));
-        }
-
-
-    }
-
-    @Override
-    public void sendArrayListToRecycleView(ArrayList<Trip> arrayList2) {
-       // frag1.getArrayList(arrayList2);
-    }
 
     @Override
     public void returnToOnGoingActivity() {

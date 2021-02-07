@@ -56,6 +56,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AddTripFragments extends Fragment {
 
+    public static final String TAG = "room";
+    public final static String START = "START";
+    public final static String END = "END";
+    public static final String ID = "ID";
     //Radio
     Switch repeat_switch;
     RadioGroup radioGroup;
@@ -63,6 +67,7 @@ public class AddTripFragments extends Fragment {
     RadioButton radio_btn_month;
     RadioButton radio_btn_week;
 
+    RadioButton radio_btn_year;
     //Notes
     ArrayList<String> myNotes;
     RecyclerView recyclerViewNote;
@@ -71,14 +76,10 @@ public class AddTripFragments extends Fragment {
     NoteAdapter noteAdapter;
     RecyclerView.LayoutManager layoutManager;
     ImageButton btn_add_note;
-
-
-    public static final String TAG = "room";
     ImageButton btn_date_round;
     ImageButton btn_time_round;
     TextView txt_date_round;
     TextView txt_time_round;
-
     Switch roundSwitch;
     EditText txt_place;
     TextView txt_date;
@@ -93,30 +94,21 @@ public class AddTripFragments extends Fragment {
     private int mYear2, mMonth2, mDay2;
 
 
-    public final static String START = "START";
-    public final static String END = "END";
-    public static final String ID = "ID";
-
-
     private int id;
 
     //Return Date and Time
     String round_date;
     String round_time;
-
-    // private int id;
-    private int updatedID;
-
     int AUTOCOMPLETE_REQUEST_CODE_START = 1;
     int AUTOCOMPLETE_REQUEST_CODE2_END = 2;
     EditText txt_start;
     EditText txt_end;
     Button btn_place;
     Context context;
-
-
-    private Communicator communicatorListener;
     ArrayList<Trip> arrayList;
+    // private int id;
+    private int updatedID;
+    private Communicator communicatorListener;
     private TripViewModel tripViewModel;
 
 
@@ -150,9 +142,9 @@ public class AddTripFragments extends Fragment {
         Places.initialize(getContext().getApplicationContext(), "AIzaSyA7dH75J8SZ0-GkeHqHANbflPhdpbfU5yI");
 
         //radio buttons
-        radioGroup =view.findViewById(R.id.radio_group);
+        radioGroup = view.findViewById(R.id.radio_group);
         radio_btn_day = view.findViewById(R.id.radio_btn_day);
-        radio_btn_month = view.findViewById(R.id.radio_btn_month);
+        radio_btn_month = view.findViewById(R.id.radio_btn_week);
         radio_btn_week = view.findViewById(R.id.radio_btn_week);
         repeat_switch = view.findViewById(R.id.repeat_switch);
 
@@ -238,6 +230,7 @@ public class AddTripFragments extends Fragment {
             Log.i("room"," time returned "+mYear+" "+mMonth+" "+mDay+" "+t1Hour+" "+t1Minuite);
 //            Log.i("room"," time returned "+'"'+datee[0]+'"'+"  "+'"'+datee[1]+'"'+"  "+'"'+datee[2]+'"');
 
+            addNoteAdapter.setNotes(trip.getNotes());
         }
 
 
@@ -273,7 +266,7 @@ public class AddTripFragments extends Fragment {
                         id = updatedID;
                     }
                     Log.i("room", "id is: " + id);
-                    communicatorListener.passingNotes(myNotes);
+
                     communicatorListener.setAlarm(alarmTime,id,txt_end.getText().toString(),reapeated,myTrip);
 
                     //adding or editing round trip
@@ -288,7 +281,7 @@ public class AddTripFragments extends Fragment {
                                 id = updatedID;
                             }
                             Log.i("room", "id is: " + id);
-                            communicatorListener.passingNotes(myNotes);
+
                             communicatorListener.setAlarm(alarmTimeRound,id, txt_start.getText().toString(),reapeated,myTripRound);
                     }
 
@@ -588,11 +581,8 @@ public class AddTripFragments extends Fragment {
     public interface Communicator {
         void setAlarm(long alarmTime, int id, String end, int repeatInterval,Trip trip);
 
-        void passingNotes(ArrayList<String> myNotes);
-
-        void sendArrayListToRecycleView(ArrayList<Trip> arrayList2);
-
         void returnToOnGoingActivity();
     }
+
 
 }

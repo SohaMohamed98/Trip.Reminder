@@ -25,7 +25,6 @@ import com.mad41.tripreminder.constants.Constants;
 import com.mad41.tripreminder.room_database.MyRoomDataBase;
 import com.mad41.tripreminder.room_database.trip.Trip;
 import com.mad41.tripreminder.room_database.view_model.TripViewModel;
-import com.mad41.tripreminder.trip_ui.RoundTripDialogue;
 
 import org.parceler.Parcels;
 

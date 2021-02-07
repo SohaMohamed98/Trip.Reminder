@@ -63,11 +63,14 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
     private FragmentTransaction trns;
     private NavigationView drawerMenu;
     private TripViewModel tripViewModel;
+    String UserID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
+        Intent intent = getIntent();
+        UserID = intent.getStringExtra("userID");
 
         frag2 = new HistoryFragment();
         fragment = new AddTripFragments();
@@ -135,8 +138,7 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
                         tripViewModel.getAllNotes().observe(MainScreen.this, new Observer<List<Trip>>() {
                             @Override
                             public void onChanged(List<Trip> trips) {
-                                System.out.println(trips.get(0));
-                                WriteHandler.WriteInfireBase(trips);
+                                WriteHandler.WriteInfireBase(trips ,UserID);
                             }
                         });
 

@@ -36,9 +36,15 @@ public class ReadHandler implements Runnable{
                     DataSnapshot DSnapshot = ds.child("Notes");
                     GenericTypeIndicator<ArrayList<String>> t = new GenericTypeIndicator<ArrayList<String>>() {
                     };
-                    ArrayList<String> TripNotes = DSnapshot.getValue(t);
-                    user.setNotes(TripNotes);
-                    Log.i("user","notes value"+user.getIsRound());
+                    ArrayList<String> TripNotes = new ArrayList<>();
+                    TripNotes = DSnapshot.getValue(t);
+                    if( ! TripNotes.isEmpty()) {
+                        user.setNotes(TripNotes);
+                        Log.i("user", "notes value" + user.getIsRound());
+                    }
+                    else{
+                        System.out.println("the array of notes is empty");
+                    }
                     returnedData.add(user);
                 }
                 System.out.println("the result inside thread :  "+ returnedData.size()+"");

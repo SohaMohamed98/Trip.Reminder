@@ -64,6 +64,7 @@ public class Login_form extends AppCompatActivity implements View.OnClickListene
     Button Login , Registeration;
     SignInButton signInButton;
     ArrayList<User_Data> TotalUserData;
+    String UserID;
 
     public static Handler fireBaseReadHandler;
     public static Thread readFireBase;
@@ -80,6 +81,7 @@ public class Login_form extends AppCompatActivity implements View.OnClickListene
         signInButton = (SignInButton)findViewById(R.id.googleBtn);
         mAuth = FirebaseAuth.getInstance();
         mCallbackManager = CallbackManager.Factory.create();
+
         tripViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication())).get(TripViewModel.class);
 
         readFireBase = new Thread(new ReadHandler());
@@ -121,7 +123,10 @@ public class Login_form extends AppCompatActivity implements View.OnClickListene
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if(user!= null){
-                    startActivity(new Intent(getApplicationContext(), MainScreen.class));
+                    UserID = FirebaseAuth.getInstance().getCurrentUser().getUid() ;
+                    Intent intent = new Intent(getApplicationContext(), MainScreen.class);
+                    intent.putExtra("userID",UserID );
+                    startActivity(intent);
                 }
             }
         };
@@ -183,7 +188,10 @@ public class Login_form extends AppCompatActivity implements View.OnClickListene
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    startActivity(new Intent(getApplicationContext(), MainScreen.class));
+                                    UserID = FirebaseAuth.getInstance().getCurrentUser().getUid() ;
+                                    Intent intent = new Intent(getApplicationContext(), MainScreen.class);
+                                    intent.putExtra("userID",UserID );
+                                    startActivity(intent);
                                     Toast.makeText(Login_form.this, "Login complete.", Toast.LENGTH_SHORT).show();
                                     readFireBase.start();
                                 } else {
@@ -219,11 +227,13 @@ public class Login_form extends AppCompatActivity implements View.OnClickListene
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    FirebaseUser user = mAuth.getCurrentUser();
+
                     Toast.makeText(Login_form.this, "task is Successful", Toast.LENGTH_SHORT).show();
                     readFireBase.start();
-                   //updateUI(user);
-                    startActivity(new Intent(getApplicationContext(), MainScreen.class));
+                    UserID = FirebaseAuth.getInstance().getCurrentUser().getUid() ;
+                    Intent intent = new Intent(getApplicationContext(), MainScreen.class);
+                    intent.putExtra("userID",UserID );
+                    startActivity(intent);
                 }else{
                     Toast.makeText(Login_form.this, "failed", Toast.LENGTH_SHORT).show();
 
@@ -262,9 +272,11 @@ public class Login_form extends AppCompatActivity implements View.OnClickListene
                 if(task.isSuccessful())
                 {
                     Toast.makeText(Login_form.this, "Successfully Login", Toast.LENGTH_SHORT).show();
-                    FirebaseUser user = mAuth.getCurrentUser();
+                    UserID = FirebaseAuth.getInstance().getCurrentUser().getUid() ;
                     readFireBase.start();
-                    startActivity(new Intent(getApplicationContext(), MainScreen.class));
+                    Intent intent = new Intent(getApplicationContext(), MainScreen.class);
+                    intent.putExtra("userID",UserID );
+                    startActivity(intent);
 
 
                 }

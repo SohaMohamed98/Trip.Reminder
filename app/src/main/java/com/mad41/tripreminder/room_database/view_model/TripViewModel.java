@@ -41,6 +41,10 @@ public class TripViewModel extends AndroidViewModel {
     public void deleteAllTrips() {
         repository.deleteAllTrips();
     }
+    public Trip getTripById(int id) {
+      return repository.getTripById(id);
+    }
+
     public LiveData<List<Trip>> getAllNotes() {
         return allTrips;
     }

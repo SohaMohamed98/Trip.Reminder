@@ -25,10 +25,10 @@ public class Trip implements Parcelable {
     private ArrayList<String> notes;
     private int status;
     private boolean isRepeated;
-    private boolean isRound;
+    private int isRound;
 
     public Trip(String name, String startLoacation, String endLoacation, String time, String date
-            , ArrayList<String> notes, int status, boolean isRepeated, boolean isRound) {
+            , ArrayList<String> notes, int status, boolean isRepeated, int isRound) {
         this.name = name;
         this.startLoacation = startLoacation;
         this.endLoacation = endLoacation;
@@ -80,7 +80,7 @@ public class Trip implements Parcelable {
         return isRepeated;
     }
 
-    public boolean isRound() {
+    public int isRound() {
         return isRound;
     }
 

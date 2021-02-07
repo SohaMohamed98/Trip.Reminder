@@ -46,9 +46,12 @@ import com.mad41.tripreminder.trip_ui.AddNoteAdapter;
 import com.mad41.tripreminder.trip_ui.NoteAdapter;
 import com.mad41.tripreminder.room_database.view_model.TripViewModel;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -256,7 +259,7 @@ public class AddTripFragments extends Fragment {
                     ArrayList<String> strlist = new ArrayList<>();
                     strlist.add("mmmm");
                     Trip myTrip = new Trip(txt_place.getText().toString(), txt_start.getText().toString(), txt_end.getText().toString(),
-                            txt_time.getText().toString(), txt_date.getText().toString(), myNotes, Constants.TRIP_UPCOMING, true, true);
+                            txt_time.getText().toString(), txt_date.getText().toString(), myNotes, Constants.TRIP_UPCOMING, true, 0);
                     Log.i("room","switch state "+roundSwitch.isChecked());
                     if (getArguments() == null) {
                         id = (int) tripViewModel.insert(myTrip);
@@ -272,7 +275,7 @@ public class AddTripFragments extends Fragment {
                     //adding or editing round trip
                     if(roundSwitch.isChecked()){
                             Trip myTripRound = new Trip(txt_place.getText().toString(), txt_end.getText().toString(), txt_start.getText().toString(),
-                                    txt_time_round.getText().toString(), txt_date_round.getText().toString(), myNotes, Constants.TRIP_UPCOMING, true, true);
+                                    txt_time_round.getText().toString(), txt_date_round.getText().toString(), myNotes, Constants.TRIP_UPCOMING, true, 0);
                             if (getArguments() == null) {
                                 id = (int) tripViewModel.insert(myTripRound);
                             } else {
@@ -284,6 +287,7 @@ public class AddTripFragments extends Fragment {
 
                             communicatorListener.setAlarm(alarmTimeRound,id, txt_start.getText().toString(),reapeated,myTripRound);
                     }
+
 
                     myData();
 
@@ -409,6 +413,7 @@ public class AddTripFragments extends Fragment {
 
     private long getAlarmTime(int year, int month, int day, int hr, int minute) {
         Calendar calendar1 = Calendar.getInstance();
+        Log.i("room","time before edit "+ calendar1.getTime());
         long l = calendar1.getTimeInMillis();
         Log.i("room", " check calendar " + l);
         Calendar calendar = Calendar.getInstance();
@@ -424,7 +429,7 @@ public class AddTripFragments extends Fragment {
 //        calendar.set(Calendar.DAY_OF_MONTH, day+30);
         Log.i("room", " check calendar alarm date " + calendar.getTime());
         Log.i("room", "check real time"+SystemClock.elapsedRealtime());
-        Log.i("room"," time before check "+year+" "+month+" "+mDay+" "+hr+" "+minute);
+        Log.i("room"," time before check "+year+" "+month+" "+day+" "+hr+" "+minute);
         long alarmTime = calendar.getTimeInMillis() - l;
 //        Calendar c3 = Calendar.getInstance();
 //        Log.i("room", " check new calendar " + c3.getTime());

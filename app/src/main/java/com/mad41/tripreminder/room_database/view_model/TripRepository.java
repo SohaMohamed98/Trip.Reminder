@@ -52,6 +52,18 @@ public class TripRepository {
     public void deleteAllTrips() {
         new DeleteAllTripsAsyncTask(tripDao).execute();
     }
+    public Trip getTripById(int id) {
+        Trip trip=null;
+        try {
+             trip= new getTripByIdAsyncTask(tripDao).execute(id).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return trip;
+    }
+
     public LiveData<List<Trip>> getAllNotes() {
         return allTrips;
     }
@@ -71,6 +83,18 @@ public class TripRepository {
         protected Void doInBackground(Integer... integers) {
             tripDao.updateStatus(integers[0],integers[1]);
             return null;
+        }
+    }
+
+    private static class getTripByIdAsyncTask extends AsyncTask<Integer, Void, Trip> {
+        private TripDao tripDao;
+        private getTripByIdAsyncTask(TripDao tripDao) {
+            this.tripDao = tripDao;
+        }
+        @Override
+        protected Trip doInBackground(Integer... integers) {
+           Trip trip= tripDao.getTripById(integers[0]);
+            return trip;
         }
     }
 

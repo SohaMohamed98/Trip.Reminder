@@ -139,6 +139,7 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
                                 WriteHandler.WriteInfireBase(trips);
                             }
                         });
+                    //   trips=tripViewModel.getAllTripsForFireBase();
 
                         Toast.makeText(MainScreen.this, "show language dialog", Toast.LENGTH_SHORT).show();
                         break;

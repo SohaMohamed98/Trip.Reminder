@@ -55,4 +55,8 @@ public class TripViewModel extends AndroidViewModel {
     public LiveData<List<Trip>> getHistoryNotes() {
         return historyTrips;
     }
+    public List<Trip> getAllTripsForFireBase() {
+        return  repository.getAllTripsForFireBase();
+
+    }
 }

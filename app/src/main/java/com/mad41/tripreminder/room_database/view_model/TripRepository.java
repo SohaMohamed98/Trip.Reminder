@@ -85,7 +85,32 @@ public class TripRepository {
             return null;
         }
     }
+    public List<Trip> getAllTripsForFireBase() {
 
+
+        List<Trip> trips=null;
+        try {
+            trips= new getAllTripsForFireBaseAsyncTask(tripDao).execute().get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return trips;
+
+    }
+
+    private static class getAllTripsForFireBaseAsyncTask extends AsyncTask<Void, Void, List<Trip>> {
+        private TripDao tripDao;
+        private getAllTripsForFireBaseAsyncTask(TripDao tripDao) {
+            this.tripDao = tripDao;
+        }
+
+        @Override
+        protected List<Trip> doInBackground(Void... voids) {
+            return tripDao.getAllTripsForFireBase();
+        }
+    }
     private static class getTripByIdAsyncTask extends AsyncTask<Integer, Void, Trip> {
         private TripDao tripDao;
         private getTripByIdAsyncTask(TripDao tripDao) {

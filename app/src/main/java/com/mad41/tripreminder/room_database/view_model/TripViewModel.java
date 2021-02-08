@@ -49,7 +49,7 @@ public class TripViewModel extends AndroidViewModel {
     public LiveData<List<Trip>> getAllNotes() {
         return allTrips;
     }
-    public LiveData<List<Trip>> getUpcomingNotes() {
+    public LiveData<List<Trip>> getUpcomingTrips() {
         return upComingTrips;
     }
     public LiveData<List<Trip>> getHistoryNotes() {

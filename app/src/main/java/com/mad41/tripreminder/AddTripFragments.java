@@ -268,7 +268,7 @@ public class AddTripFragments extends Fragment {
                     }
                     Log.i("room", "id is: " + id);
 
-                    communicatorListener.setAlarm(alarmTime,id,txt_end.getText().toString(),reapeated,myTrip);
+                    communicatorListener.setAlarm(alarmTime,id);
 
                     //adding or editing round trip
                     if(roundSwitch.isChecked()){
@@ -283,7 +283,7 @@ public class AddTripFragments extends Fragment {
                             }
                             Log.i("room", "id is: " + id);
 
-                            communicatorListener.setAlarm(alarmTimeRound,id, txt_start.getText().toString(),reapeated,myTripRound);
+                            communicatorListener.setAlarm(alarmTimeRound,id);
                     }
 
 
@@ -582,7 +582,7 @@ public class AddTripFragments extends Fragment {
     }
 
     public interface Communicator {
-        void setAlarm(long alarmTime, int id, String end, int repeatInterval,Trip trip);
+        void setAlarm(long alarmTime, int id);
 
         void returnToOnGoingActivity();
     }

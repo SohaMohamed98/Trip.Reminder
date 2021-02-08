@@ -43,6 +43,7 @@ import com.mad41.tripreminder.trip_ui.TripModel;
 
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 
@@ -147,7 +148,6 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
                                 WriteHandler.WriteInfireBase(trips);
                             }
                         });
-                        cancelAllAlarms();
                         logOut();
                         break;
 
@@ -159,7 +159,7 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
     }
 
     private void cancelAllAlarms() {
-        List<Trip> nextTrips = (List<Trip>) tripViewModel.getUpcomingNotes();
+        List<Trip> nextTrips = (List<Trip>) tripViewModel.getUpcomingTrips();
         for(Trip trip:nextTrips){
             cancelAlarm(trip.getId());
         }
@@ -171,6 +171,7 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
 
+                        cancelAllAlarms();
                         //log out
                         FirebaseAuth.getInstance().signOut();
                         startActivity(new Intent(getApplicationContext(), Login_form.class));
@@ -213,16 +214,41 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
             }
         }
     }
+    public void setLoginAlarms(){
+        List<Trip> comingTrips = (List<Trip>) tripViewModel.getUpcomingTrips();
+        for(Trip trip:comingTrips){
+            Calendar calendar = Calendar.getInstance();
+            long alarmTime, now;
+            String comingTime = trip.getTime();
+            String comingDate = trip.getDate();
+            int comingId = trip.getId();
+
+            String[] datee = comingDate.split("-");
+            int mDay = Integer.parseInt(datee[0]);
+            int mMonth = Integer.parseInt(datee[1])-1;
+            int mYear = Integer.parseInt(datee[2]);
+            String[] timee = comingDate.split(":");
+            int t1Hour = Integer.parseInt(timee[0]);
+            int t1Minuite = Integer.parseInt(timee[1]);
+
+            calendar.set(Calendar.SECOND, 0);
+            now = calendar.getTimeInMillis();
+            calendar.set(mYear,mMonth,mDay,t1Hour,t1Minuite);
+            alarmTime = calendar.getTimeInMillis() - now;
+            if(alarmTime>0){
+                setAlarm(alarmTime,comingId);
+            }else{
+                tripViewModel.updateStatus(comingId,Constants.TRIP_CANCELED);
+            }
+        }
+    }
 
     @Override
-    public void setAlarm(long alarmTime, int id, String end, int repeatInterval,Trip trip) {
+    public void setAlarm(long alarmTime, int id) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Intent notifyIntent = new Intent(this, TransparentActivity.class);
-//            notifyIntent.putExtra(Constants.TRIP, Parcels.wrap(trip));
-            notifyIntent.putExtra(Constants.END, end);
             Log.i("room", "id sent " + id);
             notifyIntent.putExtra(Constants.ID, id);
-            notifyIntent.putExtra(Constants.REPEATED, repeatInterval);
 
             notifyIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             PendingIntent notifyPendingIntent = PendingIntent.getActivity(this, id, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);

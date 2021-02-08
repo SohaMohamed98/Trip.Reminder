@@ -52,11 +52,7 @@ public class TransparentActivity extends AppCompatActivity {
     private Trip trip;
     private Calendar calendar;
     private int mDay, mMonth, mYear;
-
     private static final int CODE_DRAW_OVER_OTHER_APP_PERMISSION = 2084;
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,21 +109,11 @@ public class TransparentActivity extends AppCompatActivity {
     }
 
     private long setDate() {
-//        String[] timee = time.split(":");
-//        t1Hour = Integer.parseInt(timee[0]);
-//        t1Minuite = Integer.parseInt(timee[1]);
-//        String amPm = timee[2];
-//        if(amPm.equals("PM")){t1Hour=t1Hour+12;}
-//            String[] datee = day.split(" ");
         String[] datee = date.split("-");
         mDay=Integer.parseInt(datee[0]);
         mMonth=Integer.parseInt(datee[1])-1;
         mYear=Integer.parseInt(datee[2]);
         Log.i("room", "yea month day " + mYear+" "+mMonth+" "+mDay);
-
-//        calendar.set(Calendar.YEAR, mYear);
-//        calendar.set(Calendar.HOUR_OF_DAY, t1Hour);
-//        calendar.set(Calendar.MINUTE, t1Minuite);
 
         long alarmTime, now;
         calendar.set(Calendar.SECOND, 0);

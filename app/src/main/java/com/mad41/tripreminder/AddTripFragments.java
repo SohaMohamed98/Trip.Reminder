@@ -225,13 +225,11 @@ public class AddTripFragments extends Fragment {
             t1Minuite = Integer.parseInt(timee[1]);
             String amPm = timee[2];
             if(amPm.equals("PM")){t1Hour=t1Hour+12;}
-//            String[] datee = day.split(" ");
             String[] datee = day.split("-");
             mDay=Integer.parseInt(datee[0]);
             mMonth=Integer.parseInt(datee[1])-1;
             mYear=Integer.parseInt(datee[2]);
             Log.i("room"," time returned "+mYear+" "+mMonth+" "+mDay+" "+t1Hour+" "+t1Minuite);
-//            Log.i("room"," time returned "+'"'+datee[0]+'"'+"  "+'"'+datee[1]+'"'+"  "+'"'+datee[2]+'"');
 
             addNoteAdapter.setNotes(trip.getNotes());
         }
@@ -259,7 +257,7 @@ public class AddTripFragments extends Fragment {
                     ArrayList<String> strlist = new ArrayList<>();
                     strlist.add("mmmm");
                     Trip myTrip = new Trip(txt_place.getText().toString(), txt_start.getText().toString(), txt_end.getText().toString(),
-                            txt_time.getText().toString(), txt_date.getText().toString(), myNotes, Constants.TRIP_UPCOMING, true, 0);
+                            txt_time.getText().toString(), txt_date.getText().toString(), myNotes, Constants.TRIP_UPCOMING, true, 2);
                     Log.i("room","switch state "+roundSwitch.isChecked());
                     if (getArguments() == null) {
                         id = (int) tripViewModel.insert(myTrip);
@@ -275,7 +273,7 @@ public class AddTripFragments extends Fragment {
                     //adding or editing round trip
                     if(roundSwitch.isChecked()){
                             Trip myTripRound = new Trip(txt_place.getText().toString(), txt_end.getText().toString(), txt_start.getText().toString(),
-                                    txt_time_round.getText().toString(), txt_date_round.getText().toString(), myNotes, Constants.TRIP_UPCOMING, true, 0);
+                                    txt_time_round.getText().toString(), txt_date_round.getText().toString(), myNotes, Constants.TRIP_UPCOMING, true, 2);
                             if (getArguments() == null) {
                                 id = (int) tripViewModel.insert(myTripRound);
                             } else {

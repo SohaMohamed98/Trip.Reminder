@@ -101,8 +101,6 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
             drawerMenu.setCheckedItem(R.id.btnOngoing);
         }
         tripViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication())).get(TripViewModel.class);
-
-
     }
 
 
@@ -149,6 +147,7 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
                                 WriteHandler.WriteInfireBase(trips);
                             }
                         });
+                        cancelAllAlarms();
                         logOut();
                         break;
 
@@ -157,6 +156,13 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
                 return true;
             }
         });
+    }
+
+    private void cancelAllAlarms() {
+        List<Trip> nextTrips = (List<Trip>) tripViewModel.getUpcomingNotes();
+        for(Trip trip:nextTrips){
+            cancelAlarm(trip.getId());
+        }
     }
 
     private void logOut() {
@@ -226,35 +232,12 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
             alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + alarmTime, notifyPendingIntent);
             Log.i("alram what is this ", SystemClock.elapsedRealtime() + "");
         }
-
-
-
-
-//        //one trip
-//        if (tripBack == 0 && repeatInterval == 0) {
-//            setAlarm(alarmTime, id, end, false, 0);
-//            //two trips
-//        } else if (tripBack != 0 && repeatInterval == 0) {
-//            setAlarm(alarmTime, id, end, false, 0);
-//            setAlarm(alarmTime + tripBack, id + 1, start, false, 0);
-//            //one trip repeated
-//        } else if (tripBack == 0 && repeatInterval != 0) {
-////            setAlarm(alarmTime, id, end, true, repeatInterval);
-//            //two trips repeated
-//        } else {
-//            setAlarm(alarmTime, id, end, true, repeatInterval);
-//            setAlarm(alarmTime + tripBack, id + 1, start, true, repeatInterval);
-//        }
     }
 
-    public void cancelAlarm(int id, String end, int repeatInterval){
+    public void cancelAlarm(int id){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Intent notifyIntent = new Intent(this, TransparentActivity.class);
-
-            notifyIntent.putExtra(Constants.END, end);
             notifyIntent.putExtra(Constants.ID, id);
-            notifyIntent.putExtra(Constants.REPEATED, repeatInterval);
-
             notifyIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             PendingIntent notifyPendingIntent = PendingIntent.getActivity(this, id, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
@@ -262,29 +245,7 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
             alarmManager.cancel(notifyPendingIntent);
             Log.i("alram what is this ", SystemClock.elapsedRealtime() + "");
         }
-
     }
-
-//    private void setAlarm(long alarmTime, int id, String end, boolean repeated, long interval) {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            Intent notifyIntent = new Intent(this, TransparentActivity.class);
-//
-//            notifyIntent.putExtra(Constants.END, end);
-//            Log.i("room", "id sent " + id);
-//            notifyIntent.putExtra(Constants.ID, id);
-//
-//            notifyIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//            PendingIntent notifyPendingIntent = PendingIntent.getActivity(this, id, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-//            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-//
-//            if (repeated) {
-//                alarmManager.setRepeating(id, SystemClock.elapsedRealtime() + alarmTime, interval, notifyPendingIntent);
-//            } else {
-//                alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + alarmTime, notifyPendingIntent);
-//            }
-//            Log.i("alram what is this ", SystemClock.elapsedRealtime() + "");
-//        }
-//    }
 
     @Override
     public void returnToOnGoingActivity() {
@@ -295,6 +256,4 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
-
-
 }

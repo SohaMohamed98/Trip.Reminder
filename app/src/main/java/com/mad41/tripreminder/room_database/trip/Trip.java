@@ -27,6 +27,7 @@ public class Trip implements Parcelable {
     private boolean isRepeated;
     private int isRound;
 
+
     public Trip(String name, String startLoacation, String endLoacation, String time, String date
             , ArrayList<String> notes, int status, boolean isRepeated, int isRound) {
         this.name = name;

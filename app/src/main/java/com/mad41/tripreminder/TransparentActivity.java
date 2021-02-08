@@ -12,6 +12,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.icu.text.SimpleDateFormat;
+import android.icu.util.TimeZone;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -34,26 +36,23 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class TransparentActivity extends AppCompatActivity {
     private AlertDialog.Builder builder;
     private Intent incomingIntent;
     private static final String CHANNEL_ID = "SERVICE_CHANNEL_ID";
-    private MyRoomDataBase myRoomDataBase;
-    private String start;
     private String end;
     private int tripId;
     private MediaPlayer mMediaPlayer;
     private int repeated;
-    private long interval;
-    CardView cardView;
     private TripViewModel tripViewModel;
-    private int t1Hour, t1Minuite;
-    private int mYear, mMonth, mDay;
     private String time, date;
+    private Trip trip;
+    private Calendar calendar;
+    private int mDay, mMonth, mYear;
 
-    Button showBubble;
     private static final int CODE_DRAW_OVER_OTHER_APP_PERMISSION = 2084;
 
 
@@ -64,99 +63,105 @@ public class TransparentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transparent);
         incomingIntent = getIntent();
-        myRoomDataBase = MyRoomDataBase.getUserDataBaseInstance(this);
-
-
 
         tripViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication())).get(TripViewModel.class);
-//        Trip finishedTrip = (Trip) Parcels.unwrap(incomingIntent.getParcelableExtra(Constants.TRIP));
-
-//        Log.i("room","Triped received safely "+finishedTrip.getId()+" "+finishedTrip.getName());
-        end = incomingIntent.getStringExtra(Constants.END);
         tripId = incomingIntent.getIntExtra(Constants.ID, 0);
-        repeated = incomingIntent.getIntExtra(Constants.REPEATED,0);
+        trip = tripViewModel.getTripById(tripId);
+        end = trip.getEndLoacation();
+        repeated = trip.isRound();
+        Log.i("room", "incoming id " + tripId);
+        Log.i("room", "incoming repeated " + repeated);
+
+        calendar = Calendar.getInstance();
+        Log.i("room", "alarm date before switch " + calendar.getTime());
 
         if(repeated!=0){
-            ArrayList<String> strlist = new ArrayList<>();
-            strlist.add("mmmm");
-            Trip trip = new Trip("fake trip","fake trip","fake trip","12:00:AM","7-2-2021",strlist,2,false,0);
-            String name = trip.getName();
-            String start = trip.getStartLoacation();
-            String end = trip.getEndLoacation();
-            time = trip.getTime();
             date = trip.getDate();
-            ArrayList<String> strlis2 = trip.getNotes();
-            Trip realTrip = new Trip(name,start,end,time,date,strlis2,2,false,0);
-
-            addNextTrip(repeated,realTrip);
+            addNextTrip();
+            Log.i("room", "date from trip " + date);
         }
-        Log.i("location", incomingIntent.getAction() + "");
-        Log.i("room", "incoming id " + tripId);
-        showAlert();
 
         mMediaPlayer = new MediaPlayer();
         mMediaPlayer = MediaPlayer.create(this, R.raw.sound1);
         mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mMediaPlayer.start();
+
+        showAlert();
     }
 
+    private void addNextTrip() {
+        long alarmTime = setDate();
+        String name = trip.getName();
+        String start = trip.getStartLoacation();
+        ArrayList<String> strlist = trip.getNotes();
+        time = trip.getTime();
+        Trip realTrip = new Trip(name,start,end,time,date,strlist,2,false,repeated);
 
+        int id;
+        id = (int) tripViewModel.insert(realTrip);
 
-    private void addNextTrip(int repeated,Trip newTrip) {
-        long alarmTime;
-        String[] timee = time.split(":");
-        t1Hour = Integer.parseInt(timee[0]);
-        t1Minuite = Integer.parseInt(timee[1]);
-        String amPm = timee[2];
-        if(amPm.equals("PM")){t1Hour=t1Hour+12;}
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Intent notifyIntent = new Intent(this, TransparentActivity.class);
+            Log.i("room", "repeated id " + id);
+            notifyIntent.putExtra(Constants.ID, id);
+            notifyIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            PendingIntent notifyPendingIntent = PendingIntent.getActivity(this, id, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + alarmTime, notifyPendingIntent);
+            Log.i("room", " system realtime "+SystemClock.elapsedRealtime());
+        }
+    }
+
+    private long setDate() {
+//        String[] timee = time.split(":");
+//        t1Hour = Integer.parseInt(timee[0]);
+//        t1Minuite = Integer.parseInt(timee[1]);
+//        String amPm = timee[2];
+//        if(amPm.equals("PM")){t1Hour=t1Hour+12;}
 //            String[] datee = day.split(" ");
         String[] datee = date.split("-");
         mDay=Integer.parseInt(datee[0]);
         mMonth=Integer.parseInt(datee[1])-1;
         mYear=Integer.parseInt(datee[2]);
+        Log.i("room", "yea month day " + mYear+" "+mMonth+" "+mDay);
 
-        Calendar calendar = Calendar.getInstance();
-        long l = calendar.getTimeInMillis();
+//        calendar.set(Calendar.YEAR, mYear);
+//        calendar.set(Calendar.HOUR_OF_DAY, t1Hour);
+//        calendar.set(Calendar.MINUTE, t1Minuite);
 
-        calendar.set(Calendar.YEAR, mYear);
-        calendar.set(Calendar.HOUR_OF_DAY, t1Hour);
-        calendar.set(Calendar.MINUTE, t1Minuite);
+        long alarmTime, now;
         calendar.set(Calendar.SECOND, 0);
-
+        Log.i("room", "alarm date before switch " + calendar.getTime());
+        now = calendar.getTimeInMillis();
         switch (repeated){
             case 1:
-                calendar.set(Calendar.MONTH, mMonth);
-                calendar.set(Calendar.DAY_OF_MONTH, mDay+1);
+                Log.i("room","case 1 : "+Calendar.DAY_OF_YEAR);
+//                calendar.set(Calendar.DAY_OF_MONTH, Calendar.DAY_OF_MONTH+1);
+                calendar.set(mYear,mMonth,mDay+1);
                 break;
             case 2:
-                calendar.set(Calendar.MONTH, mMonth);
-                calendar.set(Calendar.DAY_OF_MONTH, mDay+7);
+                Log.i("room","day of year : "+Calendar.DAY_OF_YEAR);
+//                calendar.set(Calendar.DAY_OF_MONTH, Calendar.DAY_OF_MONTH+7);
+                calendar.set(mYear,mMonth,mDay+7);
                 break;
             case 3:
-                calendar.set(Calendar.MONTH, mMonth+1);
-                calendar.set(Calendar.DAY_OF_MONTH, mDay);
+                Log.i("room","case 3 : "+Calendar.DAY_OF_YEAR);
+//                calendar.set(Calendar.MONTH, Calendar.MONTH);//don't need to add 1 because second one take index from 0
+                calendar.set(mYear,mMonth+1,mDay);
                 break;
         }
-        Log.i("room", "alarm date " + calendar.getTime());
-        alarmTime = calendar.getTimeInMillis() - l;
-        int id;
-        id = (int) tripViewModel.insert(newTrip);
+        Log.i("room", "alarm date from transparent activity " + calendar.getTime());
+        alarmTime = calendar.getTimeInMillis() - now;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            Intent notifyIntent = new Intent(this, TransparentActivity.class);
-            notifyIntent.putExtra(Constants.END, end);
-            Log.i("room", "repeated id " + id);
-            notifyIntent.putExtra(Constants.ID, id);
-            notifyIntent.putExtra(Constants.REPEATED, repeated);
-
-            notifyIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            PendingIntent notifyPendingIntent = PendingIntent.getActivity(this, id, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-
-            alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + alarmTime, notifyPendingIntent);
-            Log.i("room", " system realtime "+SystemClock.elapsedRealtime());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            //get date string that will be added to the new trip in database and card
+            String format = "dd-MM-YYYY";
+            SimpleDateFormat dateFormat = new SimpleDateFormat(format);
+            Date today = calendar.getTime();
+            date = dateFormat.format(today);
+            Log.i("room","today is : "+date);
         }
-
+        return alarmTime;
     }
 
     @Override
@@ -171,12 +176,8 @@ public class TransparentActivity extends AppCompatActivity {
         builder.setMessage("Do you want to start your trip now?").setCancelable(false).setTitle("Reminder")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-
                         startTrip();
                         startBubble();
-//                        if(repeated){
-//                            updateDate(interval);
-//                        }
                         finish();
                     }
                 })
@@ -184,12 +185,7 @@ public class TransparentActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
                         //  Action for 'NO' Button
                         dialog.cancel();
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                myRoomDataBase.tripDao().updateStatus(tripId, Constants.TRIP_CANCELED);
-                            }
-                        }).start();
+                        tripViewModel.updateStatus(tripId,Constants.TRIP_CANCELED);
                         finish();
                     }
                 }).setNeutralButton("Snooze", new DialogInterface.OnClickListener() {
@@ -205,19 +201,7 @@ public class TransparentActivity extends AppCompatActivity {
         alert.show();
     }
 
-//    private void updateDate(long interval) {
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                myRoomDataBase.tripDao().updateStatus(tripId, Constants.TRIP_UPCOMING);
-//                //update date
-//            }
-//        }).start();
-//    }
-
     private void startTrip() {
-
-
         // Create a Uri from an intent string. Use the result to create an Intent.
         Uri openMaps = Uri.parse("http://maps.google.com/maps?daddr=" + Uri.encode(end) + " &dirflg=d");
         // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
@@ -227,16 +211,11 @@ public class TransparentActivity extends AppCompatActivity {
         // check if there's at least one app can open that intent
         if (mapIntent.resolveActivity(getPackageManager()) != null) {
             // Attempt to start an activity that can handle the Intent
+            tripViewModel.updateStatus(tripId,Constants.TRIP_DONE);
             startActivity(mapIntent);
         } else {
             Toast.makeText(TransparentActivity.this, "There's an issue opening google maps", Toast.LENGTH_SHORT).show();
         }
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                myRoomDataBase.tripDao().updateStatus(tripId, Constants.TRIP_DONE);
-            }
-        }).start();
     }
 
     private void startBubble(){
@@ -291,7 +270,4 @@ public class TransparentActivity extends AppCompatActivity {
             notificationManager.notify(1,not);
         }
     }
-
-
-
 }

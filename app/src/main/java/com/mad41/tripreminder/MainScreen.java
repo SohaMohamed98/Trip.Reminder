@@ -59,7 +59,7 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
 
     public static Context context;
     AddTripFragments fragment;
-    List<Trip> Trips;
+    List<Trip> trips;
     String name, start, end, date, time;
     ArrayList<String> notes;
     String dateDialogue;
@@ -124,13 +124,8 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
 
                 String data = (String) msg.obj;
                 if(data=="done") {
-                    tripViewModel.getAllNotes().observe(MainScreen.this, new Observer<List<Trip>>() {
-                        @Override
-                        public void onChanged(List<Trip> trips) {
-                            WriteHandler.WriteInfireBase(trips, UserID);
-                        //  Trips = trips;
-                        }
-                    });
+                    trips = tripViewModel.getAllTripsForFireBase();
+                    WriteHandler.WriteInfireBase(trips, UserID);
 
                 }
             }
@@ -176,12 +171,8 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
                         Toast.makeText(MainScreen.this, "show language dialog", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.btnExit:
-                        tripViewModel.getAllNotes().observe(MainScreen.this, new Observer<List<Trip>>() {
-                            @Override
-                            public void onChanged(List<Trip> trips) {
-                                WriteHandler.WriteInfireBase(trips);
-                            }
-                        });
+                        deleteFireBase = new Thread(new DeleteFromDataBase());
+                        deleteFireBase.start();
                         logOut();
                         break;
 

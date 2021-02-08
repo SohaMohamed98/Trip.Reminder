@@ -9,7 +9,7 @@ public class User_Data {
     private String Time;
     private String Date;
     private String Status;
-    private String Notes = "";
+    private String Notes ;
     private String IsRepeated;
 
     public String getIsRepeated() {

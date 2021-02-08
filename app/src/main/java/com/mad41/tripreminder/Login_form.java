@@ -99,8 +99,8 @@ public class Login_form extends AppCompatActivity implements View.OnClickListene
                         ArrayList<String> Notes = new ArrayList<>();
                         if( !data.getNotes().isEmpty()){
                             String[] arrOfStr = data.getNotes().split("##%");
-                            for (String a : arrOfStr)
-                                Notes.add(a);
+                            for (int k = 1 ; k <arrOfStr.length; k++)
+                                Notes.add(arrOfStr[k]);
                         }
                         Trip trip =new Trip(data.getTripName(), data.getStart(), data.getEnd(),data.getTime(),data.getDate()
 

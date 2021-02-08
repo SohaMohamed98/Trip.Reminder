@@ -91,23 +91,21 @@ public class Login_form extends AppCompatActivity implements View.OnClickListene
                 super.handleMessage(msg);
                 TotalUserData = (ArrayList<User_Data>) msg.obj;
                 if(TotalUserData.size() == 0){
-//                    System.out.println("from fireeeee"+TotalUserData.get(0).getTripName()+TotalUserData.get(0).getDate());
-                  /*  ArrayList<Trip> tripList=new ArrayList<>();
-                    for(int i=0;i<TotalUserData.size();i++){
-                        User_Data data=TotalUserData.get(i);
-                        Trip trip =new Trip(data.getTripName(), data.getStart(), data.getEnd(),data.getTime(),data.getDate()
-                                , data.getNotes(), Integer.parseInt(data.getStatus()),true,true);
-                        Log.i("message", " from fireeeee"+TotalUserData.get(0).getTripName()+TotalUserData.get(0).getDate());
-                    }*/
                     Toast.makeText(getApplicationContext(), "You don't have data", Toast.LENGTH_SHORT).show();
                 }else {
-                       ArrayList<Trip> tripList=new ArrayList<>();
+
                     for(int i=0;i<TotalUserData.size();i++){
                         User_Data data=TotalUserData.get(i);
+                        ArrayList<String> Notes = new ArrayList<>();
+                        if( !data.getNotes().isEmpty()){
+                            String[] arrOfStr = data.getNotes().split("##%");
+                            for (String a : arrOfStr)
+                                Notes.add(a);
+                        }
                         Trip trip =new Trip(data.getTripName(), data.getStart(), data.getEnd(),data.getTime(),data.getDate()
-                                , data.getNotes(),Integer.parseInt(data.getStatus()),true,true);
+                                , Notes , Integer.parseInt(data.getStatus()) ,true,true);
                         tripViewModel.insert(trip);
-                        System.out.println("message"+ " from fireeeee"+TotalUserData.get(0).getTripName()+TotalUserData.get(0).getDate());
+                        System.out.println("message"+ " from fireeeee"+ data.getNotes().isEmpty());
                     }
 
                     System.out.println("the result after thread :  " + TotalUserData.size() + "");

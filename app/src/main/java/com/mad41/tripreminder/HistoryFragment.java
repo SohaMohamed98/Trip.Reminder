@@ -96,6 +96,7 @@ public class HistoryFragment extends Fragment {
                                        // Trips.remove(Trips.get(id));
                                         adapter.notifyDataSetChanged();
                                         tripViewModel.deleteTripById(id);
+
                                     }
                                 })
                                 .setNegativeButton(android.R.string.no, null)

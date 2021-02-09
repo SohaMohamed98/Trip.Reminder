@@ -27,6 +27,14 @@
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
     <string name="edit_trip">Edit Trip</string>
+    <string name="resetapasswordHint">Enter your email</string>
+    <string name="BackFromResetPassword">Back</string>
+    <string name="send">send</string>
+    <string name="forgetPassword"><u>Forget Password?</u></string>
+    <string name="creatAccount"><u>Creat account</u></string>
+    <string name="signin">Sign in</string>
+    <string name="Sync" />
+    <string name="sync">Sync</string>
 
     <string-array name="spinner">
         <item>Edit Trip</item>

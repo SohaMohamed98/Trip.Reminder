@@ -1,16 +1,21 @@
 package com.mad41.tripreminder;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,32 +47,35 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.mad41.tripreminder.Firebase.ReadHandler;
 import com.mad41.tripreminder.Firebase.User_Data;
+import com.mad41.tripreminder.constants.Constants;
 import com.mad41.tripreminder.room_database.trip.Trip;
 import com.mad41.tripreminder.room_database.view_model.TripViewModel;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 
-public class Login_form extends AppCompatActivity implements View.OnClickListener {
+public class Login_form extends AppCompatActivity {
     public static final String PREFS_NAME = "PreFile";
+    public static Handler fireBaseReadHandler;
+    public static Thread readFireBase;
     private FirebaseAuth mAuth;
     private CallbackManager mCallbackManager;
     private LoginButton loginButton;
     private FirebaseAuth.AuthStateListener authStateListener;
     private AccessTokenTracker accessTokenTracker;
     private static final String TAG = "EmailPassword";
-    TextView forgetPassword;
+    private int RC_SIGN_IN = 1;
     private TripViewModel tripViewModel;
     GoogleSignInClient googleSignInClient;
-    private int RC_SIGN_IN = 1;
     EditText Email , Password ;
-    Button Login , Registeration;
+    Button Login , Registeration , forgetPassword;
     SignInButton signInButton;
+    ProgressBar progress_bar;
     ArrayList<User_Data> TotalUserData;
     String UserID;
 
-    public static Handler fireBaseReadHandler;
-    public static Thread readFireBase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,14 +84,13 @@ public class Login_form extends AppCompatActivity implements View.OnClickListene
         Password = findViewById(R.id.PasswordTxt);
         Registeration = findViewById(R.id.RegisterationButton);
         forgetPassword = findViewById(R.id.forgetPassword);
+        progress_bar = findViewById(R.id.progressBar);
         Login = findViewById(R.id.LoginButton);
         loginButton = findViewById(R.id.login_button);
         signInButton = (SignInButton)findViewById(R.id.googleBtn);
         mAuth = FirebaseAuth.getInstance();
         mCallbackManager = CallbackManager.Factory.create();
-
         tripViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication())).get(TripViewModel.class);
-
         readFireBase = new Thread(new ReadHandler());
         fireBaseReadHandler = new Handler(){
             @Override
@@ -93,25 +100,23 @@ public class Login_form extends AppCompatActivity implements View.OnClickListene
                 if(TotalUserData.size() == 0){
                     Toast.makeText(getApplicationContext(), "You don't have data", Toast.LENGTH_SHORT).show();
                 }else {
-
                     for(int i=0;i<TotalUserData.size();i++){
                         User_Data data=TotalUserData.get(i);
                         ArrayList<String> Notes = new ArrayList<>();
                         if( !data.getNotes().isEmpty()){
                             String[] arrOfStr = data.getNotes().split("##%");
-                            for (String a : arrOfStr)
-                                Notes.add(a);
+                            for (int k = 1 ; k <arrOfStr.length; k++)
+                                Notes.add(arrOfStr[k]);
                         }
                         Trip trip =new Trip(data.getTripName(), data.getStart(), data.getEnd(),data.getTime(),data.getDate()
-                                , Notes , Integer.parseInt(data.getStatus()) ,true,true);
+                                , Notes , Integer.parseInt(data.getStatus()) ,true,0);
                         tripViewModel.insert(trip);
                         System.out.println("message"+ " from fireeeee"+ data.getNotes().isEmpty());
                     }
-
                     System.out.println("the result after thread :  " + TotalUserData.size() + "");
-                    // System.out.println("the first note of first element :  " + TotalUserData.get(1).getNotes().get(2) + "");
                 }
                 writeInSharedPreference();
+                setLoginAlarms();
 
             }
         };
@@ -173,34 +178,34 @@ public class Login_form extends AppCompatActivity implements View.OnClickListene
                     return;
                 }
 
-                if (TextUtils.isEmpty(password)){
+                else if (TextUtils.isEmpty(password)){
                     Toast.makeText(Login_form.this, "Please, Enter your password.", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(password.length()<6){
+                else if(password.length()<6){
                     Toast.makeText(Login_form.this, "Password should be more than 5 characters", Toast.LENGTH_SHORT).show();
                 }
+               else
+                   {
+                       progress_bar.setVisibility(View.VISIBLE);
+                       mAuth.signInWithEmailAndPassword(email, password)
+                           .addOnCompleteListener(Login_form.this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        UserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                        Intent intent = new Intent(getApplicationContext(), MainScreen.class);
+                                        intent.putExtra("userID", UserID);
+                                        startActivity(intent);
+                                        Toast.makeText(Login_form.this, "Login complete.", Toast.LENGTH_SHORT).show();
+                                        readFireBase.start();
+                                    } else {
+                                        Toast.makeText(Login_form.this, "please check your internet connection.", Toast.LENGTH_SHORT).show();
 
-                mAuth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(Login_form.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    UserID = FirebaseAuth.getInstance().getCurrentUser().getUid() ;
-                                    Intent intent = new Intent(getApplicationContext(), MainScreen.class);
-                                    intent.putExtra("userID",UserID );
-                                    startActivity(intent);
-                                    Toast.makeText(Login_form.this, "Login complete.", Toast.LENGTH_SHORT).show();
-                                    readFireBase.start();
-                                } else {
-                                    Toast.makeText(Login_form.this, "Login Failed.", Toast.LENGTH_SHORT).show();
-
+                                    }
                                 }
-
-
-                            }
-                        });
-
+                            });
+                }
             }
         });
 
@@ -211,7 +216,12 @@ public class Login_form extends AppCompatActivity implements View.OnClickListene
             }
         });
 
-
+        forgetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Login_form.this,ResetPassword.class));
+            }
+        });
 
     }
     private void signWithGoogle() {
@@ -233,7 +243,7 @@ public class Login_form extends AppCompatActivity implements View.OnClickListene
                     intent.putExtra("userID",UserID );
                     startActivity(intent);
                 }else{
-                    Toast.makeText(Login_form.this, "failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Login_form.this, "please check your internet connection", Toast.LENGTH_SHORT).show();
 
                 }
             }
@@ -272,15 +282,18 @@ public class Login_form extends AppCompatActivity implements View.OnClickListene
                     Toast.makeText(Login_form.this, "Successfully Login", Toast.LENGTH_SHORT).show();
                     UserID = FirebaseAuth.getInstance().getCurrentUser().getUid() ;
                     readFireBase.start();
+
+
                     Intent intent = new Intent(getApplicationContext(), MainScreen.class);
                     intent.putExtra("userID",UserID );
                     startActivity(intent);
 
 
+
                 }
                 else
                 {
-                    Toast.makeText(Login_form.this, "Failed to Login", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Login_form.this, "please check your internet connection ", Toast.LENGTH_SHORT).show();
 
 
                 }
@@ -316,13 +329,51 @@ public class Login_form extends AppCompatActivity implements View.OnClickListene
         super.onBackPressed();
         finishAffinity();
     }
+    public void setLoginAlarms(){
+        List<Trip> comingTrips = tripViewModel.getAllTripsForFireBase();
+        for(Trip trip:comingTrips){
+            if(trip.getStatus()==2) {
+                Calendar calendar = Calendar.getInstance();
+                long alarmTime, now;
+                String comingTime = trip.getTime();
+                String comingDate = trip.getDate();
+                int comingId = trip.getId();
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.forgetPassword:
-                startActivity(new Intent(Login_form.this,ResetPassword.class));
-                break;
+                String[] datee = comingDate.split("-");
+                int mDay = Integer.parseInt(datee[0]);
+                int mMonth = Integer.parseInt(datee[1]) - 1;
+                int mYear = Integer.parseInt(datee[2]);
+                String[] timee = comingTime.split(":");
+                int t1Hour = Integer.parseInt(timee[0]);
+                int t1Minuite = Integer.parseInt(timee[1]);
+
+                calendar.set(Calendar.SECOND, 0);
+                now = calendar.getTimeInMillis();
+                calendar.set(mYear, mMonth, mDay, t1Hour, t1Minuite);
+                alarmTime = calendar.getTimeInMillis() - now;
+                if (alarmTime > 0) {
+                    setAlarm(alarmTime, comingId);
+                } else {
+                    tripViewModel.updateStatus(comingId, Constants.TRIP_MISSED);
+                }
+            }
         }
     }
+
+    public  void setAlarm(long alarmTime, int id) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Intent notifyIntent = new Intent(this, TransparentActivity.class);
+            Log.i("room", "id sent " + id);
+            notifyIntent.putExtra(Constants.ID, id);
+
+            notifyIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            PendingIntent notifyPendingIntent = PendingIntent.getActivity(this, id, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+//            alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + alarmTime, notifyPendingIntent);
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + alarmTime, notifyPendingIntent);
+            Log.i("alram what is this ", SystemClock.elapsedRealtime() + "");
+        }
+    }
+
 }

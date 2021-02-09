@@ -18,13 +18,20 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+
+import android.os.Parcel;
+
 import android.os.Handler;
 import android.os.Message;
+
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
@@ -36,6 +43,7 @@ import com.mad41.tripreminder.Firebase.ReadHandler;
 import com.mad41.tripreminder.Firebase.User_Data;
 import com.mad41.tripreminder.constants.Constants;
 import com.mad41.tripreminder.Firebase.WriteHandler;
+import com.mad41.tripreminder.Firebase.checkConnectionToInternet;
 
 import com.mad41.tripreminder.room_database.MyRoomDataBase;
 import com.mad41.tripreminder.room_database.trip.Trip;
@@ -47,15 +55,16 @@ import com.mad41.tripreminder.trip_ui.TripModel;
 
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 
 public class MainScreen extends AppCompatActivity implements AddTripFragments.Communicator,
         OnGoingFrag.onGoingCommunicator {
-
+    public static final String PREFS_NAME = "PreFile";
     public static Context context;
     AddTripFragments fragment;
-    List<Trip> Trips;
+    List<Trip> trips;
     String name, start, end, date, time;
     ArrayList<String> notes;
     String dateDialogue;
@@ -71,6 +80,8 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
     String UserID;
     public static Handler fireBaseDeleteHandler;
     public  Thread deleteFireBase;
+    private View navigationHeaderView;
+    private TextView email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,10 +89,11 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
         setContentView(R.layout.activity_main_screen);
         Intent intent = getIntent();
         UserID = intent.getStringExtra("userID");
-
         frag2 = new HistoryFragment();
         fragment = new AddTripFragments();
         notes = new ArrayList<String>();
+        SharedPreferences Read = getSharedPreferences(PREFS_NAME , Context.MODE_PRIVATE);
+        String user_Email = Read.getString("Email","Email not found");
 
 
         for (int i = 0; i < notes.size(); i++) {
@@ -101,6 +113,11 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
 
         drawerMenu = findViewById(R.id.drawerMenu);
         setListener();
+        //set email
+        navigationHeaderView = drawerMenu.getHeaderView(0);
+        email = navigationHeaderView.findViewById(R.id.mailText);
+        email.setText(user_Email);
+
 
         if (savedInstanceState == null) {
             mgr = getSupportFragmentManager();
@@ -111,8 +128,6 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
             drawerMenu.setCheckedItem(R.id.btnOngoing);
         }
         tripViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication())).get(TripViewModel.class);
-
-
         fireBaseDeleteHandler = new Handler(){
             @Override
             public void handleMessage(@NonNull Message msg) {
@@ -120,13 +135,8 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
 
                 String data = (String) msg.obj;
                 if(data=="done") {
-                    tripViewModel.getAllNotes().observe(MainScreen.this, new Observer<List<Trip>>() {
-                        @Override
-                        public void onChanged(List<Trip> trips) {
-                            WriteHandler.WriteInfireBase(trips, UserID);
-                        //  Trips = trips;
-                        }
-                    });
+                    trips = tripViewModel.getAllTripsForFireBase();
+                    WriteHandler.WriteInfireBase(trips, UserID);
 
                 }
             }
@@ -161,15 +171,24 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
                         getSupportFragmentManager().beginTransaction().replace(R.id.dynamicFrag, frag2).commit();
                         break;
                     case R.id.btnLanguage:
-                        //LiveData<List<Trip>> trips= MyRoomDataBase.getUserDataBaseInstance(getApplicationContext()).tripDao().getAllTrips();
-                      //  DeleteFromDataBase.userId = UserID;
+                        if(checkConnectionToInternet.isConnected(context)) {
+                            deleteFireBase = new Thread(new DeleteFromDataBase());
+                            deleteFireBase.start();
+                            Toast.makeText(MainScreen.this, "now your data uptodate with remote server", Toast.LENGTH_SHORT).show();
+                        }else {
+                            Toast.makeText(MainScreen.this, "Check your connection to the internet", Toast.LENGTH_SHORT).show();
+                        }
+                        break;
+                    case R.id.btnExit:
+                        if(checkConnectionToInternet.isConnected(context)) {
                             deleteFireBase = new Thread(new DeleteFromDataBase());
                             deleteFireBase.start();
 
-                        Toast.makeText(MainScreen.this, "show language dialog", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.btnExit:
-                        logOut();
+                            logOut();
+                        }
+                        else {
+                            Toast.makeText(context, "Check your connection to the internet", Toast.LENGTH_LONG).show();
+                        }
                         break;
 
                 }
@@ -179,11 +198,22 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
         });
     }
 
+    private void cancelAllAlarms() {
+        List<Trip> nextTrips =  tripViewModel.getAllTripsForFireBase();
+        for(Trip trip:nextTrips){
+            if(trip.getStatus()==2) {
+                cancelAlarm(trip.getId());
+            }
+        }
+    }
+
     private void logOut() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainScreen.this);
         builder.setMessage("Sure you want to log out?").setCancelable(false).setTitle("Log out")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+
+                        cancelAllAlarms();
                         //log out
                         FirebaseAuth.getInstance().signOut();
                         startActivity(new Intent(getApplicationContext(), Login_form.class));
@@ -207,6 +237,7 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
         alert.show();
     }
 
+
     @Override
     public void onBackPressed() {
         //check if the drawer is open then the back button close the drawer first and not exit the activity directly
@@ -226,41 +257,33 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
         }
     }
 
+
     @Override
-    public void respon(long alarmTime, int id, String start, String end, int tripBack, int repeatInterval) {
-        //one trip
-        if (tripBack == 0 && repeatInterval == 0) {
-            setAlarm(alarmTime, id, end, false, 0);
-            //two trips
-        } else if (tripBack != 0 && repeatInterval == 0) {
-            setAlarm(alarmTime, id, end, false, 0);
-            setAlarm(alarmTime + tripBack, id + 1, start, false, 0);
-            //one trip repeated
-        } else if (tripBack == 0 && repeatInterval != 0) {
-            setAlarm(alarmTime, id, end, true, repeatInterval);
-            //two trips repeated
-        } else {
-            setAlarm(alarmTime, id, end, true, repeatInterval);
-            setAlarm(alarmTime + tripBack, id + 1, start, true, repeatInterval);
+    public  void setAlarm(long alarmTime, int id) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Intent notifyIntent = new Intent(this, TransparentActivity.class);
+            Log.i("room", "id sent " + id);
+            notifyIntent.putExtra(Constants.ID, id);
+
+            notifyIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            PendingIntent notifyPendingIntent = PendingIntent.getActivity(this, id, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+//            alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + alarmTime, notifyPendingIntent);
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + alarmTime, notifyPendingIntent);
+            Log.i("alram what is this ", SystemClock.elapsedRealtime() + "");
         }
     }
 
-    private void setAlarm(long alarmTime, int id, String end, boolean repeated, long interval) {
+    public void cancelAlarm(int id){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Intent notifyIntent = new Intent(this, TransparentActivity.class);
-
-            notifyIntent.putExtra(Constants.END, end);
-            Log.i("room", "id sent " + id);
             notifyIntent.putExtra(Constants.ID, id);
             notifyIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             PendingIntent notifyPendingIntent = PendingIntent.getActivity(this, id, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
-            if (repeated) {
-                alarmManager.setRepeating(id, SystemClock.elapsedRealtime() + alarmTime, interval, notifyPendingIntent);
-            } else {
-                alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + alarmTime, notifyPendingIntent);
-            }
+            alarmManager.cancel(notifyPendingIntent);
             Log.i("alram what is this ", SystemClock.elapsedRealtime() + "");
         }
     }
@@ -274,6 +297,4 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
-
-
 }

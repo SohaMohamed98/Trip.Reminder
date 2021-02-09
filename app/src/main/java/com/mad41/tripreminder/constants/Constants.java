@@ -13,5 +13,5 @@ public class Constants {
     public static final String ID = "ID";
     public static final String REPEATED = "REPEATED";
     public static final String INTERVAL = "INTERVAL";
-
+    public static final String TRIP = "TRIP";
 }

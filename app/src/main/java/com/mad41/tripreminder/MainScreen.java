@@ -199,9 +199,11 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
     }
 
     private void cancelAllAlarms() {
-        List<Trip> nextTrips = (List<Trip>) tripViewModel.getUpcomingTrips();
+        List<Trip> nextTrips =  tripViewModel.getAllTripsForFireBase();
         for(Trip trip:nextTrips){
-            cancelAlarm(trip.getId());
+            if(trip.getStatus()==2) {
+                cancelAlarm(trip.getId());
+            }
         }
     }
 

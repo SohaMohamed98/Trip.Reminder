@@ -330,30 +330,32 @@ public class Login_form extends AppCompatActivity {
         finishAffinity();
     }
     public void setLoginAlarms(){
-        List<Trip> comingTrips = (List<Trip>) tripViewModel.getUpcomingTrips();
+        List<Trip> comingTrips = tripViewModel.getAllTripsForFireBase();
         for(Trip trip:comingTrips){
-            Calendar calendar = Calendar.getInstance();
-            long alarmTime, now;
-            String comingTime = trip.getTime();
-            String comingDate = trip.getDate();
-            int comingId = trip.getId();
+            if(trip.getStatus()==2) {
+                Calendar calendar = Calendar.getInstance();
+                long alarmTime, now;
+                String comingTime = trip.getTime();
+                String comingDate = trip.getDate();
+                int comingId = trip.getId();
 
-            String[] datee = comingDate.split("-");
-            int mDay = Integer.parseInt(datee[0]);
-            int mMonth = Integer.parseInt(datee[1])-1;
-            int mYear = Integer.parseInt(datee[2]);
-            String[] timee = comingDate.split(":");
-            int t1Hour = Integer.parseInt(timee[0]);
-            int t1Minuite = Integer.parseInt(timee[1]);
+                String[] datee = comingDate.split("-");
+                int mDay = Integer.parseInt(datee[0]);
+                int mMonth = Integer.parseInt(datee[1]) - 1;
+                int mYear = Integer.parseInt(datee[2]);
+                String[] timee = comingTime.split(":");
+                int t1Hour = Integer.parseInt(timee[0]);
+                int t1Minuite = Integer.parseInt(timee[1]);
 
-            calendar.set(Calendar.SECOND, 0);
-            now = calendar.getTimeInMillis();
-            calendar.set(mYear,mMonth,mDay,t1Hour,t1Minuite);
-            alarmTime = calendar.getTimeInMillis() - now;
-            if(alarmTime>0){
-                setAlarm(alarmTime,comingId);
-            }else{
-                tripViewModel.updateStatus(comingId, Constants.TRIP_CANCELED);
+                calendar.set(Calendar.SECOND, 0);
+                now = calendar.getTimeInMillis();
+                calendar.set(mYear, mMonth, mDay, t1Hour, t1Minuite);
+                alarmTime = calendar.getTimeInMillis() - now;
+                if (alarmTime > 0) {
+                    setAlarm(alarmTime, comingId);
+                } else {
+                    tripViewModel.updateStatus(comingId, Constants.TRIP_MISSED);
+                }
             }
         }
     }

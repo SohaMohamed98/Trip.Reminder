@@ -1,4 +1,4 @@
-package com.mad41.tripreminder.trip_ui;
+package com.mad41.tripreminder;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;

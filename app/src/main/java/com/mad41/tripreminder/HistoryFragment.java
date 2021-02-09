@@ -1,5 +1,6 @@
 package com.mad41.tripreminder;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -137,6 +138,8 @@ public class HistoryFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getContext(), "working", Toast.LENGTH_SHORT).show();
+                MainScreen mainScreen = (MainScreen) getActivity();
+                mainScreen.openMaps();
             }
         });
 

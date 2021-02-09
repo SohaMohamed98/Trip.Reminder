@@ -50,6 +50,7 @@ import com.mad41.tripreminder.room_database.trip.Trip;
 
 
 import com.mad41.tripreminder.room_database.view_model.TripViewModel;
+import com.mad41.tripreminder.trip_ui.MapsActivity;
 import com.mad41.tripreminder.trip_ui.NoteReviewDialogue;
 import com.mad41.tripreminder.trip_ui.TripModel;
 
@@ -154,6 +155,11 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
         fragmentTransaction.replace(R.id.dynamicFrag, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+    }
+
+    public void openMaps() {
+        Intent intent = new Intent(this, MapsActivity.class);
+        startActivity(intent);
     }
 
 

@@ -88,6 +88,9 @@ public class HistoryAdapter extends RecyclerView.Adapter<com.mad41.tripreminder.
         else if(currentItem.getStatus() == 1){
             Status = "Completed";
         }
+        else if(currentItem.getStatus() == -1){
+            Status = "Missed";
+        }
         holder.txt_date.setText(currentItem.getDate());
         holder.txt_time.setText(currentItem.getTime());
         holder.txt_start.setText(currentItem.getStartLoacation());

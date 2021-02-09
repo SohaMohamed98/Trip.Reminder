@@ -18,6 +18,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -60,7 +61,7 @@ import java.util.List;
 
 public class MainScreen extends AppCompatActivity implements AddTripFragments.Communicator,
         OnGoingFrag.onGoingCommunicator {
-
+    public static final String PREFS_NAME = "PreFile";
     public static Context context;
     AddTripFragments fragment;
     List<Trip> trips;
@@ -91,6 +92,8 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
         frag2 = new HistoryFragment();
         fragment = new AddTripFragments();
         notes = new ArrayList<String>();
+        SharedPreferences Read = getSharedPreferences(PREFS_NAME , Context.MODE_PRIVATE);
+        String user_Email = Read.getString("Email","Email not found");
 
 
         for (int i = 0; i < notes.size(); i++) {
@@ -113,7 +116,7 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
         //set email
         navigationHeaderView = drawerMenu.getHeaderView(0);
         email = navigationHeaderView.findViewById(R.id.mailText);
-        email.setText("moataz@gmail.com");
+        email.setText(user_Email);
 
 
         if (savedInstanceState == null) {
@@ -251,37 +254,10 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
             }
         }
     }
-    public void setLoginAlarms(){
-        List<Trip> comingTrips = (List<Trip>) tripViewModel.getUpcomingTrips();
-        for(Trip trip:comingTrips){
-            Calendar calendar = Calendar.getInstance();
-            long alarmTime, now;
-            String comingTime = trip.getTime();
-            String comingDate = trip.getDate();
-            int comingId = trip.getId();
 
-            String[] datee = comingDate.split("-");
-            int mDay = Integer.parseInt(datee[0]);
-            int mMonth = Integer.parseInt(datee[1])-1;
-            int mYear = Integer.parseInt(datee[2]);
-            String[] timee = comingDate.split(":");
-            int t1Hour = Integer.parseInt(timee[0]);
-            int t1Minuite = Integer.parseInt(timee[1]);
-
-            calendar.set(Calendar.SECOND, 0);
-            now = calendar.getTimeInMillis();
-            calendar.set(mYear,mMonth,mDay,t1Hour,t1Minuite);
-            alarmTime = calendar.getTimeInMillis() - now;
-            if(alarmTime>0){
-                setAlarm(alarmTime,comingId);
-            }else{
-                tripViewModel.updateStatus(comingId,Constants.TRIP_CANCELED);
-            }
-        }
-    }
 
     @Override
-    public void setAlarm(long alarmTime, int id) {
+    public  void setAlarm(long alarmTime, int id) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Intent notifyIntent = new Intent(this, TransparentActivity.class);
             Log.i("room", "id sent " + id);

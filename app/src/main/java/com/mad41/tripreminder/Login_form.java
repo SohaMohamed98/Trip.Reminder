@@ -1,11 +1,15 @@
 package com.mad41.tripreminder;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -43,10 +47,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.mad41.tripreminder.Firebase.ReadHandler;
 import com.mad41.tripreminder.Firebase.User_Data;
+import com.mad41.tripreminder.constants.Constants;
 import com.mad41.tripreminder.room_database.trip.Trip;
 import com.mad41.tripreminder.room_database.view_model.TripViewModel;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 
 public class Login_form extends AppCompatActivity {
@@ -109,6 +116,7 @@ public class Login_form extends AppCompatActivity {
                     System.out.println("the result after thread :  " + TotalUserData.size() + "");
                 }
                 writeInSharedPreference();
+                setLoginAlarms();
 
             }
         };
@@ -321,6 +329,49 @@ public class Login_form extends AppCompatActivity {
         super.onBackPressed();
         finishAffinity();
     }
+    public void setLoginAlarms(){
+        List<Trip> comingTrips = (List<Trip>) tripViewModel.getUpcomingTrips();
+        for(Trip trip:comingTrips){
+            Calendar calendar = Calendar.getInstance();
+            long alarmTime, now;
+            String comingTime = trip.getTime();
+            String comingDate = trip.getDate();
+            int comingId = trip.getId();
 
+            String[] datee = comingDate.split("-");
+            int mDay = Integer.parseInt(datee[0]);
+            int mMonth = Integer.parseInt(datee[1])-1;
+            int mYear = Integer.parseInt(datee[2]);
+            String[] timee = comingDate.split(":");
+            int t1Hour = Integer.parseInt(timee[0]);
+            int t1Minuite = Integer.parseInt(timee[1]);
+
+            calendar.set(Calendar.SECOND, 0);
+            now = calendar.getTimeInMillis();
+            calendar.set(mYear,mMonth,mDay,t1Hour,t1Minuite);
+            alarmTime = calendar.getTimeInMillis() - now;
+            if(alarmTime>0){
+                setAlarm(alarmTime,comingId);
+            }else{
+                tripViewModel.updateStatus(comingId, Constants.TRIP_CANCELED);
+            }
+        }
+    }
+
+    public  void setAlarm(long alarmTime, int id) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Intent notifyIntent = new Intent(this, TransparentActivity.class);
+            Log.i("room", "id sent " + id);
+            notifyIntent.putExtra(Constants.ID, id);
+
+            notifyIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            PendingIntent notifyPendingIntent = PendingIntent.getActivity(this, id, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+//            alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + alarmTime, notifyPendingIntent);
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + alarmTime, notifyPendingIntent);
+            Log.i("alram what is this ", SystemClock.elapsedRealtime() + "");
+        }
+    }
 
 }

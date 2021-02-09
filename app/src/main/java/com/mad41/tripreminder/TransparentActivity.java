@@ -27,6 +27,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.mad41.tripreminder.constants.Constants;
+
 import com.mad41.tripreminder.floating_bubble.FloatingViewService;
 import com.mad41.tripreminder.room_database.MyRoomDataBase;
 import com.mad41.tripreminder.room_database.trip.Trip;
@@ -224,8 +225,10 @@ public class TransparentActivity extends AppCompatActivity {
     }
 
     private void initializeView() {
+        Toast.makeText(this,"before service started", Toast.LENGTH_LONG).show();
         startService(new Intent(this, FloatingViewService.class));
-        finish();
+        Toast.makeText(this,"after service started", Toast.LENGTH_LONG).show();
+        //finish();
     }
 
     @Override
@@ -236,7 +239,7 @@ public class TransparentActivity extends AppCompatActivity {
                 initializeView();
             } else { //Permission is not available
                 Toast.makeText(this,"Draw over other app permission not available. Closing the application",Toast.LENGTH_SHORT).show();
-                finish();
+            //    finish();
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);

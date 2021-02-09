@@ -25,7 +25,7 @@ public class ReadHandler implements Runnable{
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid() ;
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
         returnedData = new ArrayList<>();
-        mDatabase.addValueEventListener(new ValueEventListener() {
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Message Msg = Message.obtain();
@@ -33,12 +33,6 @@ public class ReadHandler implements Runnable{
                     DataSnapshot dataSnapshot = ds.child("TripsInfo");
                     User_Data user = dataSnapshot.getValue(User_Data.class);
                     System.out.println(user.getTripName());
-                    DataSnapshot DSnapshot = ds.child("Notes");
-                    GenericTypeIndicator<ArrayList<String>> t = new GenericTypeIndicator<ArrayList<String>>() {
-                    };
-                    ArrayList<String> TripNotes = DSnapshot.getValue(t);
-                    user.setNotes(TripNotes);
-                    Log.i("user","notes value"+user.getIsRound());
                     returnedData.add(user);
                 }
                 System.out.println("the result inside thread :  "+ returnedData.size()+"");

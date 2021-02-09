@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
+
     <application
         android:name="androidx.multidex.MultiDexApplication"
         android:allowBackup="true"
@@ -34,6 +35,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".Login_form"></activity>
+        <service
+            android:name="com.mad41.tripreminder.floating_bubble.FloatingViewService"
+            android:enabled="true"
+            android:exported="false" />
         <activity android:name=".SecondActivity" />
 
         <meta-data

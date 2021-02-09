@@ -54,4 +54,7 @@ public interface TripDao  {
     @Query("SELECT * FROM trips_table where id=:id")
     Trip getTripById(int id);
 
+    @Query("SELECT * FROM trips_table")
+    List<Trip> getAllTripsForFireBase();
+
 }

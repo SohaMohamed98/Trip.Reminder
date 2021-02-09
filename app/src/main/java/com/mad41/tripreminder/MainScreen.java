@@ -20,7 +20,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+
 import android.os.Parcel;
+
+import android.os.Handler;
+import android.os.Message;
+
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.MenuItem;
@@ -30,8 +35,12 @@ import com.facebook.login.LoginManager;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
+import com.mad41.tripreminder.Firebase.DeleteFromDataBase;
+import com.mad41.tripreminder.Firebase.ReadHandler;
+import com.mad41.tripreminder.Firebase.User_Data;
 import com.mad41.tripreminder.constants.Constants;
 import com.mad41.tripreminder.Firebase.WriteHandler;
+import com.mad41.tripreminder.Firebase.checkConnectionToInternet;
 
 import com.mad41.tripreminder.room_database.MyRoomDataBase;
 import com.mad41.tripreminder.room_database.trip.Trip;
@@ -65,15 +74,21 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
     private FragmentTransaction trns;
     private NavigationView drawerMenu;
     private TripViewModel tripViewModel;
+    String UserID;
+    public static Handler fireBaseDeleteHandler;
+    public  Thread deleteFireBase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
+        Intent intent = getIntent();
+        UserID = intent.getStringExtra("userID");
 
         frag2 = new HistoryFragment();
         fragment = new AddTripFragments();
         notes = new ArrayList<String>();
+
 
         for (int i = 0; i < notes.size(); i++) {
             Toast.makeText(getApplication().getBaseContext(), notes.get(i), Toast.LENGTH_SHORT).show();
@@ -102,6 +117,20 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
             drawerMenu.setCheckedItem(R.id.btnOngoing);
         }
         tripViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication())).get(TripViewModel.class);
+        fireBaseDeleteHandler = new Handler(){
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+                super.handleMessage(msg);
+
+                String data = (String) msg.obj;
+                if(data=="done") {
+                    trips = tripViewModel.getAllTripsForFireBase();
+                    WriteHandler.WriteInfireBase(trips, UserID);
+
+                }
+            }
+        };
+
     }
 
 
@@ -131,24 +160,24 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
                         getSupportFragmentManager().beginTransaction().replace(R.id.dynamicFrag, frag2).commit();
                         break;
                     case R.id.btnLanguage:
-                        //LiveData<List<Trip>> trips= MyRoomDataBase.getUserDataBaseInstance(getApplicationContext()).tripDao().getAllTrips();
-                        tripViewModel.getAllNotes().observe(MainScreen.this, new Observer<List<Trip>>() {
-                            @Override
-                            public void onChanged(List<Trip> trips) {
-                                WriteHandler.WriteInfireBase(trips);
-                            }
-                        });
-
-                        Toast.makeText(MainScreen.this, "show language dialog", Toast.LENGTH_SHORT).show();
+                        if(checkConnectionToInternet.isConnected(context)) {
+                            deleteFireBase = new Thread(new DeleteFromDataBase());
+                            deleteFireBase.start();
+                            Toast.makeText(MainScreen.this, "now your data uptodate with remote server", Toast.LENGTH_SHORT).show();
+                        }else {
+                            Toast.makeText(MainScreen.this, "Check your connection to the internet", Toast.LENGTH_SHORT).show();
+                        }
                         break;
                     case R.id.btnExit:
-                        tripViewModel.getAllNotes().observe(MainScreen.this, new Observer<List<Trip>>() {
-                            @Override
-                            public void onChanged(List<Trip> trips) {
-                                WriteHandler.WriteInfireBase(trips);
-                            }
-                        });
-                        logOut();
+                        if(checkConnectionToInternet.isConnected(context)) {
+                            deleteFireBase = new Thread(new DeleteFromDataBase());
+                            deleteFireBase.start();
+
+                            logOut();
+                        }
+                        else {
+                            Toast.makeText(context, "Check your connection to the internet", Toast.LENGTH_LONG).show();
+                        }
                         break;
 
                 }

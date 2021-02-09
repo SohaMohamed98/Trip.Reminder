@@ -9,7 +9,7 @@ public class User_Data {
     private String Time;
     private String Date;
     private String Status;
-    private ArrayList<String> Notes;
+    private String Notes ;
     private String IsRepeated;
 
     public String getIsRepeated() {
@@ -23,7 +23,8 @@ public class User_Data {
     private String IsRound;
 
     public User_Data(){
-        Notes = new ArrayList<>();
+        //Notes = new ArrayList<>();
+
     }
     public String getTripName() {
         return TripName;
@@ -49,14 +50,14 @@ public class User_Data {
         return Status;
     }
 
-    public ArrayList<String> getNotes() { return Notes; }
+    public String getNotes() { return Notes; }
 
-    public void setNotes(ArrayList<String> notes) {
+   /* public void setNotes(ArrayList<String> notes) {
 //        System.out.println( "the notes size"+notes.size());
        for(int i = 0 ; i < notes.size() ; i++)
         {
            Notes.add(i,notes.get(i));
 
         }
-    }
+    }*/
 }

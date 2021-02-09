@@ -51,7 +51,7 @@ public class TransparentActivity extends AppCompatActivity {
     private String time, date;
     private Trip trip;
     private Calendar calendar;
-    private int mDay, mMonth, mYear;
+    private int mDay, mMonth, mYear, t1Hour, t1Minuite;
     private static final int CODE_DRAW_OVER_OTHER_APP_PERMISSION = 2084;
 
     @Override
@@ -71,12 +71,6 @@ public class TransparentActivity extends AppCompatActivity {
         calendar = Calendar.getInstance();
         Log.i("room", "alarm date before switch " + calendar.getTime());
 
-        if(repeated!=0){
-            date = trip.getDate();
-            addNextTrip();
-            Log.i("room", "date from trip " + date);
-        }
-
         mMediaPlayer = new MediaPlayer();
         mMediaPlayer = MediaPlayer.create(this, R.raw.sound1);
         mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -90,9 +84,7 @@ public class TransparentActivity extends AppCompatActivity {
         String name = trip.getName();
         String start = trip.getStartLoacation();
         ArrayList<String> strlist = trip.getNotes();
-        time = trip.getTime();
         Trip realTrip = new Trip(name,start,end,time,date,strlist,2,false,repeated);
-
         int id;
         id = (int) tripViewModel.insert(realTrip);
 
@@ -109,6 +101,9 @@ public class TransparentActivity extends AppCompatActivity {
     }
 
     private long setDate() {
+        String[] timee = time.split(":");
+        t1Hour = Integer.parseInt(timee[0]);
+        t1Minuite = Integer.parseInt(timee[1]);
         String[] datee = date.split("-");
         mDay=Integer.parseInt(datee[0]);
         mMonth=Integer.parseInt(datee[1])-1;
@@ -123,17 +118,17 @@ public class TransparentActivity extends AppCompatActivity {
             case 1:
                 Log.i("room","case 1 : "+Calendar.DAY_OF_YEAR);
 //                calendar.set(Calendar.DAY_OF_MONTH, Calendar.DAY_OF_MONTH+1);
-                calendar.set(mYear,mMonth,mDay+1);
+                calendar.set(mYear,mMonth,mDay+1,t1Hour,t1Minuite);
                 break;
             case 2:
                 Log.i("room","day of year : "+Calendar.DAY_OF_YEAR);
 //                calendar.set(Calendar.DAY_OF_MONTH, Calendar.DAY_OF_MONTH+7);
-                calendar.set(mYear,mMonth,mDay+7);
+                calendar.set(mYear,mMonth,mDay+7,t1Hour,t1Minuite);
                 break;
             case 3:
                 Log.i("room","case 3 : "+Calendar.DAY_OF_YEAR);
 //                calendar.set(Calendar.MONTH, Calendar.MONTH);//don't need to add 1 because second one take index from 0
-                calendar.set(mYear,mMonth+1,mDay);
+                calendar.set(mYear,mMonth+1,mDay,t1Hour,t1Minuite);
                 break;
         }
         Log.i("room", "alarm date from transparent activity " + calendar.getTime());
@@ -172,6 +167,12 @@ public class TransparentActivity extends AppCompatActivity {
                         //  Action for 'NO' Button
                         dialog.cancel();
                         tripViewModel.updateStatus(tripId,Constants.TRIP_CANCELED);
+                        if(repeated!=0){
+                            time = trip.getTime();
+                            date = trip.getDate();
+                            addNextTrip();
+                            Log.i("room", "date from trip " + date);
+                        }
                         finish();
                     }
                 }).setNeutralButton("Snooze", new DialogInterface.OnClickListener() {
@@ -188,6 +189,12 @@ public class TransparentActivity extends AppCompatActivity {
     }
 
     private void startTrip() {
+        if(repeated!=0){
+            time = trip.getTime();
+            date = trip.getDate();
+            addNextTrip();
+            Log.i("room", "date from trip " + date);
+        }
         // Create a Uri from an intent string. Use the result to create an Intent.
         Uri openMaps = Uri.parse("http://maps.google.com/maps?daddr=" + Uri.encode(end) + " &dirflg=d");
         // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW

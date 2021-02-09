@@ -33,6 +33,8 @@
     <string name="forgetPassword"><u>Forget Password?</u></string>
     <string name="creatAccount"><u>Creat account</u></string>
     <string name="signin">Sign in</string>
+    <string name="Sync" />
+    <string name="sync">Sync</string>
 
     <string-array name="spinner">
         <item>Edit Trip</item>

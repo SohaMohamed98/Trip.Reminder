@@ -29,6 +29,8 @@ import android.os.Message;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
@@ -77,6 +79,8 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
     String UserID;
     public static Handler fireBaseDeleteHandler;
     public  Thread deleteFireBase;
+    private View navigationHeaderView;
+    private TextView email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +88,6 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
         setContentView(R.layout.activity_main_screen);
         Intent intent = getIntent();
         UserID = intent.getStringExtra("userID");
-
         frag2 = new HistoryFragment();
         fragment = new AddTripFragments();
         notes = new ArrayList<String>();
@@ -107,6 +110,11 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
 
         drawerMenu = findViewById(R.id.drawerMenu);
         setListener();
+        //set email
+        navigationHeaderView = drawerMenu.getHeaderView(0);
+        email = navigationHeaderView.findViewById(R.id.mailText);
+        email.setText("moataz@gmail.com");
+
 
         if (savedInstanceState == null) {
             mgr = getSupportFragmentManager();

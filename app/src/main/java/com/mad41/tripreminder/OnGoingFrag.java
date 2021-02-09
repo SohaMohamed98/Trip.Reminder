@@ -72,7 +72,7 @@ public class OnGoingFrag extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
         tripViewModel = ViewModelProviders.of(requireActivity()).get(TripViewModel.class);
-        tripViewModel.getUpcomingNotes().observe(requireActivity(), new Observer<List<Trip>>() {
+        tripViewModel.getUpcomingTrips().observe(requireActivity(), new Observer<List<Trip>>() {
             @Override
             public void onChanged(List<Trip> trips) {
                 tripModelArrayList = trips;

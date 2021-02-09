@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mad41.tripreminder.room_database.MyRoomDataBase;
 import com.mad41.tripreminder.room_database.trip.Trip;
 import com.mad41.tripreminder.room_database.view_model.TripViewModel;
@@ -41,6 +42,7 @@ public class HistoryFragment extends Fragment {
     RecyclerView.LayoutManager layoutManager;
     List<Trip> tripModelArrayList;
     historyListner listner;
+    FloatingActionButton mapButton;
     int ID;
 
     public HistoryFragment() {
@@ -129,6 +131,15 @@ public class HistoryFragment extends Fragment {
 
             }
         });
+
+        mapButton = fragment.findViewById(R.id.mapButton);
+        mapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "working", Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
         return fragment;
     }

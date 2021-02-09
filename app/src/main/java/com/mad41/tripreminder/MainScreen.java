@@ -40,6 +40,7 @@ import com.mad41.tripreminder.Firebase.ReadHandler;
 import com.mad41.tripreminder.Firebase.User_Data;
 import com.mad41.tripreminder.constants.Constants;
 import com.mad41.tripreminder.Firebase.WriteHandler;
+import com.mad41.tripreminder.Firebase.checkConnectionToInternet;
 
 import com.mad41.tripreminder.room_database.MyRoomDataBase;
 import com.mad41.tripreminder.room_database.trip.Trip;
@@ -160,20 +161,24 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
                         getSupportFragmentManager().beginTransaction().replace(R.id.dynamicFrag, frag2).commit();
                         break;
                     case R.id.btnLanguage:
-
-                    //   trips=tripViewModel.getAllTripsForFireBase();
-
-                      //  DeleteFromDataBase.userId = UserID;
+                        if(checkConnectionToInternet.isConnected(context)) {
+                            deleteFireBase = new Thread(new DeleteFromDataBase());
+                            deleteFireBase.start();
+                            Toast.makeText(MainScreen.this, "now your data uptodate with remote server", Toast.LENGTH_SHORT).show();
+                        }else {
+                            Toast.makeText(MainScreen.this, "Check your connection to the internet", Toast.LENGTH_SHORT).show();
+                        }
+                        break;
+                    case R.id.btnExit:
+                        if(checkConnectionToInternet.isConnected(context)) {
                             deleteFireBase = new Thread(new DeleteFromDataBase());
                             deleteFireBase.start();
 
-
-                        Toast.makeText(MainScreen.this, "show language dialog", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.btnExit:
-                        deleteFireBase = new Thread(new DeleteFromDataBase());
-                        deleteFireBase.start();
-                        logOut();
+                            logOut();
+                        }
+                        else {
+                            Toast.makeText(context, "Check your connection to the internet", Toast.LENGTH_LONG).show();
+                        }
                         break;
 
                 }
@@ -184,34 +189,34 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
     }
 
     private void logOut() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainScreen.this);
-        builder.setMessage("Sure you want to log out?").setCancelable(false).setTitle("Log out")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
 
-                        //log out
-                        FirebaseAuth.getInstance().signOut();
-                        startActivity(new Intent(getApplicationContext(), Login_form.class));
-                        LoginManager.getInstance().logOut();
-                        //clear database
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                MyRoomDataBase myRoomDataBase = MyRoomDataBase.getUserDataBaseInstance(MainScreen.this);
-                                myRoomDataBase.tripDao().deleteAllTrips();
-                            }
-                        }).start();
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
-                });
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainScreen.this);
+            builder.setMessage("Sure you want to log out?").setCancelable(false).setTitle("Log out")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
 
+
+                            FirebaseAuth.getInstance().signOut();
+                            startActivity(new Intent(getApplicationContext(), Login_form.class));
+                            LoginManager.getInstance().logOut();
+                            //clear database
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    MyRoomDataBase myRoomDataBase = MyRoomDataBase.getUserDataBaseInstance(MainScreen.this);
+                                    myRoomDataBase.tripDao().deleteAllTrips();
+                                }
+                            }).start();
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
 
     @Override
     public void onBackPressed() {

@@ -3,6 +3,7 @@ package com.mad41.tripreminder;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -37,6 +38,8 @@ public class ResetPassword extends AppCompatActivity {
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar2);
 
+        btnBack = findViewById(R.id.back);
+
         auth = FirebaseAuth.getInstance();
 
         btnReset.setOnClickListener(new View.OnClickListener() {
@@ -59,6 +62,7 @@ public class ResetPassword extends AppCompatActivity {
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(ResetPassword.this, "We have sent you instructions to reset your password!", Toast.LENGTH_SHORT).show();
+                                    btnBack.setVisibility(View.VISIBLE);
                                 } else {
                                     Toast.makeText(ResetPassword.this, "Failed to send reset email!", Toast.LENGTH_SHORT).show();
                                 }
@@ -66,6 +70,12 @@ public class ResetPassword extends AppCompatActivity {
                                 progressBar.setVisibility(View.GONE);
                             }
                         });
+            }
+        });
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ResetPassword.this,Login_form.class));
             }
         });
     }

@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,26 +49,26 @@ import com.mad41.tripreminder.room_database.view_model.TripViewModel;
 import java.util.ArrayList;
 
 
-public class Login_form extends AppCompatActivity implements View.OnClickListener {
+public class Login_form extends AppCompatActivity {
     public static final String PREFS_NAME = "PreFile";
+    public static Handler fireBaseReadHandler;
+    public static Thread readFireBase;
     private FirebaseAuth mAuth;
     private CallbackManager mCallbackManager;
     private LoginButton loginButton;
     private FirebaseAuth.AuthStateListener authStateListener;
     private AccessTokenTracker accessTokenTracker;
     private static final String TAG = "EmailPassword";
-    TextView forgetPassword;
+    private int RC_SIGN_IN = 1;
     private TripViewModel tripViewModel;
     GoogleSignInClient googleSignInClient;
-    private int RC_SIGN_IN = 1;
     EditText Email , Password ;
-    Button Login , Registeration;
+    Button Login , Registeration , forgetPassword;
     SignInButton signInButton;
+    ProgressBar progress_bar;
     ArrayList<User_Data> TotalUserData;
     String UserID;
 
-    public static Handler fireBaseReadHandler;
-    public static Thread readFireBase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,14 +77,13 @@ public class Login_form extends AppCompatActivity implements View.OnClickListene
         Password = findViewById(R.id.PasswordTxt);
         Registeration = findViewById(R.id.RegisterationButton);
         forgetPassword = findViewById(R.id.forgetPassword);
+        progress_bar = findViewById(R.id.progressBar);
         Login = findViewById(R.id.LoginButton);
         loginButton = findViewById(R.id.login_button);
         signInButton = (SignInButton)findViewById(R.id.googleBtn);
         mAuth = FirebaseAuth.getInstance();
         mCallbackManager = CallbackManager.Factory.create();
-
         tripViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication())).get(TripViewModel.class);
-
         readFireBase = new Thread(new ReadHandler());
         fireBaseReadHandler = new Handler(){
             @Override
@@ -93,7 +93,6 @@ public class Login_form extends AppCompatActivity implements View.OnClickListene
                 if(TotalUserData.size() == 0){
                     Toast.makeText(getApplicationContext(), "You don't have data", Toast.LENGTH_SHORT).show();
                 }else {
-
                     for(int i=0;i<TotalUserData.size();i++){
                         User_Data data=TotalUserData.get(i);
                         ArrayList<String> Notes = new ArrayList<>();
@@ -103,15 +102,11 @@ public class Login_form extends AppCompatActivity implements View.OnClickListene
                                 Notes.add(arrOfStr[k]);
                         }
                         Trip trip =new Trip(data.getTripName(), data.getStart(), data.getEnd(),data.getTime(),data.getDate()
-
                                 , Notes , Integer.parseInt(data.getStatus()) ,true,0);
-
                         tripViewModel.insert(trip);
                         System.out.println("message"+ " from fireeeee"+ data.getNotes().isEmpty());
                     }
-
                     System.out.println("the result after thread :  " + TotalUserData.size() + "");
-                    // System.out.println("the first note of first element :  " + TotalUserData.get(1).getNotes().get(2) + "");
                 }
                 writeInSharedPreference();
 
@@ -175,34 +170,34 @@ public class Login_form extends AppCompatActivity implements View.OnClickListene
                     return;
                 }
 
-                if (TextUtils.isEmpty(password)){
+                else if (TextUtils.isEmpty(password)){
                     Toast.makeText(Login_form.this, "Please, Enter your password.", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(password.length()<6){
+                else if(password.length()<6){
                     Toast.makeText(Login_form.this, "Password should be more than 5 characters", Toast.LENGTH_SHORT).show();
                 }
+               else
+                   {
+                       progress_bar.setVisibility(View.VISIBLE);
+                       mAuth.signInWithEmailAndPassword(email, password)
+                           .addOnCompleteListener(Login_form.this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        UserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                        Intent intent = new Intent(getApplicationContext(), MainScreen.class);
+                                        intent.putExtra("userID", UserID);
+                                        startActivity(intent);
+                                        Toast.makeText(Login_form.this, "Login complete.", Toast.LENGTH_SHORT).show();
+                                        readFireBase.start();
+                                    } else {
+                                        Toast.makeText(Login_form.this, "please check your internet connection.", Toast.LENGTH_SHORT).show();
 
-                mAuth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(Login_form.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    UserID = FirebaseAuth.getInstance().getCurrentUser().getUid() ;
-                                    Intent intent = new Intent(getApplicationContext(), MainScreen.class);
-                                    intent.putExtra("userID",UserID );
-                                    startActivity(intent);
-                                    Toast.makeText(Login_form.this, "Login complete.", Toast.LENGTH_SHORT).show();
-                                    readFireBase.start();
-                                } else {
-                                    Toast.makeText(Login_form.this, "Login Failed.", Toast.LENGTH_SHORT).show();
-
+                                    }
                                 }
-
-
-                            }
-                        });
-
+                            });
+                }
             }
         });
 
@@ -213,7 +208,12 @@ public class Login_form extends AppCompatActivity implements View.OnClickListene
             }
         });
 
-
+        forgetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Login_form.this,ResetPassword.class));
+            }
+        });
 
     }
     private void signWithGoogle() {
@@ -235,7 +235,7 @@ public class Login_form extends AppCompatActivity implements View.OnClickListene
                     intent.putExtra("userID",UserID );
                     startActivity(intent);
                 }else{
-                    Toast.makeText(Login_form.this, "failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Login_form.this, "please check your internet connection", Toast.LENGTH_SHORT).show();
 
                 }
             }
@@ -285,7 +285,7 @@ public class Login_form extends AppCompatActivity implements View.OnClickListene
                 }
                 else
                 {
-                    Toast.makeText(Login_form.this, "Failed to Login", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Login_form.this, "please check your internet connection ", Toast.LENGTH_SHORT).show();
 
 
                 }
@@ -322,12 +322,5 @@ public class Login_form extends AppCompatActivity implements View.OnClickListene
         finishAffinity();
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.forgetPassword:
-                startActivity(new Intent(Login_form.this,ResetPassword.class));
-                break;
-        }
-    }
+
 }

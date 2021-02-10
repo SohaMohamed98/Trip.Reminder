@@ -25,6 +25,7 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -39,6 +40,7 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.android.material.textfield.TextInputEditText;
 import com.mad41.tripreminder.constants.Constants;
 import com.mad41.tripreminder.room_database.MyRoomDataBase;
 import com.mad41.tripreminder.room_database.trip.Trip;
@@ -46,15 +48,10 @@ import com.mad41.tripreminder.trip_ui.AddNoteAdapter;
 import com.mad41.tripreminder.trip_ui.NoteAdapter;
 import com.mad41.tripreminder.room_database.view_model.TripViewModel;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class AddTripFragments extends Fragment {
@@ -84,11 +81,11 @@ public class AddTripFragments extends Fragment {
     TextView txt_date_round;
     TextView txt_time_round;
     Switch roundSwitch;
-    EditText txt_place;
+    TextInputEditText txt_place;
     TextView txt_date;
     TextView txt_time;
-    CircleImageView btnDate;
-    CircleImageView btnTime;
+    ImageView btnDate;
+    ImageView btnTime;
     int t1Hour, t1Minuite;
     private int mYear, mMonth, mDay;
     private MyRoomDataBase dataBaseInstance;
@@ -178,13 +175,13 @@ public class AddTripFragments extends Fragment {
 
         txt_date = (TextView) view.findViewById(R.id.txt_date);
         txt_time = (TextView) view.findViewById(R.id.txt_time);
-        txt_place = (EditText) view.findViewById(R.id.txt_place);
+        txt_place = (TextInputEditText) view.findViewById(R.id.txt_place);
 
         txt_start = (EditText) view.findViewById(R.id.txt_startPlace);
         txt_end = (EditText) view.findViewById(R.id.txt_endPlace);
 
-        btnDate = (CircleImageView) view.findViewById(R.id.btn_date);
-        btnTime = (CircleImageView) view.findViewById(R.id.btn_time);
+        btnDate = (ImageView) view.findViewById(R.id.btn_date);
+        btnTime = (ImageView) view.findViewById(R.id.btn_time);
         btn_place = (Button) view.findViewById(R.id.btn_addTrip);
 
         roundSwitch = (Switch) view.findViewById(R.id.round_switch);

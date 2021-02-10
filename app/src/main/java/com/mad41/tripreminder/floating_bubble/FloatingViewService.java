@@ -19,13 +19,24 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mad41.tripreminder.FloatingNotesAdapter;
 import com.mad41.tripreminder.R;
+import com.mad41.tripreminder.room_database.view_model.TripRepository;
+import com.mad41.tripreminder.room_database.view_model.TripViewModel;
 
 import java.util.ArrayList;
 
 public class FloatingViewService extends Service {
     private WindowManager mWindowManager;
     private View mFloatingView;
+    private TripRepository repository;
     public FloatingViewService() {
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        int id=intent.getIntExtra("USER_ID",-1);
+        Toast.makeText(this, "USER_ID"+id, Toast.LENGTH_LONG).show();
+        return super.onStartCommand(intent, flags, startId);
+
     }
 
     @Override
@@ -37,6 +48,7 @@ public class FloatingViewService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        repository = new TripRepository(getApplication());
         Toast.makeText(this,"service started", Toast.LENGTH_LONG).show();
         //Inflate the floating view layout we created
         mFloatingView = LayoutInflater.from(this).inflate(R.layout.layout_floating_widget, null);

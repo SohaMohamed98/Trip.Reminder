@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Trip.Reminder</string>
+    <string name="Remind_me">Remind_me</string>
     <string name="facebook_app_id">861440641315611</string>
     <string name="fb_login_protocol_scheme">fb861440641315611</string>
 

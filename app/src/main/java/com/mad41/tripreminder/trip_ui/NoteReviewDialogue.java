@@ -64,8 +64,8 @@ public class NoteReviewDialogue extends DialogFragment {
         recyclerView.setAdapter(noteAdapter);
 
         builder.setView(view)
-                .setTitle("My Notes")
-                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                .setTitle(R.string.myNotes)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 

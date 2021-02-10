@@ -136,8 +136,8 @@ public class OnGoingFrag extends Fragment {
                                 break;
                             case R.id.btnCancel:
                                 new AlertDialog.Builder(getContext())
-                                        .setTitle("Cancel trip")
-                                        .setMessage("Are you sure you want to cancel this trip?")
+                                        .setTitle(R.string.cancelTrip)
+                                        .setMessage(R.string.sureCancelTrip)
                                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int which) {
                                                 tripViewModel.updateStatus(id, Constants.TRIP_CANCELED);
@@ -151,8 +151,8 @@ public class OnGoingFrag extends Fragment {
                                 break;
                             case R.id.btnDelete:
                                 new AlertDialog.Builder(getContext())
-                                        .setTitle("Delete trip")
-                                        .setMessage("Are you sure you want to delete this trip?")
+                                        .setTitle(R.string.deleteTrip)
+                                        .setMessage(R.string.sureDeleteTrip)
                                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int which) {
                                                 tripViewModel.deleteTripById(id);

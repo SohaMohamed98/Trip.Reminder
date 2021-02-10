@@ -10,8 +10,10 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.TimeZone;
 import android.media.AudioManager;
@@ -56,42 +58,72 @@ public class TransparentActivity extends AppCompatActivity {
     private boolean comingBoolean;
     private int mDay, mMonth, mYear, t1Hour, t1Minuite;
     private static final int CODE_DRAW_OVER_OTHER_APP_PERMISSION = 2084;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+    private String preferenceId, preferenceBoolean;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transparent);
+
+        sharedPreferences = getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+//        preferenceBoolean = sharedPreferences.getString(Constants.preferenceBoolean,"false");
+        calendar = Calendar.getInstance();
+        Log.i("room", "alarm date before switch " + calendar.getTime());
+
         incomingIntent = getIntent();
         comingBoolean = true;
         tripViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication())).get(TripViewModel.class);
         tripId = incomingIntent.getIntExtra(Constants.ID, 0);
-        trip = tripViewModel.getTripById(tripId);
-        end = trip.getEndLoacation();
-        repeated = trip.isRound();
-        Log.i("startactivity"," "+incomingIntent);
 
-        comingPage = incomingIntent.getStringExtra(Constants.START);
-        Log.i("startactivity"," "+incomingIntent.getStringExtra(Constants.START));
-        if(comingPage.equals(Constants.START)){
-            comingBoolean=false;
-        }
-        Log.i("room", "incoming id " + tripId);
-        Log.i("room", "incoming repeated " + repeated);
+        if(tripId==0){
+//            if(preferenceBoolean.equals("false")){
 
-        calendar = Calendar.getInstance();
-        Log.i("room", "alarm date before switch " + calendar.getTime());
-
-        if(comingBoolean){
+//            }else{
+                preferenceId = sharedPreferences.getString(Constants.preferenceId,"0");
+                tripId = Integer.parseInt(preferenceId);
+                trip = tripViewModel.getTripById(tripId);
+                end = trip.getEndLoacation();
+                repeated = trip.isRound();
+//            }
             mMediaPlayer = new MediaPlayer();
             mMediaPlayer = MediaPlayer.create(this, R.raw.sound1);
             mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mMediaPlayer.start();
             showAlert();
         }else{
-            startBubble();
-            startTrip();
-            finish();
+            editor.putString(Constants.preferenceId,tripId+"");
+//            editor.putString(Constants.preferenceBoolean,"true");
+            editor.commit();
+            trip = tripViewModel.getTripById(tripId);
+            end = trip.getEndLoacation();
+            repeated = trip.isRound();
+            Log.i("room"," "+incomingIntent);
+
+            comingPage = incomingIntent.getStringExtra(Constants.START);
+            Log.i("room"," "+incomingIntent.getStringExtra(Constants.START));
+            if(comingPage.equals(Constants.START)){
+                comingBoolean=false;
+            }
+            Log.i("room", "incoming id " + tripId);
+            Log.i("room", "incoming repeated " + repeated);
+
+            if(comingBoolean){
+                mMediaPlayer = new MediaPlayer();
+                mMediaPlayer = MediaPlayer.create(this, R.raw.sound1);
+                mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                mMediaPlayer.start();
+                showAlert();
+            }else{
+                startBubble();
+                startTrip();
+                finish();
+            }
         }
+
     }
 
     private void addNextTrip() {
@@ -169,19 +201,22 @@ public class TransparentActivity extends AppCompatActivity {
     private void showAlert() {
         builder = new AlertDialog.Builder(this);
         //Setting message manually and performing action on button click
-        builder.setMessage("Do you want to start your trip now?").setCancelable(false).setTitle("Reminder")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setMessage(R.string.startTripNow).setCancelable(false).setTitle(R.string.reminder)
+                .setPositiveButton(R.string.startTrip, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         startTrip();
                         startBubble();
                         finish();
                     }
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancelTrip, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         //  Action for 'NO' Button
                         dialog.cancel();
                         tripViewModel.updateStatus(tripId,Constants.TRIP_CANCELED);
+                        editor.putString(Constants.preferenceBoolean,"false");
+                        editor.commit();
+
                         if(repeated!=0){
                             time = trip.getTime();
                             date = trip.getDate();
@@ -190,7 +225,7 @@ public class TransparentActivity extends AppCompatActivity {
                         }
                         finish();
                     }
-                }).setNeutralButton("Snooze", new DialogInterface.OnClickListener() {
+                }).setNeutralButton(R.string.snooze, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 showNotification();
@@ -204,6 +239,9 @@ public class TransparentActivity extends AppCompatActivity {
     }
 
     private void startTrip() {
+        editor.putString(Constants.preferenceBoolean,"false");
+        editor.commit();
+
         if(repeated!=0){
             time = trip.getTime();
             date = trip.getDate();

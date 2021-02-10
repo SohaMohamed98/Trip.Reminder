@@ -81,7 +81,9 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
         Intent intent = getIntent();
         UserID = intent.getStringExtra("userID");
         frag2 = new HistoryFragment();
-     //   fragment = new AddTripFragments();
+        fragment = new AddTripFragments();
+
+        //   fragment = new AddTripFragments();
         notes = new ArrayList<String>();
         SharedPreferences Read = getSharedPreferences(PREFS_NAME , Context.MODE_PRIVATE);
         String user_Email = Read.getString("Email","Email not found");
@@ -204,8 +206,8 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
 
     private void logOut() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainScreen.this);
-        builder.setMessage("Sure you want to log out?").setCancelable(false).setTitle("Log out")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setMessage(R.string.sureLogout).setCancelable(false).setTitle(R.string.Logout)
+                .setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
 
                         cancelAllAlarms();
@@ -223,7 +225,7 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
                         }).start();
                     }
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                     }

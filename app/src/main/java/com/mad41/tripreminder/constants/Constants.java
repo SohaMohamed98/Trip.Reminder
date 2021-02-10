@@ -14,4 +14,9 @@ public class Constants {
     public static final String REPEATED = "REPEATED";
     public static final String INTERVAL = "INTERVAL";
     public static final String TRIP = "TRIP";
+    public static final String PREF_NAME = "sharedPreference";
+    public static final String preferenceId = "preferenceId";
+    public static final String preferenceBoolean = "preferenceBoolean";
+     ;
+
 }

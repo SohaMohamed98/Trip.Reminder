@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Trip.Reminder</string>
+    <string name="app_name">Remind me</string>
     <string name="facebook_app_id">861440641315611</string>
     <string name="fb_login_protocol_scheme">fb861440641315611</string>
 
@@ -42,6 +42,28 @@
     <string name="password">Password</string>
     <string name="Confirm_Password">Confirm Password</string>
     <string name="have_account">Have account?<font color="#1976d2"><u>Sign In</u></font> </string>
+    <string name="round">Round</string>
+    <string name="time">Time</string>
+    <string name="date">Date</string>
+    <string name="repeat">Repeat</string>
+    <string name="daily">Daily</string>
+    <string name="weekly">Weekly</string>
+    <string name="monthly">Monthly</string>
+    <string name="startTrip">Start Trip</string>
+    <string name="reminder">Reminder</string>
+    <string name="cancelTrip">Cancel</string>
+    <string name="snooze">Snooze</string>
+    <string name="startTripNow">Do you want to start your trip now?</string>
+    <string name="sureLogout">Are you sure you want to log out?</string>
+    <string name="Yes">Yes</string>
+    <string name="No">No</string>
+    <string name="deleteEntry">Delete record</string>
+    <string name="sureDeleteEntry">Are you sure you want to delete this record?</string>
+    <string name="myNotes">My Notes</string>
+    <string name="ok">Ok</string>
+    <string name="deleteTrip">Delete Trip</string>
+    <string name="sureDeleteTrip">Are you sure you want to delete this trip?</string>
+    <string name="sureCancelTrip">Are you sure you want to cancel this trip?</string>
 
 
     <string-array name="spinner">

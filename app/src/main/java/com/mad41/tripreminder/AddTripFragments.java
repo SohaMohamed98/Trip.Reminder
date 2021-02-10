@@ -280,10 +280,8 @@ public class AddTripFragments extends Fragment {
                         }
                     }
                     //adding or editing trip
-                    ArrayList<String> strlist = new ArrayList<>();
-                    strlist.add("mmmm");
                     Trip myTrip = new Trip(txt_place.getText().toString(), txt_start.getText().toString(), txt_end.getText().toString(),
-                            txt_time.getText().toString(), txt_date.getText().toString(), myNotes, Constants.TRIP_UPCOMING, true, repeatCase);
+                            txt_time.getText().toString(), txt_date.getText().toString(), myNotes, Constants.TRIP_UPCOMING, roundSwitch.isChecked(), repeatCase);
                     Log.i("room", "switch state " + roundSwitch.isChecked());
                     if (getArguments() == null) {
                         id = (int) tripViewModel.insert(myTrip);
@@ -299,14 +297,16 @@ public class AddTripFragments extends Fragment {
                     //adding or editing round trip
                     if (roundSwitch.isChecked()) {
                         Trip myTripRound = new Trip(txt_place.getText().toString(), txt_end.getText().toString(), txt_start.getText().toString(),
-                                txt_time_round.getText().toString(), txt_date_round.getText().toString(), myNotes, Constants.TRIP_UPCOMING, true, repeatCase);
-                        if (getArguments() == null) {
-                            id = (int) tripViewModel.insert(myTripRound);
-                        } else {
-                            myTripRound.setId(updatedID);
-                            tripViewModel.update(myTripRound);
-                            id = updatedID;
-                        }
+                                txt_time_round.getText().toString(), txt_date_round.getText().toString(), myNotes, Constants.TRIP_UPCOMING, roundSwitch.isChecked(), repeatCase);
+                        id = (int) tripViewModel.insert(myTripRound);
+
+//                        if (getArguments() == null) {
+//                        } else {
+//                            id = (int) tripViewModel.insert(myTripRound);
+//                            myTripRound.setId(updatedID);
+//                            tripViewModel.update(myTripRound);
+//                            id = updatedID;
+//                        }
                         Log.i("room", "id is: " + id);
 
                         communicatorListener.setAlarm(alarmTimeRound, id);
@@ -318,10 +318,6 @@ public class AddTripFragments extends Fragment {
                     //                } else {
                     //                    Toast.makeText(getContext(), "Please enter a valid date & time", Toast.LENGTH_SHORT).show();
                     //                }
-                    //print_Notes
-                    for (int i = 0; i < myNotes.size(); i++) {
-                        Toast.makeText(getContext(), myNotes.get(i), Toast.LENGTH_LONG).show();
-                    }
                 }
             }
 
@@ -574,7 +570,6 @@ public class AddTripFragments extends Fragment {
             if (resultCode == Activity.RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
                 txt_start.setText(place.getAddress());
-                Toast.makeText(getContext(), place.getLatLng() + "", Toast.LENGTH_LONG).show();
 
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 // TODO: Handle the error.

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">فكرني</string>
+    <string name="facebook_app_id">861440641315611</string>
+    <string name="fb_login_protocol_scheme">fb861440641315611</string>
+
+    <string name="TripName">اسم الرحلة</string>
+    <string name="Place">اسم الرحلة</string>
+    <string name="Start">البداية</string>
+    <string name="End">النهاية</string>
+    <string name="Date">التاريخ</string>
+    <string name="Time">الوقت</string>
+    <string name="AddTrip">إضافة رحلة جديدة</string>
+    <string name="trip_notes">مذكرات الرحلة</string>
+    <string name="on_going">الرحلات القادمة</string>
+    <string name="history">السجل</string>
+    <string name="options">إختيارات</string>
+    <string name="Language">اللغة</string>
+    <string name="Logout">الخروج</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!--for the menu drawer-->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="edit_menu">تعديل القائمة</string>
+    <string name="edit_notes">تعديل الملاحظات</string>
+    <string name="cancel">إالغاء</string>
+    <string name="delete">مسح</string>
+    <string name="edit_trip">تعديل الرحلة</string>
+    <string name="resetapasswordHint">من فضلت أدخل بريدك الإلكتروني</string>
+    <string name="BackFromResetPassword">رجوع</string>
+    <string name="send">إرسال</string>
+    <string name="forgetPassword"><u>نسيت كلمة السر؟</u></string>
+    <string name="creatAccount"><u>إنشاء حساب</u></string>
+    <string name="signin">تسجيل الدخول</string>
+    <string name="Sync" />
+    <string name="sync">مزامنة</string>
+    <string name="signUp">إنشاء حساب</string>
+    <string name="Createyouraccount">أنشئ حسابك</string>
+    <string name="UserNameHint">اسم المستخدم</string>
+    <string name="Email">البريد الإلكتروني</string>
+    <string name="password">كلمة السر</string>
+    <string name="Confirm_Password">تأكيد كلمة السر</string>
+    <string name="have_account">لديك حساب؟<font color="#1976d2"><u>تسجيل الدخول</u></font> </string>
+    <string name="round">ذهاب و عودة</string>
+    <string name="time">التاريخ</string>
+    <string name="date">الوقت</string>
+    <string name="repeat">التكرار</string>
+    <string name="daily">يوميا</string>
+    <string name="weekly">أسبوعيا</string>
+    <string name="monthly">شهريا</string>
+    <string name="startTrip">ابدأ الرحلة</string>
+    <string name="reminder">تذكير</string>
+    <string name="cancelTrip">إلغاء</string>
+    <string name="snooze">تأجيل</string>
+    <string name="startTripNow">هل تريد أن تبدأ رحلتك الآن؟</string>
+    <string name="sureLogout">متأكد من الخروج؟</string>
+    <string name="Yes">نعم</string>
+    <string name="No">لا</string>
+    <string name="deleteEntry">مسح الرحلة</string>
+    <string name="sureDeleteEntry">هل أنت متأكد من مسح هذا السجل؟</string>
+    <string name="myNotes">ملاحظاتي</string>
+    <string name="ok">حسنا</string>
+    <string name="deleteTrip">مسح الرحلة</string>
+    <string name="sureDeleteTrip">متأكد من مسح هذه الرحلة؟</string>
+    <string name="sureCancelTrip">متأكد من إلغاء هذه الرحلة</string>
+
+
+    <string-array name="spinner">
+        <item>تعديل الرحلة</item>
+        <item>تعديل الملاحظات</item>
+        <item>إلغاء</item>
+        <item>مسح</item>
+    </string-array>
+</resources>

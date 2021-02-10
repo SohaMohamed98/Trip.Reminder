@@ -92,8 +92,8 @@ public class HistoryFragment extends Fragment {
                     @Override
                     public void DeleteTrip(List<Trip> Trips, int id) {
                         new AlertDialog.Builder(getContext())
-                                .setTitle("Delete entry")
-                                .setMessage("Are you sure you want to delete this entry?")
+                                .setTitle(R.string.deleteEntry)
+                                .setMessage(R.string.sureDeleteEntry)
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                        // Trips.remove(Trips.get(id));

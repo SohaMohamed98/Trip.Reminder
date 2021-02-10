@@ -4,7 +4,10 @@ import android.app.Service;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -13,29 +16,44 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mad41.tripreminder.FloatingNotesAdapter;
 import com.mad41.tripreminder.R;
+import com.mad41.tripreminder.room_database.MyRoomDataBase;
+import com.mad41.tripreminder.room_database.trip.Trip;
 import com.mad41.tripreminder.room_database.view_model.TripRepository;
 import com.mad41.tripreminder.room_database.view_model.TripViewModel;
 
 import java.util.ArrayList;
 
 public class FloatingViewService extends Service {
+    String TAG="service";
     private WindowManager mWindowManager;
     private View mFloatingView;
     private TripRepository repository;
+
     public FloatingViewService() {
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        int id=intent.getIntExtra("USER_ID",-1);
-        Toast.makeText(this, "USER_ID"+id, Toast.LENGTH_LONG).show();
-        return super.onStartCommand(intent, flags, startId);
+
+      int id=intent.getIntExtra("TRIP_ID",10);
+        ArrayList<String> notes=new ArrayList<>();
+        Trip trip = repository.getTripById(id);
+        notes=trip.getNotes();
+        RecyclerView recyclerView = mFloatingView.findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+        FloatingNotesAdapter adapter = new FloatingNotesAdapter(notes);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        layoutManager.setOrientation(RecyclerView.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+        return START_STICKY;
 
     }
 
@@ -74,16 +92,7 @@ public class FloatingViewService extends Service {
         final View collapsedView = mFloatingView.findViewById(R.id.collapse_view);
 //The root element of the expanded view layout
         final View expandedView = mFloatingView.findViewById(R.id.expanded_container);
-        ArrayList<String> notes=new ArrayList<>();
-        notes.add("mahmoud");
-        notes.add("ali");
-        RecyclerView recyclerView = mFloatingView.findViewById(R.id.recyclerView);
-        recyclerView.setHasFixedSize(true);
-        FloatingNotesAdapter adapter = new FloatingNotesAdapter(notes);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        layoutManager.setOrientation(RecyclerView.VERTICAL);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
+
 
 
 //Set the close button

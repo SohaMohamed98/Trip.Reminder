@@ -149,7 +149,7 @@ public class AddTripFragments extends Fragment {
         //radio buttons
         radioGroup = view.findViewById(R.id.radio_group);
         radio_btn_day = view.findViewById(R.id.radio_btn_day);
-        radio_btn_month = view.findViewById(R.id.radio_btn_week);
+        radio_btn_month = view.findViewById(R.id.radio_btn_month);
         radio_btn_week = view.findViewById(R.id.radio_btn_week);
         repeat_switch = view.findViewById(R.id.repeat_switch);
 
@@ -247,65 +247,72 @@ public class AddTripFragments extends Fragment {
         btn_place.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("room"," time before check "+mYear+" "+mMonth+" "+mDay+" "+t1Hour+" "+t1Minuite);
-                long alarmTime = getAlarmTime(mYear,mMonth,mDay,t1Hour,t1Minuite);
-                long alarmTimeRound=0;
-                int reapeated = checkRepeated();
-                Log.i("room"," repeated "+reapeated);
-                //checking trip time
+
+             if(txt_place.getText().toString().isEmpty()|| txt_start.getText().toString().isEmpty()|| txt_end.getText().toString().isEmpty()||
+                     txt_time.getText().toString().isEmpty()|| txt_date.getText().toString().isEmpty() ){
+                 Toast.makeText(context, "You should enter all required data", Toast.LENGTH_LONG).show();
+             }
+             else {
+                 Log.i("room"," time before check "+mYear+" "+mMonth+" "+mDay+" "+t1Hour+" "+t1Minuite);
+                 long alarmTime = getAlarmTime(mYear,mMonth,mDay,t1Hour,t1Minuite);
+                 long alarmTimeRound=0;
+                 int reapeated = checkRepeated();
+                 Log.i("room"," repeated "+reapeated);
+                 //checking trip time
 //                if (alarmTime > 0) {
-                    //checking time for round trip
-                    if(roundSwitch.isChecked()){
-                        alarmTimeRound=getAlarmTime(mYear2,mMonth2,mDay2,t1Hour2,t1Minuite2);
-                        if(alarmTimeRound<alarmTime){
-                            Toast.makeText(getContext(), "Please enter a valid coming back date & time", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                    }
-                    //adding or editing trip
-                    ArrayList<String> strlist = new ArrayList<>();
-                    strlist.add("mmmm");
-                    Trip myTrip = new Trip(txt_place.getText().toString(), txt_start.getText().toString(), txt_end.getText().toString(),
-                            txt_time.getText().toString(), txt_date.getText().toString(), myNotes, Constants.TRIP_UPCOMING, true, repeatCase);
-                    Log.i("room","switch state "+roundSwitch.isChecked());
-                    if (getArguments() == null) {
-                        id = (int) tripViewModel.insert(myTrip);
-                    } else {
-                        myTrip.setId(updatedID);
-                        tripViewModel.update(myTrip);
-                        id = updatedID;
-                    }
-                    Log.i("room", "id is: " + id);
+                 //checking time for round trip
+                 if(roundSwitch.isChecked()){
+                     alarmTimeRound=getAlarmTime(mYear2,mMonth2,mDay2,t1Hour2,t1Minuite2);
+                     if(alarmTimeRound<alarmTime){
+                         Toast.makeText(getContext(), "Please enter a valid coming back date & time", Toast.LENGTH_SHORT).show();
+                         return;
+                     }
+                 }
+                 //adding or editing trip
+                 ArrayList<String> strlist = new ArrayList<>();
+                 strlist.add("mmmm");
+                 Trip myTrip = new Trip(txt_place.getText().toString(), txt_start.getText().toString(), txt_end.getText().toString(),
+                         txt_time.getText().toString(), txt_date.getText().toString(), myNotes, Constants.TRIP_UPCOMING, true, repeatCase);
+                 Log.i("room","switch state "+roundSwitch.isChecked());
+                 if (getArguments() == null) {
+                     id = (int) tripViewModel.insert(myTrip);
+                 } else {
+                     myTrip.setId(updatedID);
+                     tripViewModel.update(myTrip);
+                     id = updatedID;
+                 }
+                 Log.i("room", "id is: " + id);
 
-                    communicatorListener.setAlarm(alarmTime,id);
+                 communicatorListener.setAlarm(alarmTime,id);
 
-                    //adding or editing round trip
-                    if(roundSwitch.isChecked()){
-                            Trip myTripRound = new Trip(txt_place.getText().toString(), txt_end.getText().toString(), txt_start.getText().toString(),
-                                    txt_time_round.getText().toString(), txt_date_round.getText().toString(), myNotes, Constants.TRIP_UPCOMING, true, repeatCase);
-                            if (getArguments() == null) {
-                                id = (int) tripViewModel.insert(myTripRound);
-                            } else {
-                                myTripRound.setId(updatedID);
-                                tripViewModel.update(myTripRound);
-                                id = updatedID;
-                            }
-                            Log.i("room", "id is: " + id);
+                 //adding or editing round trip
+                 if(roundSwitch.isChecked()){
+                     Trip myTripRound = new Trip(txt_place.getText().toString(), txt_end.getText().toString(), txt_start.getText().toString(),
+                             txt_time_round.getText().toString(), txt_date_round.getText().toString(), myNotes, Constants.TRIP_UPCOMING, true, repeatCase);
+                     if (getArguments() == null) {
+                         id = (int) tripViewModel.insert(myTripRound);
+                     } else {
+                         myTripRound.setId(updatedID);
+                         tripViewModel.update(myTripRound);
+                         id = updatedID;
+                     }
+                     Log.i("room", "id is: " + id);
 
-                            communicatorListener.setAlarm(alarmTimeRound,id);
-                    }
+                     communicatorListener.setAlarm(alarmTimeRound,id);
+                 }
 
 
-                    myData();
+                 myData();
 
 //                } else {
 //                    Toast.makeText(getContext(), "Please enter a valid date & time", Toast.LENGTH_SHORT).show();
 //                }
-                //print_Notes
-                for (int i = 0; i < myNotes.size(); i++) {
-                    Toast.makeText(getContext(), myNotes.get(i), Toast.LENGTH_LONG).show();
-                }
-            }
+                 //print_Notes
+                 for (int i = 0; i < myNotes.size(); i++) {
+                     Toast.makeText(getContext(), myNotes.get(i), Toast.LENGTH_LONG).show();
+                 }
+             }}
+
         });
 
         selectDate();

@@ -239,9 +239,12 @@ public class TransparentActivity extends AppCompatActivity {
     }
 
     private void initializeView() {
-        Toast.makeText(this,"before service started", Toast.LENGTH_LONG).show();
-        startService(new Intent(this, FloatingViewService.class));
-        Toast.makeText(this,"after service started", Toast.LENGTH_LONG).show();
+       // Toast.makeText(this,"before service started", Toast.LENGTH_LONG).show();
+        Intent intent=new Intent(this, FloatingViewService.class);
+        intent.putExtra("TRIP_ID",tripId);
+        Toast.makeText(this,"Trans: "+tripId, Toast.LENGTH_LONG).show();
+        startService(intent);
+       // Toast.makeText(this,"after service started", Toast.LENGTH_LONG).show();
         //finish();
     }
 

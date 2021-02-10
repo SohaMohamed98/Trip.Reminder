@@ -81,7 +81,7 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
         Intent intent = getIntent();
         UserID = intent.getStringExtra("userID");
         frag2 = new HistoryFragment();
-        fragment = new AddTripFragments();
+     //   fragment = new AddTripFragments();
         notes = new ArrayList<String>();
         SharedPreferences Read = getSharedPreferences(PREFS_NAME , Context.MODE_PRIVATE);
         String user_Email = Read.getString("Email","Email not found");
@@ -140,7 +140,6 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
     public void startAddTripFragment(Bundle bundle) {
         mgr = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = mgr.beginTransaction();
-
         fragment = new AddTripFragments();
         fragment.setArguments(bundle);
         fragmentTransaction.replace(R.id.dynamicFrag, fragment);

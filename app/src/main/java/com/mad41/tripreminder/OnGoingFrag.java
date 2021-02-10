@@ -2,6 +2,7 @@ package com.mad41.tripreminder;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -32,6 +33,8 @@ import com.mad41.tripreminder.trip_ui.TripAdapter;
 
 import java.util.List;
 
+
+
 public class OnGoingFrag extends Fragment {
     private static List<Trip> tripModelArrayList;
     Context context;
@@ -43,11 +46,15 @@ public class OnGoingFrag extends Fragment {
     onGoingCommunicator onGoingCommunicator1;
     private FloatingActionButton btn_add;
     private TripViewModel tripViewModel;
+    SharedPreferences prefs;
+    boolean firstStart;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         onGoingCommunicator1 = (onGoingCommunicator) getActivity();
+       prefs =getActivity().getSharedPreferences("prefs", getActivity().MODE_PRIVATE);
+         firstStart = prefs.getBoolean("firstStart", true);
     }
 
     @Override
@@ -59,6 +66,9 @@ public class OnGoingFrag extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
     }
 
     @Override
@@ -67,6 +77,7 @@ public class OnGoingFrag extends Fragment {
         View fragment = inflater.inflate(R.layout.fragment_on_going2, container, false);
         mainScreen = (MainScreen) getActivity();
         btn_add = fragment.findViewById(R.id.btnf_add);
+
         recyclerView = (RecyclerView) fragment.findViewById(R.id.HistoryRecyclerView);
         recyclerView.setHasFixedSize(true);
         adapter = new TripAdapter();
@@ -167,6 +178,7 @@ public class OnGoingFrag extends Fragment {
                 onGoingCommunicator1.startAddTripFragment(null);
             }
         });
+
 
 
         return fragment;

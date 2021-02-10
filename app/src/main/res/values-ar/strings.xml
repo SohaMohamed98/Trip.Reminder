@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">فكرني</string>
+    <string name="Remind_me">فكرني</string>
+
     <string name="facebook_app_id">861440641315611</string>
     <string name="fb_login_protocol_scheme">fb861440641315611</string>
 

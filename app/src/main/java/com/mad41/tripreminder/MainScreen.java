@@ -142,6 +142,7 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
         FragmentTransaction fragmentTransaction = mgr.beginTransaction();
 
         fragment = new AddTripFragments();
+        fragment.setArguments(bundle);
         fragmentTransaction.replace(R.id.dynamicFrag, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();

@@ -195,6 +195,13 @@ public class AddTripFragments extends Fragment {
         tripViewModel = ViewModelProviders.of(requireActivity()).get(TripViewModel.class);
         Bundle bundle = getArguments();
 
+        txt_place.setText("");
+        txt_start.setText("");
+        txt_end.setText("");
+        txt_date.setText("");
+        txt_time.setText("");
+
+
         if (bundle != null) {
             btn_place.setText("update Trip");
             Trip trip = bundle.getParcelable("trip");
@@ -203,8 +210,8 @@ public class AddTripFragments extends Fragment {
             txt_time.setText(trip.getTime());
             txt_place.setText(trip.getName());
             txt_start.setText(trip.getStartLoacation());
-            txt_end.setText(trip.getStartLoacation());
-
+            txt_end.setText(trip.getEndLoacation());
+            int repeat = trip.isRound();
             ArrayList<String> Notes = trip.getNotes();
             for(String note :Notes){
                 btn_add_note.setOnClickListener(new View.OnClickListener() {

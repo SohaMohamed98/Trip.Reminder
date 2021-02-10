@@ -32,6 +32,7 @@ public class Registration_Form extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     ProgressBar progressBar;
     Button Signup , Login ;
+    String UserId;
 
 
     @Override
@@ -46,6 +47,7 @@ public class Registration_Form extends AppCompatActivity {
         confirmationPassword = (EditText)findViewById(R.id.ConfirmPasswordID);
         progressBar = findViewById(R.id.signUPprogressBar);
         firebaseAuth = FirebaseAuth.getInstance();
+
         Signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,11 +119,14 @@ public class Registration_Form extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if ((task.isSuccessful())) {
                             Toast.makeText(Registration_Form.this, "Registeration Done", Toast.LENGTH_SHORT).show();
+                            FirebaseUser user = firebaseAuth.getCurrentUser();
+                            UserId = user.getUid();
                             Login_form.readFireBase.start();
                             Intent Main = new Intent(getApplicationContext(), MainScreen.class);
+                            Main.putExtra("userID",UserId);
                             startActivity(Main);
-                            firebaseAuth = FirebaseAuth.getInstance();
                             writeInSharedPreference();
+                            writeUserStatus("true" , UserId);
 
                         } else {
                             Toast.makeText(Registration_Form.this, "Faild !" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
@@ -148,4 +153,12 @@ public class Registration_Form extends AppCompatActivity {
         System.out.println("user name is : "+user.getDisplayName());
         System.out.println("email is : "+user.getEmail());
     }
+    public void writeUserStatus(String value , String UserId){
+        SharedPreferences writr = getSharedPreferences("userAuth" , Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = writr.edit();
+        editor.putString("userMode",value);
+        editor.putString("userId",UserId);
+        editor.commit();
+    }
+
 }

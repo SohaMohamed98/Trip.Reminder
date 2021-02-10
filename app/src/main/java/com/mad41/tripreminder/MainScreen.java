@@ -180,6 +180,7 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
                         if(checkConnectionToInternet.isConnected(context)) {
                             deleteFireBase = new Thread(new DeleteFromDataBase());
                             deleteFireBase.start();
+                            writeUserStatus("false");
 
                             logOut();
                         }
@@ -305,4 +306,11 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+    public void writeUserStatus(String value){
+        SharedPreferences writr = getSharedPreferences("userAuth" , Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = writr.edit();
+        editor.putString("userMode",value);
+        editor.commit();
+    }
+
 }

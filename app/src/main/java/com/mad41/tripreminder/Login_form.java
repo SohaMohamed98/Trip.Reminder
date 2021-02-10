@@ -17,7 +17,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -83,6 +82,18 @@ public class Login_form extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        authStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if(user!= null){
+                    UserID = FirebaseAuth.getInstance().getCurrentUser().getUid() ;
+                    Intent intent = new Intent(getApplicationContext(), MainScreen.class);
+                    intent.putExtra("userID",UserID );
+                    startActivity(intent);
+                }
+            }
+        };
         setContentView(R.layout.activity_login_form);
         Email = findViewById(R.id.EmailTxt);
         Password = findViewById(R.id.PasswordTxt);
@@ -93,10 +104,10 @@ public class Login_form extends AppCompatActivity {
         loginButton = findViewById(R.id.login_button);
         signInButton = (SignInButton)findViewById(R.id.googleBtn);
         mAuth = FirebaseAuth.getInstance();
-
         mCallbackManager = CallbackManager.Factory.create();
         tripViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication())).get(TripViewModel.class);
         readFireBase = new Thread(new ReadHandler());
+
         fireBaseReadHandler = new Handler(){
             @Override
             public void handleMessage(@NonNull Message msg) {
@@ -126,18 +137,7 @@ public class Login_form extends AppCompatActivity {
             }
         };
 
-        authStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if(user!= null){
-                    UserID = FirebaseAuth.getInstance().getCurrentUser().getUid() ;
-                    Intent intent = new Intent(getApplicationContext(), MainScreen.class);
-                    intent.putExtra("userID",UserID );
-                    startActivity(intent);
-                }
-            }
-        };
+
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -210,6 +210,7 @@ public class Login_form extends AppCompatActivity {
                                         startActivity(intent);
                                         Toast.makeText(Login_form.this, "Login complete.", Toast.LENGTH_SHORT).show();
                                         readFireBase.start();
+                                       writeUserStatus("true",UserID);
                                     } else {
                                         Toast.makeText(Login_form.this, "This account not found. please, create account.", Toast.LENGTH_SHORT).show();
                                         progress_bar.setVisibility(View.INVISIBLE);
@@ -254,7 +255,8 @@ public class Login_form extends AppCompatActivity {
 
                    // Toast.makeText(Login_form.this, "task is Successful", Toast.LENGTH_SHORT).show();
                     readFireBase.start();
-                    UserID = FirebaseAuth.getInstance().getCurrentUser().getUid() ;
+                    writeUserStatus("true", UserID);
+                    UserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
                     Intent intent = new Intent(getApplicationContext(), MainScreen.class);
                     intent.putExtra("userID",UserID );
                     startActivity(intent);
@@ -298,8 +300,7 @@ public class Login_form extends AppCompatActivity {
                     Toast.makeText(Login_form.this, "Successfully Login", Toast.LENGTH_SHORT).show();
                     UserID = FirebaseAuth.getInstance().getCurrentUser().getUid() ;
                     readFireBase.start();
-
-
+                    writeUserStatus("true", UserID);
                     Intent intent = new Intent(getApplicationContext(), MainScreen.class);
                     intent.putExtra("userID",UserID );
                     startActivity(intent);
@@ -324,6 +325,13 @@ public class Login_form extends AppCompatActivity {
         editor.commit();
         System.out.println("user name is : "+user.getDisplayName());
         System.out.println("email is : "+user.getEmail());
+    }
+    public void writeUserStatus(String value, String UserId){
+        SharedPreferences writr = getSharedPreferences("userAuth" , Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = writr.edit();
+        editor.putString("userMode",value);
+        editor.putString("userId",UserId);
+        editor.commit();
     }
 
     @Override

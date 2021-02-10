@@ -136,8 +136,6 @@ public class TripAdapter extends RecyclerView.Adapter<com.mad41.tripreminder.tri
                     noteReview.onNoteClick(v, id);
                 }
             });
-
-
         }
     }
 

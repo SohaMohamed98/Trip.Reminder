@@ -31,10 +31,18 @@
     <string name="BackFromResetPassword">Back</string>
     <string name="send">send</string>
     <string name="forgetPassword"><u>Forget Password?</u></string>
-    <string name="creatAccount"><u>Creat account</u></string>
+    <string name="creatAccount"><u>Create Account.</u></string>
     <string name="signin">Sign in</string>
     <string name="Sync" />
     <string name="sync">Sync</string>
+    <string name="signUp">Sign Up</string>
+    <string name="Createyouraccount">Create your account</string>
+    <string name="UserNameHint">User Name</string>
+    <string name="Email">Email Address</string>
+    <string name="password">Password</string>
+    <string name="Confirm_Password">Confirm Password</string>
+    <string name="have_account">Have account?<font color="#1976d2"><u>Sign In</u></font> </string>
+
 
     <string-array name="spinner">
         <item>Edit Trip</item>

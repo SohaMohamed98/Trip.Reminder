@@ -10,7 +10,8 @@
     <ScrollView
         android:id="@+id/scrollPage"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toTopOf="@+id/btn_addTrip">
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -331,37 +332,33 @@
                 android:id="@+id/card_repeat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:visibility="visible"
-                app:cardCornerRadius="8dp"
+               android:layout_marginTop="2dp"
                 app:layout_constraintTop_toBottomOf="@+id/card_location"
                 tools:ignore="MissingConstraints">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp">
+                    android:padding="4dp">
 
                     <Switch
                         android:id="@+id/repeat_switch"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
                         android:checked="false"
                         android:text="Repeat"
                         android:textOff="OFF"
                         android:textOn="ON"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.0" />
+                        tools:ignore="UseSwitchCompatOrMaterialXml" />
 
                     <RadioGroup
                         android:id="@+id/radio_group"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
+                        android:visibility="gone"
                         android:layout_marginTop="8dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/repeat_switch">
@@ -389,26 +386,26 @@
             </androidx.cardview.widget.CardView>
 
 
-
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_notes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="2dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/card_repeat"
                 tools:ignore="NotSibling">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="8dp">
+                    android:padding="4dp">
 
                     <TextView
                         android:id="@+id/tv_trip_notes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="My Notes"
                         android:layout_marginStart="8dp"
+                        android:text="My Notes"
                         app:layout_constraintBottom_toBottomOf="@+id/btn_add_note"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/btn_add_note" />
@@ -417,11 +414,11 @@
                         android:id="@+id/btn_add_note"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/ic_plus1"
                         android:layout_marginEnd="8dp"
                         android:background="#00000000"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_plus1"
                         tools:ignore="ContentDescription,VectorDrawableCompat" />
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -429,11 +426,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
+                        android:layout_marginTop="4dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/btn_add_note" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
                 <androidx.fragment.app.FragmentContainerView
                     android:id="@+id/switchFragment"
                     android:layout_width="match_parent"
@@ -446,12 +445,14 @@
         android:id="@+id/btn_addTrip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
         android:backgroundTint="@color/colorAccent"
         android:text="Done"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginBottom="16dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/card_notes"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:ignore="NotSibling" />
 </androidx.constraintlayout.widget.ConstraintLayout>

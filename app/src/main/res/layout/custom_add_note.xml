@@ -26,8 +26,11 @@
                 android:layout_height="wrap_content"
                 android:hint="Add note"
                 android:inputType="textPersonName"
+                android:nextFocusDown="@id/et_note_name"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:singleLine="true" >
+                <requestFocus/>
+            </EditText>
         </com.google.android.material.textfield.TextInputLayout>
 
 

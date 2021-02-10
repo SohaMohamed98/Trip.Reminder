@@ -1,6 +1,7 @@
 package com.mad41.tripreminder.trip_ui;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -97,6 +98,7 @@ public class AddNoteAdapter extends RecyclerView.Adapter<AddNoteAdapter.ViewHold
 
                 @Override
                 public void afterTextChanged(Editable s) {
+
 
                 }
             });

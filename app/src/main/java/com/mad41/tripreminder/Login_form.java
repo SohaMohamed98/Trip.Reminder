@@ -12,6 +12,7 @@ import android.os.Message;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.facebook.AccessToken;
@@ -49,6 +51,7 @@ import com.mad41.tripreminder.Firebase.ReadHandler;
 import com.mad41.tripreminder.Firebase.User_Data;
 import com.mad41.tripreminder.constants.Constants;
 import com.mad41.tripreminder.room_database.trip.Trip;
+import com.mad41.tripreminder.Firebase.checkConnectionToInternet;
 import com.mad41.tripreminder.room_database.view_model.TripViewModel;
 
 import java.util.ArrayList;
@@ -75,6 +78,7 @@ public class Login_form extends AppCompatActivity {
     ProgressBar progress_bar;
     ArrayList<User_Data> TotalUserData;
     String UserID;
+    CardView cardView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +93,7 @@ public class Login_form extends AppCompatActivity {
         loginButton = findViewById(R.id.login_button);
         signInButton = (SignInButton)findViewById(R.id.googleBtn);
         mAuth = FirebaseAuth.getInstance();
+
         mCallbackManager = CallbackManager.Factory.create();
         tripViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication())).get(TripViewModel.class);
         readFireBase = new Thread(new ReadHandler());
@@ -138,10 +143,16 @@ public class Login_form extends AppCompatActivity {
                 .requestEmail()
                 .build();
         googleSignInClient = GoogleSignIn.getClient(this,googleSignInOptions);
+
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                signWithGoogle();
+                if(checkConnectionToInternet.isConnected(getApplicationContext())) {
+                    signWithGoogle();
+                }else{
+                    Toast.makeText(Login_form.this, "please check your internet connection ", Toast.LENGTH_SHORT).show();
+
+                }
             }
         });
 
@@ -173,19 +184,19 @@ public class Login_form extends AppCompatActivity {
             public void onClick(View v) {
                 String email = Email.getText().toString().trim();
                 String password = Password.getText().toString().trim();
-                if (TextUtils.isEmpty(email)){
-                    Toast.makeText(Login_form.this, "Please, Enter your email address.", Toast.LENGTH_SHORT).show();
-                    return;
+                if (TextUtils.isEmpty(email) || !Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                    Email.setError("Enter Valid Email.");
+                    Email.requestFocus();
                 }
-
                 else if (TextUtils.isEmpty(password)){
-                    Toast.makeText(Login_form.this, "Please, Enter your password.", Toast.LENGTH_SHORT).show();
-                    return;
+                    Password.setError("Password is Required.");
+                    Password.requestFocus();
                 }
                 else if(password.length()<6){
-                    Toast.makeText(Login_form.this, "Password should be more than 5 characters", Toast.LENGTH_SHORT).show();
+                    Password.setError("Password should be more than 5 characters.");
+                    Password.requestFocus();
                 }
-               else
+               else if(checkConnectionToInternet.isConnected(getApplicationContext()))
                    {
                        progress_bar.setVisibility(View.VISIBLE);
                        mAuth.signInWithEmailAndPassword(email, password)
@@ -200,11 +211,16 @@ public class Login_form extends AppCompatActivity {
                                         Toast.makeText(Login_form.this, "Login complete.", Toast.LENGTH_SHORT).show();
                                         readFireBase.start();
                                     } else {
-                                        Toast.makeText(Login_form.this, "please check your internet connection.", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(Login_form.this, "This account not found. please, create account.", Toast.LENGTH_SHORT).show();
+                                        progress_bar.setVisibility(View.INVISIBLE);
 
                                     }
                                 }
                             });
+                }
+               else{
+                    Toast.makeText(Login_form.this, "please check your internet connection", Toast.LENGTH_LONG).show();
+
                 }
             }
         });
@@ -236,14 +252,14 @@ public class Login_form extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
 
-                    Toast.makeText(Login_form.this, "task is Successful", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(Login_form.this, "task is Successful", Toast.LENGTH_SHORT).show();
                     readFireBase.start();
                     UserID = FirebaseAuth.getInstance().getCurrentUser().getUid() ;
                     Intent intent = new Intent(getApplicationContext(), MainScreen.class);
                     intent.putExtra("userID",UserID );
                     startActivity(intent);
                 }else{
-                    Toast.makeText(Login_form.this, "please check your internet connection", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Login_form.this, "please check your internet connection", Toast.LENGTH_LONG).show();
 
                 }
             }
@@ -263,7 +279,7 @@ public class Login_form extends AppCompatActivity {
     private void handleSignInResult(Task<GoogleSignInAccount> task) {
         try {
             GoogleSignInAccount account = task.getResult(ApiException.class);
-            Toast.makeText(this, "Signed In Successfully", Toast.LENGTH_SHORT).show();
+           // Toast.makeText(this, "Signed In Successfully", Toast.LENGTH_SHORT).show();
             FirebaseGoogleAuth(account);
 
         } catch (ApiException e) {
@@ -288,12 +304,10 @@ public class Login_form extends AppCompatActivity {
                     intent.putExtra("userID",UserID );
                     startActivity(intent);
 
-
-
                 }
                 else
                 {
-                    Toast.makeText(Login_form.this, "please check your internet connection ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Login_form.this, "please check your internet connection ", Toast.LENGTH_LONG).show();
 
 
                 }

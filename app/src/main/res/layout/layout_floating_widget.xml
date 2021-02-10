@@ -43,14 +43,14 @@
         <!--View while view is expanded-->
         <FrameLayout
             android:id="@+id/expanded_container"
-            android:layout_width="400dp"
+            android:layout_width="300dp"
             android:layout_height="400dp"
-            android:visibility="gone"
-            android:background="#F8BBD0"
-
+            android:visibility="visible"
+            android:background="#DAD9D5"
             android:padding="8dp">
 
             <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginTop="40dp"
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
@@ -61,15 +61,15 @@
 
                 <ImageView
                     android:id="@+id/close_button"
-                    android:layout_width="34dp"
-                    android:layout_height="41dp"
+                    android:layout_width="21dp"
+                    android:layout_height="26dp"
                     android:src="@mipmap/ic_close"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.722"
+                    app:layout_constraintHorizontal_bias="0.002"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.046" />
+                    app:layout_constraintVertical_bias="0.002" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </FrameLayout>

@@ -19,6 +19,9 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    defaultConfig {
+        vectorDrawables.useSupportLibrary = true
+    }
 
     buildTypes {
         release {
@@ -49,6 +52,7 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:26.3.0')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.android.material:material:1.0.0'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
 
     //firebase
     implementation 'com.google.firebase:firebase-database:19.2.1'
@@ -98,5 +102,9 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
     // Annotation processor
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+    //drawing on maps
+    implementation 'com.google.maps:google-maps-services:0.16.1'
+    implementation 'org.slf4j:slf4j-simple:1.7.25'
+
 
 }

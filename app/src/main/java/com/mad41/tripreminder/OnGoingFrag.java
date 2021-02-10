@@ -1,10 +1,13 @@
 package com.mad41.tripreminder;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -30,21 +33,28 @@ import com.mad41.tripreminder.trip_ui.TripAdapter;
 
 import java.util.List;
 
+
+
 public class OnGoingFrag extends Fragment {
     private static List<Trip> tripModelArrayList;
     Context context;
     RecyclerView recyclerView;
     TripAdapter adapter;
     RecyclerView.LayoutManager layoutManager;
+    MainScreen mainScreen;
 
     onGoingCommunicator onGoingCommunicator1;
     private FloatingActionButton btn_add;
     private TripViewModel tripViewModel;
+    SharedPreferences prefs;
+    boolean firstStart;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         onGoingCommunicator1 = (onGoingCommunicator) getActivity();
+       prefs =getActivity().getSharedPreferences("prefs", getActivity().MODE_PRIVATE);
+         firstStart = prefs.getBoolean("firstStart", true);
     }
 
     @Override
@@ -56,13 +66,18 @@ public class OnGoingFrag extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View fragment = inflater.inflate(R.layout.fragment_on_going2, container, false);
+        mainScreen = (MainScreen) getActivity();
         btn_add = fragment.findViewById(R.id.btnf_add);
+
         recyclerView = (RecyclerView) fragment.findViewById(R.id.HistoryRecyclerView);
         recyclerView.setHasFixedSize(true);
         adapter = new TripAdapter();
@@ -80,6 +95,13 @@ public class OnGoingFrag extends Fragment {
             }
         });
 
+        adapter.setOnStartClickListener(new TripAdapter.OnStartClickListener() {
+            @Override
+            public void startTrip(int id) {
+                onGoingCommunicator1.startTrip(id);
+            }
+        });
+
         adapter.setOnNoteClickListener(new TripAdapter.NoteReview() {
             @Override
             public void onNoteClick(View view, int id) {
@@ -91,7 +113,6 @@ public class OnGoingFrag extends Fragment {
                 }
                 NoteReviewDialogue noteReviewDialogue = new NoteReviewDialogue(trip);
                 noteReviewDialogue.show(getActivity().getSupportFragmentManager(), "frag");
-
             }
         });
 
@@ -114,11 +135,33 @@ public class OnGoingFrag extends Fragment {
                                 Toast.makeText(view.getContext(), "item: " + item + " trip ", Toast.LENGTH_SHORT).show();
                                 break;
                             case R.id.btnCancel:
-                                tripViewModel.updateStatus(id, Constants.TRIP_CANCELED);
+                                new AlertDialog.Builder(getContext())
+                                        .setTitle("Cancel trip")
+                                        .setMessage("Are you sure you want to cancel this trip?")
+                                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                tripViewModel.updateStatus(id, Constants.TRIP_CANCELED);
+                                                mainScreen.cancelAlarm(id);
+                                            }
+                                        })
+                                        .setNegativeButton(android.R.string.no, null)
+                                        .setIcon(android.R.drawable.ic_dialog_alert)
+                                        .show();
                                 Toast.makeText(view.getContext(), "item: " + item + " trip ", Toast.LENGTH_SHORT).show();
                                 break;
                             case R.id.btnDelete:
-                                tripViewModel.deleteTripById(id);
+                                new AlertDialog.Builder(getContext())
+                                        .setTitle("Delete trip")
+                                        .setMessage("Are you sure you want to delete this trip?")
+                                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                tripViewModel.deleteTripById(id);
+                                                mainScreen.cancelAlarm(id);
+                                            }
+                                        })
+                                        .setNegativeButton(android.R.string.no, null)
+                                        .setIcon(android.R.drawable.ic_dialog_alert)
+                                        .show();
                                 Toast.makeText(view.getContext(), "item: " + item + " trip ", Toast.LENGTH_SHORT).show();
                                 break;
                         }
@@ -127,17 +170,15 @@ public class OnGoingFrag extends Fragment {
                 });
                 popupMenu.show();
             }
-
         });
-
 
         btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onGoingCommunicator1.startAddTripFragment(null);
-
             }
         });
+
 
 
         return fragment;
@@ -157,7 +198,9 @@ public class OnGoingFrag extends Fragment {
     }
 
 
+
     public interface onGoingCommunicator {
         void startAddTripFragment(Bundle bundle);
+        void startTrip(int id);
     }
 }

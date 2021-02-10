@@ -110,6 +110,7 @@ public class AddTripFragments extends Fragment {
     private int updatedID;
     private Communicator communicatorListener;
     private TripViewModel tripViewModel;
+    private int repeatCase;
 
 
     public AddTripFragments() {
@@ -141,10 +142,11 @@ public class AddTripFragments extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add_trip_fragments, container, false);
         Places.initialize(getContext().getApplicationContext(), "AIzaSyA7dH75J8SZ0-GkeHqHANbflPhdpbfU5yI");
 
+        repeatCase = 0;
         //radio buttons
         radioGroup = view.findViewById(R.id.radio_group);
         radio_btn_day = view.findViewById(R.id.radio_btn_day);
-        radio_btn_month = view.findViewById(R.id.radio_btn_week);
+        radio_btn_month = view.findViewById(R.id.radio_btn_month);
         radio_btn_week = view.findViewById(R.id.radio_btn_week);
         repeat_switch = view.findViewById(R.id.repeat_switch);
 
@@ -190,6 +192,13 @@ public class AddTripFragments extends Fragment {
         tripViewModel = ViewModelProviders.of(requireActivity()).get(TripViewModel.class);
         Bundle bundle = getArguments();
 
+        txt_place.setText("");
+        txt_start.setText("");
+        txt_end.setText("");
+        txt_date.setText("");
+        txt_time.setText("");
+
+
         if (bundle != null) {
             btn_place.setText("update Trip");
             Trip trip = bundle.getParcelable("trip");
@@ -198,10 +207,20 @@ public class AddTripFragments extends Fragment {
             txt_time.setText(trip.getTime());
             txt_place.setText(trip.getName());
             txt_start.setText(trip.getStartLoacation());
-            txt_end.setText(trip.getStartLoacation());
-
+            txt_end.setText(trip.getEndLoacation());
+            int repeat = trip.isRound();
+            if (repeat != 0) {
+                repeat_switch.setChecked(true);
+                if (repeat == 1) {
+                    radioGroup.check(R.id.radio_btn_day);
+                } else if (repeat == 2) {
+                    radioGroup.check(R.id.radio_btn_week);
+                } else {
+                    radioGroup.check(R.id.radio_btn_month);
+                }
+            }
             ArrayList<String> Notes = trip.getNotes();
-            for(String note :Notes){
+            for (String note : Notes) {
                 btn_add_note.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -214,19 +233,21 @@ public class AddTripFragments extends Fragment {
 
             String time = txt_time.getText().toString();
             String day = txt_date.getText().toString();
-            Log.i("room","string time: '"+time+"'");
-            Log.i("room","string time: '"+day+"'");
+            Log.i("room", "string time: '" + time + "'");
+            Log.i("room", "string time: '" + day + "'");
 
             String[] timee = time.split(":");
             t1Hour = Integer.parseInt(timee[0]);
             t1Minuite = Integer.parseInt(timee[1]);
             String amPm = timee[2];
-            if(amPm.equals("PM")){t1Hour=t1Hour+12;}
+            if (amPm.equals("PM")) {
+                t1Hour = t1Hour + 12;
+            }
             String[] datee = day.split("-");
-            mDay=Integer.parseInt(datee[0]);
-            mMonth=Integer.parseInt(datee[1])-1;
-            mYear=Integer.parseInt(datee[2]);
-            Log.i("room"," time returned "+mYear+" "+mMonth+" "+mDay+" "+t1Hour+" "+t1Minuite);
+            mDay = Integer.parseInt(datee[0]);
+            mMonth = Integer.parseInt(datee[1]) - 1;
+            mYear = Integer.parseInt(datee[2]);
+            Log.i("room", " time returned " + mYear + " " + mMonth + " " + mDay + " " + t1Hour + " " + t1Minuite);
 
             addNoteAdapter.setNotes(trip.getNotes());
         }
@@ -235,17 +256,22 @@ public class AddTripFragments extends Fragment {
         btn_place.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("room"," time before check "+mYear+" "+mMonth+" "+mDay+" "+t1Hour+" "+t1Minuite);
-                long alarmTime = getAlarmTime(mYear,mMonth,mDay,t1Hour,t1Minuite);
-                long alarmTimeRound=0;
-                int reapeated = checkRepeated();
-                Log.i("room"," repeated "+reapeated);
-                //checking trip time
-//                if (alarmTime > 0) {
+
+                if (txt_place.getText().toString().isEmpty() || txt_start.getText().toString().isEmpty() || txt_end.getText().toString().isEmpty() ||
+                        txt_time.getText().toString().isEmpty() || txt_date.getText().toString().isEmpty()) {
+                    Toast.makeText(context, "You should enter all required data", Toast.LENGTH_LONG).show();
+                } else {
+                    Log.i("room", " time before check " + mYear + " " + mMonth + " " + mDay + " " + t1Hour + " " + t1Minuite);
+                    long alarmTime = getAlarmTime(mYear, mMonth, mDay, t1Hour, t1Minuite);
+                    long alarmTimeRound = 0;
+                    int reapeated = checkRepeated();
+                    Log.i("room", " repeated " + reapeated);
+                    //checking trip time
+                    //                if (alarmTime > 0) {
                     //checking time for round trip
-                    if(roundSwitch.isChecked()){
-                        alarmTimeRound=getAlarmTime(mYear2,mMonth2,mDay2,t1Hour2,t1Minuite2);
-                        if(alarmTimeRound<alarmTime){
+                    if (roundSwitch.isChecked()) {
+                        alarmTimeRound = getAlarmTime(mYear2, mMonth2, mDay2, t1Hour2, t1Minuite2);
+                        if (alarmTimeRound < alarmTime) {
                             Toast.makeText(getContext(), "Please enter a valid coming back date & time", Toast.LENGTH_SHORT).show();
                             return;
                         }
@@ -255,8 +281,8 @@ public class AddTripFragments extends Fragment {
                     strlist.add("mmmm");
                     Trip myTrip = new Trip(txt_place.getText().toString(), txt_start.getText().toString(), txt_end.getText().toString(),
 
-                            txt_time.getText().toString(), txt_date.getText().toString(), myNotes, Constants.TRIP_UPCOMING, true, 2);
-                    Log.i("room","switch state "+roundSwitch.isChecked());
+                            txt_time.getText().toString(), txt_date.getText().toString(), myNotes, Constants.TRIP_UPCOMING, true, repeatCase);
+                    Log.i("room", "switch state " + roundSwitch.isChecked());
                     if (getArguments() == null) {
                         id = (int) tripViewModel.insert(myTrip);
                     } else {
@@ -266,35 +292,37 @@ public class AddTripFragments extends Fragment {
                     }
                     Log.i("room", "id is: " + id);
 
-                    communicatorListener.setAlarm(alarmTime,id);
+                    communicatorListener.setAlarm(alarmTime, id);
 
                     //adding or editing round trip
-                    if(roundSwitch.isChecked()){
-                            Trip myTripRound = new Trip(txt_place.getText().toString(), txt_end.getText().toString(), txt_start.getText().toString(),
-                                    txt_time_round.getText().toString(), txt_date_round.getText().toString(), myNotes, Constants.TRIP_UPCOMING, true, 2);
-                            if (getArguments() == null) {
-                                id = (int) tripViewModel.insert(myTripRound);
-                            } else {
-                                myTripRound.setId(updatedID);
-                                tripViewModel.update(myTripRound);
-                                id = updatedID;
-                            }
-                            Log.i("room", "id is: " + id);
+                    if (roundSwitch.isChecked()) {
+                        Trip myTripRound = new Trip(txt_place.getText().toString(), txt_end.getText().toString(), txt_start.getText().toString(),
+                                txt_time_round.getText().toString(), txt_date_round.getText().toString(), myNotes, Constants.TRIP_UPCOMING, true, repeatCase);
+                        if (getArguments() == null) {
+                            id = (int) tripViewModel.insert(myTripRound);
+                        } else {
+                            myTripRound.setId(updatedID);
+                            tripViewModel.update(myTripRound);
+                            id = updatedID;
+                        }
+                        Log.i("room", "id is: " + id);
 
-                            communicatorListener.setAlarm(alarmTimeRound,id);
+                        communicatorListener.setAlarm(alarmTimeRound, id);
                     }
 
 
                     myData();
 
-//                } else {
-//                    Toast.makeText(getContext(), "Please enter a valid date & time", Toast.LENGTH_SHORT).show();
-//                }
-                //print_Notes
-                for (int i = 0; i < myNotes.size(); i++) {
-                    Toast.makeText(getContext(), myNotes.get(i), Toast.LENGTH_LONG).show();
+                    //                } else {
+                    //                    Toast.makeText(getContext(), "Please enter a valid date & time", Toast.LENGTH_SHORT).show();
+                    //                }
+                    //print_Notes
+                    for (int i = 0; i < myNotes.size(); i++) {
+                        Toast.makeText(getContext(), myNotes.get(i), Toast.LENGTH_LONG).show();
+                    }
                 }
             }
+
         });
 
         selectDate();
@@ -308,9 +336,8 @@ public class AddTripFragments extends Fragment {
     }
 
     private int checkRepeated() {
-        int repeatCase = 0;
-        if(repeat_switch.isChecked()){
-            switch (radioGroup.getCheckedRadioButtonId()){
+        if (repeat_switch.isChecked()) {
+            switch (radioGroup.getCheckedRadioButtonId()) {
                 case R.id.radio_btn_day:
                     repeatCase = 1;
                     break;
@@ -409,7 +436,7 @@ public class AddTripFragments extends Fragment {
 
     private long getAlarmTime(int year, int month, int day, int hr, int minute) {
         Calendar calendar1 = Calendar.getInstance();
-        Log.i("room","time before edit "+ calendar1.getTime());
+        Log.i("room", "time before edit " + calendar1.getTime());
         long l = calendar1.getTimeInMillis();
         Log.i("room", " check calendar " + l);
         Calendar calendar = Calendar.getInstance();
@@ -424,8 +451,8 @@ public class AddTripFragments extends Fragment {
 //        Log.i("room", " check calendar alarm date " + calendar.getTime());
 //        calendar.set(Calendar.DAY_OF_MONTH, day+30);
         Log.i("room", " check calendar alarm date " + calendar.getTime());
-        Log.i("room", "check real time"+SystemClock.elapsedRealtime());
-        Log.i("room"," time before check "+year+" "+month+" "+day+" "+hr+" "+minute);
+        Log.i("room", "check real time" + SystemClock.elapsedRealtime());
+        Log.i("room", " time before check " + year + " " + month + " " + day + " " + hr + " " + minute);
         long alarmTime = calendar.getTimeInMillis() - l;
 //        Calendar c3 = Calendar.getInstance();
 //        Log.i("room", " check new calendar " + c3.getTime());

@@ -1,458 +1,484 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".AddTripFragments">
 
-
-    <ScrollView
-        android:id="@+id/scrollPage"
+    <LinearLayout
+        android:weightSum="4"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintBottom_toTopOf="@+id/btn_addTrip">
-
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cv_basic_info"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:ignore="MissingConstraints">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/textp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="8dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/txt_place"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Name" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/layout_date"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginTop="8dp"
-                        android:padding="8dp"
-                        app:layout_constraintTop_toBottomOf="@+id/textp">
-
-                        <ImageView
-                            android:id="@+id/btn_date"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:src="@drawable/calendar"
-                            app:layout_constraintStart_toStartOf="parent"
-                            tools:ignore="MissingConstraints" />
-
-                        <TextView
-                            android:id="@+id/tv_date_label"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="8dp"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginTop="8dp"
-                            android:text="Date: "
-                            app:layout_constraintBottom_toBottomOf="@+id/btn_date"
-                            app:layout_constraintStart_toEndOf="@+id/btn_date"
-                            app:layout_constraintTop_toTopOf="@+id/btn_date" />
-
-                        <TextView
-                            android:id="@+id/txt_date"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            app:layout_constraintBottom_toBottomOf="@+id/tv_date_label"
-                            app:layout_constraintStart_toEndOf="@+id/tv_date_label"
-                            app:layout_constraintTop_toTopOf="@+id/tv_date_label" />
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/right_arrow"
-                            app:layout_constraintBottom_toBottomOf="@+id/btn_date"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/btn_date" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/layout_time"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginTop="8dp"
-                        android:orientation="horizontal"
-                        android:padding="8dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/layout_date">
-
-                        <ImageView
-                            android:id="@+id/btn_time"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:src="@drawable/clock"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/tv_time_label"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="8dp"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginTop="8dp"
-                            android:text="Time: "
-                            app:layout_constraintBottom_toBottomOf="@+id/btn_time"
-                            app:layout_constraintStart_toEndOf="@+id/btn_time"
-                            app:layout_constraintTop_toTopOf="@+id/btn_time" />
-
-                        <TextView
-                            android:id="@+id/txt_time"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:gravity="right"
-                            app:layout_constraintBottom_toBottomOf="@+id/tv_time_label"
-                            app:layout_constraintStart_toEndOf="@+id/tv_time_label"
-                            app:layout_constraintTop_toTopOf="@+id/tv_time_label" />
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end|center_vertical"
-                            android:layout_marginBottom="8dp"
-                            android:layout_marginTop="8dp"
-                            android:src="@drawable/right_arrow"
-                            app:layout_constraintBottom_toBottomOf="@+id/txt_time"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/btn_time" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.cardview.widget.CardView>
-
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/card_location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                app:layout_constraintTop_toBottomOf="@+id/cv_basic_info">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="4dp">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/layout_start_point"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="4dp"
-                        android:orientation="horizontal"
-                        android:padding="4dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <ImageView
-                            android:id="@+id/btn_start"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:src="@drawable/pin"
-                            tools:ignore="MissingConstraints" />
-
-                        <TextView
-                            android:id="@+id/tv_start_point_label"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="8dp"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginTop="8dp"
-                            android:text="start point"
-                            app:layout_constraintBottom_toBottomOf="@+id/btn_start"
-                            app:layout_constraintStart_toEndOf="@+id/btn_start"
-                            app:layout_constraintTop_toTopOf="@+id/btn_start" />
-
-                        <EditText
-                            android:id="@+id/txt_startPlace"
-                            android:layout_width="220dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:gravity="right"
-                            app:layout_constraintBottom_toBottomOf="@+id/tv_start_point_label"
-                            app:layout_constraintStart_toEndOf="@+id/tv_start_point_label"
-                            app:layout_constraintTop_toTopOf="@+id/tv_start_point_label" />
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end|center_vertical"
-                            android:src="@drawable/right_arrow"
-                            app:layout_constraintBottom_toBottomOf="@+id/btn_start"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/btn_start" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/layout_end_point"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="2dp"
-                        android:orientation="horizontal"
-                        android:padding="4dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/layout_start_point">
-
-                        <ImageView
-                            android:id="@+id/btn_end"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:src="@drawable/finish"
-                            tools:ignore="MissingConstraints" />
-
-                        <TextView
-                            android:id="@+id/tv_end_point_label"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginTop="8dp"
-                            android:text="end point  "
-                            app:layout_constraintStart_toEndOf="@+id/btn_end"
-                            app:layout_constraintTop_toTopOf="@+id/btn_end" />
-
-                        <EditText
-                            android:id="@+id/txt_endPlace"
-                            android:layout_width="220dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            app:layout_constraintBottom_toBottomOf="@+id/tv_end_point_label"
-                            app:layout_constraintStart_toEndOf="@+id/tv_end_point_label"
-                            app:layout_constraintTop_toTopOf="@+id/tv_end_point_label" />
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end|center_vertical"
-                            android:layout_marginBottom="8dp"
-                            android:layout_marginTop="8dp"
-                            android:src="@drawable/right_arrow"
-                            app:layout_constraintBottom_toBottomOf="@+id/btn_end"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/btn_end" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <Switch
-                        android:id="@+id/round_switch"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:checked="false"
-                        android:text="Round"
-                        android:textOff="OFF"
-                        android:textOn="ON"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/layout_end_point" />
-
-                    <ImageButton
-                        android:id="@+id/btn_time_round"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="32dp"
-                        android:minWidth="100dp"
-                        android:minHeight="100dp"
-                        android:src="@drawable/ic_time"
-                        android:visibility="gone"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/round_switch" />
-
-                    <TextView
-                        android:id="@+id/txt_date_round"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:hint="Time"
-                        android:visibility="gone"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="@+id/btn_date_round"
-                        app:layout_constraintTop_toBottomOf="@+id/btn_time_round" />
-
-                    <ImageButton
-                        android:id="@+id/btn_date_round"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="50dp"
-                        android:minWidth="100dp"
-                        android:minHeight="100dp"
-                        android:src="@drawable/ic_date"
-                        android:visibility="gone"
-                        app:layout_constraintEnd_toStartOf="@+id/btn_time_round"
-                        app:layout_constraintTop_toTopOf="@+id/btn_time_round" />
-
-                    <TextView
-                        android:id="@+id/txt_time_round"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:hint="Date"
-                        android:visibility="gone"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="@+id/btn_time_round"
-                        app:layout_constraintTop_toBottomOf="@+id/btn_time_round" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/card_repeat"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-               android:layout_marginTop="2dp"
-                app:layout_constraintTop_toBottomOf="@+id/card_location"
-                tools:ignore="MissingConstraints">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="4dp">
-
-                    <Switch
-                        android:id="@+id/repeat_switch"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:checked="false"
-                        android:text="Repeat"
-                        android:textOff="OFF"
-                        android:textOn="ON"
-                        tools:ignore="UseSwitchCompatOrMaterialXml" />
-
-                    <RadioGroup
-                        android:id="@+id/radio_group"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
-                        android:visibility="gone"
-                        android:layout_marginTop="8dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/repeat_switch">
-
-                        <RadioButton
-                            android:id="@+id/radio_btn_day"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Daily" />
-
-                        <RadioButton
-                            android:id="@+id/radio_btn_week"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="weekly" />
-
-                        <RadioButton
-                            android:id="@+id/radio_btn_month"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="monthly" />
-                    </RadioGroup>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.cardview.widget.CardView>
-
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/card_notes"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/card_repeat"
-                tools:ignore="NotSibling">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="4dp">
-
-                    <TextView
-                        android:id="@+id/tv_trip_notes"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="My Notes"
-                        app:layout_constraintBottom_toBottomOf="@+id/btn_add_note"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/btn_add_note" />
-
-                    <ImageButton
-                        android:id="@+id/btn_add_note"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:background="#00000000"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_plus1"
-                        tools:ignore="ContentDescription,VectorDrawableCompat" />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recyclerNote"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:layout_marginTop="4dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/btn_add_note" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.fragment.app.FragmentContainerView
-                    android:id="@+id/switchFragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </androidx.cardview.widget.CardView>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
-    <Button
-        android:id="@+id/btn_addTrip"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/colorAccent"
-        android:text="Done"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/card_notes"
-        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:ignore="NotSibling" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_weight="3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ScrollView
+                android:id="@+id/scrollPage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toTopOf="@+id/btn_addTrip">
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cv_basic_info"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:ignore="MissingConstraints">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/textp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="8dp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/txt_place"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Name" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/layout_date"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="8dp"
+                                android:padding="8dp"
+                                app:layout_constraintTop_toBottomOf="@+id/textp">
+
+                                <ImageView
+                                    android:id="@+id/btn_date"
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:src="@drawable/calendar"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    tools:ignore="MissingConstraints" />
+
+                                <TextView
+                                    android:id="@+id/tv_date_label"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginBottom="8dp"
+                                    android:text="Date: "
+                                    app:layout_constraintBottom_toBottomOf="@+id/btn_date"
+                                    app:layout_constraintStart_toEndOf="@+id/btn_date"
+                                    app:layout_constraintTop_toTopOf="@+id/btn_date" />
+
+                                <TextView
+                                    android:id="@+id/txt_date"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    app:layout_constraintBottom_toBottomOf="@+id/tv_date_label"
+                                    app:layout_constraintStart_toEndOf="@+id/tv_date_label"
+                                    app:layout_constraintTop_toTopOf="@+id/tv_date_label" />
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:src="@drawable/right_arrow"
+                                    app:layout_constraintBottom_toBottomOf="@+id/btn_date"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="@+id/btn_date" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/layout_time"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="8dp"
+                                android:orientation="horizontal"
+                                android:padding="8dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/layout_date">
+
+                                <ImageView
+                                    android:id="@+id/btn_time"
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:src="@drawable/clock"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/tv_time_label"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginBottom="8dp"
+                                    android:text="Time: "
+                                    app:layout_constraintBottom_toBottomOf="@+id/btn_time"
+                                    app:layout_constraintStart_toEndOf="@+id/btn_time"
+                                    app:layout_constraintTop_toTopOf="@+id/btn_time" />
+
+                                <TextView
+                                    android:id="@+id/txt_time"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:gravity="right"
+                                    app:layout_constraintBottom_toBottomOf="@+id/tv_time_label"
+                                    app:layout_constraintStart_toEndOf="@+id/tv_time_label"
+                                    app:layout_constraintTop_toTopOf="@+id/tv_time_label" />
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="end|center_vertical"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginBottom="8dp"
+                                    android:src="@drawable/right_arrow"
+                                    app:layout_constraintBottom_toBottomOf="@+id/txt_time"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="@+id/btn_time" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.cardview.widget.CardView>
+
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card_location"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        app:layout_constraintTop_toBottomOf="@+id/cv_basic_info">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="4dp">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/layout_start_point"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginTop="4dp"
+                                android:layout_marginEnd="8dp"
+                                android:orientation="horizontal"
+                                android:padding="4dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent">
+
+                                <ImageView
+                                    android:id="@+id/btn_start"
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:src="@drawable/pin"
+                                    tools:ignore="MissingConstraints" />
+
+                                <TextView
+                                    android:id="@+id/tv_start_point_label"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginBottom="8dp"
+                                    android:text="start point"
+                                    app:layout_constraintBottom_toBottomOf="@+id/btn_start"
+                                    app:layout_constraintStart_toEndOf="@+id/btn_start"
+                                    app:layout_constraintTop_toTopOf="@+id/btn_start" />
+
+                                <EditText
+                                    android:id="@+id/txt_startPlace"
+                                    android:layout_width="200dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:gravity="right"
+                                    app:layout_constraintBottom_toBottomOf="@+id/tv_start_point_label"
+                                    app:layout_constraintStart_toEndOf="@+id/tv_start_point_label"
+                                    app:layout_constraintTop_toTopOf="@+id/tv_start_point_label" />
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="end|center_vertical"
+                                    android:layout_marginEnd="8dp"
+                                    android:src="@drawable/right_arrow"
+                                    app:layout_constraintBottom_toBottomOf="@+id/btn_start"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="@+id/btn_start" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/layout_end_point"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginTop="2dp"
+                                android:layout_marginEnd="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:orientation="horizontal"
+                                android:padding="4dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/layout_start_point">
+
+                                <ImageView
+                                    android:id="@+id/btn_end"
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:src="@drawable/finish"
+                                    tools:ignore="MissingConstraints" />
+
+                                <TextView
+                                    android:id="@+id/tv_end_point_label"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="8dp"
+                                    android:text="end point  "
+                                    app:layout_constraintStart_toEndOf="@+id/btn_end"
+                                    app:layout_constraintTop_toTopOf="@+id/btn_end" />
+
+                                <EditText
+                                    android:id="@+id/txt_endPlace"
+                                    android:layout_width="200dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    app:layout_constraintBottom_toBottomOf="@+id/tv_end_point_label"
+                                    app:layout_constraintStart_toEndOf="@+id/tv_end_point_label"
+                                    app:layout_constraintTop_toTopOf="@+id/tv_end_point_label" />
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="end|center_vertical"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginEnd="8dp"
+                                    android:layout_marginBottom="8dp"
+                                    android:src="@drawable/right_arrow"
+                                    app:layout_constraintBottom_toBottomOf="@+id/btn_end"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="@+id/btn_end" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <Switch
+                                android:id="@+id/round_switch"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginEnd="8dp"
+                                android:checked="false"
+                                android:text="Round"
+                                android:textOff="OFF"
+                                android:textOn="ON"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/layout_end_point" />
+
+                            <ImageButton
+                                android:id="@+id/btn_time_round"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="32dp"
+                                android:minWidth="100dp"
+                                android:minHeight="100dp"
+                                android:src="@drawable/ic_time"
+                                android:visibility="gone"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/round_switch" />
+
+                            <TextView
+                                android:id="@+id/txt_date_round"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:hint="Time"
+                                android:visibility="gone"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="@+id/btn_date_round"
+                                app:layout_constraintTop_toBottomOf="@+id/btn_time_round" />
+
+                            <ImageButton
+                                android:id="@+id/btn_date_round"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="50dp"
+                                android:minWidth="100dp"
+                                android:minHeight="100dp"
+                                android:src="@drawable/ic_date"
+                                android:visibility="gone"
+                                app:layout_constraintEnd_toStartOf="@+id/btn_time_round"
+                                app:layout_constraintTop_toTopOf="@+id/btn_time_round" />
+
+                            <TextView
+                                android:id="@+id/txt_time_round"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:hint="Date"
+                                android:visibility="gone"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="@+id/btn_time_round"
+                                app:layout_constraintTop_toBottomOf="@+id/btn_time_round" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card_repeat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        app:layout_constraintTop_toBottomOf="@+id/card_location"
+                        tools:ignore="MissingConstraints">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="4dp">
+
+                            <Switch
+                                android:id="@+id/repeat_switch"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginEnd="8dp"
+                                android:checked="false"
+                                android:text="Repeat"
+                                android:textOff="OFF"
+                                android:textOn="ON"
+                                tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+                            <RadioGroup
+                                android:id="@+id/radio_group"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:layout_marginTop="8dp"
+                                android:visibility="gone"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/repeat_switch">
+
+                                <RadioButton
+                                    android:id="@+id/radio_btn_day"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Daily" />
+
+                                <RadioButton
+                                    android:id="@+id/radio_btn_week"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="weekly" />
+
+                                <RadioButton
+                                    android:id="@+id/radio_btn_month"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="monthly" />
+                            </RadioGroup>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.cardview.widget.CardView>
+
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card_notes"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/card_repeat"
+                        tools:ignore="NotSibling">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="4dp">
+
+                            <TextView
+                                android:id="@+id/tv_trip_notes"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text="My Notes"
+                                app:layout_constraintBottom_toBottomOf="@+id/btn_add_note"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/btn_add_note" />
+
+                            <ImageButton
+                                android:id="@+id/btn_add_note"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="8dp"
+                                android:background="#00000000"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/ic_plus1"
+                                tools:ignore="ContentDescription,VectorDrawableCompat" />
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/recyclerNote"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="8dp"
+                                android:layout_marginTop="4dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/btn_add_note" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.fragment.app.FragmentContainerView
+                            android:id="@+id/switchFragment"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </androidx.cardview.widget.CardView>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </ScrollView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp">
+
+            <Button
+                android:id="@+id/btn_addTrip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="@color/colorAccent"
+                android:text="Done" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

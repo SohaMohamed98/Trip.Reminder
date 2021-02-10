@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -86,6 +87,9 @@ public class AddTripFragments extends Fragment {
     TextView txt_time;
     ImageView btnDate;
     ImageView btnTime;
+
+    ConstraintLayout layout_date;
+    ConstraintLayout layout_time;
     int t1Hour, t1Minuite;
     private int mYear, mMonth, mDay;
     private MyRoomDataBase dataBaseInstance;
@@ -155,6 +159,7 @@ public class AddTripFragments extends Fragment {
         btn_date_round = view.findViewById(R.id.btn_date_round);
         btn_time_round = view.findViewById(R.id.btn_time_round);
 
+
         //Notes
         btn_add_note = view.findViewById(R.id.btn_add_note);
         recyclerViewNote = view.findViewById(R.id.recyclerNote);
@@ -175,6 +180,8 @@ public class AddTripFragments extends Fragment {
         });
 
 
+        layout_date= view.findViewById(R.id.layout_date);
+        layout_time= view.findViewById(R.id.layout_time);
         txt_date = (TextView) view.findViewById(R.id.txt_date);
         txt_time = (TextView) view.findViewById(R.id.txt_time);
         txt_place = (TextInputEditText) view.findViewById(R.id.txt_place);
@@ -214,6 +221,7 @@ public class AddTripFragments extends Fragment {
                 if (repeat == 1) {
                     radioGroup.check(R.id.radio_btn_day);
                 } else if (repeat == 2) {
+
                     radioGroup.check(R.id.radio_btn_week);
                 } else {
                     radioGroup.check(R.id.radio_btn_month);
@@ -252,6 +260,14 @@ public class AddTripFragments extends Fragment {
             addNoteAdapter.setNotes(trip.getNotes());
         }
 
+
+        repeat_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                radioGroup.setVisibility(View.VISIBLE);
+                checkRepeated();
+            }
+        });
 
         btn_place.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -335,8 +351,11 @@ public class AddTripFragments extends Fragment {
         return view;
     }
 
+
+
     private int checkRepeated() {
         if (repeat_switch.isChecked()) {
+            radioGroup.setVisibility(View.VISIBLE);
             switch (radioGroup.getCheckedRadioButtonId()) {
                 case R.id.radio_btn_day:
                     repeatCase = 1;
@@ -348,6 +367,8 @@ public class AddTripFragments extends Fragment {
                     repeatCase = 3;
                     break;
             }
+        }else{
+            radioGroup.setVisibility(View.GONE);
         }
         return repeatCase;
     }
@@ -462,7 +483,7 @@ public class AddTripFragments extends Fragment {
     }
 
     void selectDate() {
-        btnDate.setOnClickListener(new View.OnClickListener() {
+        layout_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Get Current Date
@@ -494,7 +515,7 @@ public class AddTripFragments extends Fragment {
     }
 
     void selectTime() {
-        btnTime.setOnClickListener(new View.OnClickListener() {
+        layout_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

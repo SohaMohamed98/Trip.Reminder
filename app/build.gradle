@@ -102,5 +102,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
     // Annotation processor
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+    //drawing on maps
+    implementation 'com.google.maps:google-maps-services:0.16.1'
+    implementation 'org.slf4j:slf4j-simple:1.7.25'
 
 }

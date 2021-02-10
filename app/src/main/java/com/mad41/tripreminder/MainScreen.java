@@ -8,8 +8,6 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.AlarmManager;
@@ -21,8 +19,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-
-import android.os.Parcel;
 
 import android.os.Handler;
 import android.os.Message;
@@ -39,8 +35,6 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import com.mad41.tripreminder.Firebase.DeleteFromDataBase;
-import com.mad41.tripreminder.Firebase.ReadHandler;
-import com.mad41.tripreminder.Firebase.User_Data;
 import com.mad41.tripreminder.constants.Constants;
 import com.mad41.tripreminder.Firebase.WriteHandler;
 import com.mad41.tripreminder.Firebase.checkConnectionToInternet;
@@ -50,12 +44,9 @@ import com.mad41.tripreminder.room_database.trip.Trip;
 
 
 import com.mad41.tripreminder.room_database.view_model.TripViewModel;
-import com.mad41.tripreminder.trip_ui.NoteReviewDialogue;
-import com.mad41.tripreminder.trip_ui.TripModel;
 
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 
@@ -150,12 +141,16 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
         mgr = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = mgr.beginTransaction();
 
-        fragment.setArguments(bundle);
+        fragment = new AddTripFragments();
         fragmentTransaction.replace(R.id.dynamicFrag, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 
+    public void openMaps() {
+        Intent intent = new Intent(this, MapsActivity.class);
+        startActivity(intent);
+    }
 
     private void setListener() {
         drawerMenu.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -261,9 +256,10 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
     @Override
     public  void setAlarm(long alarmTime, int id) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            Intent notifyIntent = new Intent(this, TransparentActivity.class);
+            Intent notifyIntent = new Intent(getApplicationContext(), TransparentActivity.class);
             Log.i("room", "id sent " + id);
             notifyIntent.putExtra(Constants.ID, id);
+            notifyIntent.putExtra(Constants.START,"ALARM");
 
             notifyIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             PendingIntent notifyPendingIntent = PendingIntent.getActivity(this, id, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -279,6 +275,7 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Intent notifyIntent = new Intent(this, TransparentActivity.class);
             notifyIntent.putExtra(Constants.ID, id);
+            notifyIntent.putExtra(Constants.START,"ALARM");
             notifyIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             PendingIntent notifyPendingIntent = PendingIntent.getActivity(this, id, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
@@ -286,6 +283,15 @@ public class MainScreen extends AppCompatActivity implements AddTripFragments.Co
             alarmManager.cancel(notifyPendingIntent);
             Log.i("alram what is this ", SystemClock.elapsedRealtime() + "");
         }
+    }
+
+    @Override
+    public void startTrip(int id){
+        cancelAlarm(id);
+        Intent intent = new Intent(this,TransparentActivity.class);
+        intent.putExtra(Constants.ID,id);
+        intent.putExtra(Constants.START,Constants.START);
+        startActivity(intent);
     }
 
     @Override

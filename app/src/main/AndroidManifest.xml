@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mad41.tripreminder">
-
+    <!--
+         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
+         Google Maps Android API v2, but you must specify either coarse or fine
+         location permissions for the "MyLocation" functionality.
+    -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!-- to draw on maps -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:name="androidx.multidex.MultiDexApplication"
@@ -15,18 +20,36 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TripReminder">
-        <activity android:name=".ResetPassword"></activity>
+        <activity android:name=".MapsActivity"></activity>
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/.
+        -->
+<!--        <meta-data-->
+<!--            android:name="com.google.android.geo.API_KEY"-->
+<!--            android:value="@string/google_maps_key" />-->
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity android:name=".ResetPassword" />
         <activity
             android:name=".TransparentActivity"
-            android:theme="@style/Theme.AppCompat.Transparent.NoActionBar"></activity>
-        <activity android:name=".MainScreen"
-            android:theme="@style/Theme.TripReminder.NoActionBar"></activity>
-    <activity android:name=".Registration_Form" />
+            android:theme="@style/Theme.AppCompat.Transparent.NoActionBar" />
+        <activity
+            android:name=".MainScreen"
+            android:theme="@style/Theme.TripReminder.NoActionBar" />
+        <activity android:name=".Registration_Form" />
 
         <service
             android:name=".floating_bubble.FloatingViewService"
             android:enabled="true"
             android:exported="false" />
+
         <activity android:name=".Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,19 +57,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Login_form"></activity>
+        <activity android:name=".Login_form" />
+
         <service
-            android:name="com.mad41.tripreminder.floating_bubble.FloatingViewService"
+            android:name=".floating_bubble.FloatingViewService"
             android:enabled="true"
             android:exported="false" />
+
         <activity android:name=".SecondActivity" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyA7dH75J8SZ0-GkeHqHANbflPhdpbfU5yI" />
     </application>
 
 </manifest>

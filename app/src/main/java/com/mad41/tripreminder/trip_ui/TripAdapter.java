@@ -30,6 +30,7 @@ import java.util.List;
 public class TripAdapter extends RecyclerView.Adapter<com.mad41.tripreminder.trip_ui.TripAdapter.ExampleViewHolder> {
     private static OnMenuClickListener listener;
     private static NoteReview noteReview;
+    private static OnStartClickListener startListener;
     Trip currentItem;
     private List<Trip> tripModels = new ArrayList<>();
 
@@ -76,6 +77,10 @@ public class TripAdapter extends RecyclerView.Adapter<com.mad41.tripreminder.tri
         this.noteReview = noteReview;
     }
 
+    public void setOnStartClickListener(OnStartClickListener startListener) {
+        this.startListener = startListener;
+    }
+
     public interface OnMenuClickListener {
         void onItemClick(View view, int id);
     }
@@ -94,7 +99,7 @@ public class TripAdapter extends RecyclerView.Adapter<com.mad41.tripreminder.tri
         public int id;
         ImageView btn_note_review;
         ImageView btn_menu_card;
-
+        private Button btn_startCard;
 
         public ExampleViewHolder(View itemView) {
             super(itemView);
@@ -106,6 +111,15 @@ public class TripAdapter extends RecyclerView.Adapter<com.mad41.tripreminder.tri
             txt_end = itemView.findViewById(R.id.txt_end2);
             btn_menu_card = itemView.findViewById(R.id.btn_menu_card);
             btn_note_review = itemView.findViewById(R.id.btn_noteCard);
+            btn_startCard = itemView.findViewById(R.id.btn_startCard);
+
+            btn_startCard.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //call cancel alarm and start trip
+                    startListener.startTrip(id);
+                }
+            });
 
             btn_menu_card.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -127,6 +141,9 @@ public class TripAdapter extends RecyclerView.Adapter<com.mad41.tripreminder.tri
         }
     }
 
+    public interface OnStartClickListener{
+        void startTrip(int id);
+    }
 
 }
 

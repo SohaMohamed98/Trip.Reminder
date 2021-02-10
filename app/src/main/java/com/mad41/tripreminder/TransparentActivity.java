@@ -52,6 +52,8 @@ public class TransparentActivity extends AppCompatActivity {
     private String time, date;
     private Trip trip;
     private Calendar calendar;
+    private String comingPage;
+    private boolean comingBoolean;
     private int mDay, mMonth, mYear, t1Hour, t1Minuite;
     private static final int CODE_DRAW_OVER_OTHER_APP_PERMISSION = 2084;
 
@@ -60,24 +62,36 @@ public class TransparentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transparent);
         incomingIntent = getIntent();
-
+        comingBoolean = true;
         tripViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication())).get(TripViewModel.class);
         tripId = incomingIntent.getIntExtra(Constants.ID, 0);
         trip = tripViewModel.getTripById(tripId);
         end = trip.getEndLoacation();
         repeated = trip.isRound();
+        Log.i("startactivity"," "+incomingIntent);
+
+        comingPage = incomingIntent.getStringExtra(Constants.START);
+        Log.i("startactivity"," "+incomingIntent.getStringExtra(Constants.START));
+        if(comingPage.equals(Constants.START)){
+            comingBoolean=false;
+        }
         Log.i("room", "incoming id " + tripId);
         Log.i("room", "incoming repeated " + repeated);
 
         calendar = Calendar.getInstance();
         Log.i("room", "alarm date before switch " + calendar.getTime());
 
-        mMediaPlayer = new MediaPlayer();
-        mMediaPlayer = MediaPlayer.create(this, R.raw.sound1);
-        mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        mMediaPlayer.start();
-
-        showAlert();
+        if(comingBoolean){
+            mMediaPlayer = new MediaPlayer();
+            mMediaPlayer = MediaPlayer.create(this, R.raw.sound1);
+            mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            mMediaPlayer.start();
+            showAlert();
+        }else{
+            startBubble();
+            startTrip();
+            finish();
+        }
     }
 
     private void addNextTrip() {

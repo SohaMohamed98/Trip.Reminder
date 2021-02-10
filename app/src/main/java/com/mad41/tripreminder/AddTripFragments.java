@@ -113,6 +113,7 @@ public class AddTripFragments extends Fragment {
     private int updatedID;
     private Communicator communicatorListener;
     private TripViewModel tripViewModel;
+    private int repeatCase;
 
 
     public AddTripFragments() {
@@ -144,6 +145,7 @@ public class AddTripFragments extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add_trip_fragments, container, false);
         Places.initialize(getContext().getApplicationContext(), "AIzaSyA7dH75J8SZ0-GkeHqHANbflPhdpbfU5yI");
 
+        repeatCase = 0;
         //radio buttons
         radioGroup = view.findViewById(R.id.radio_group);
         radio_btn_day = view.findViewById(R.id.radio_btn_day);
@@ -257,7 +259,7 @@ public class AddTripFragments extends Fragment {
                     ArrayList<String> strlist = new ArrayList<>();
                     strlist.add("mmmm");
                     Trip myTrip = new Trip(txt_place.getText().toString(), txt_start.getText().toString(), txt_end.getText().toString(),
-                            txt_time.getText().toString(), txt_date.getText().toString(), myNotes, Constants.TRIP_UPCOMING, true, 2);
+                            txt_time.getText().toString(), txt_date.getText().toString(), myNotes, Constants.TRIP_UPCOMING, true, repeatCase);
                     Log.i("room","switch state "+roundSwitch.isChecked());
                     if (getArguments() == null) {
                         id = (int) tripViewModel.insert(myTrip);
@@ -273,7 +275,7 @@ public class AddTripFragments extends Fragment {
                     //adding or editing round trip
                     if(roundSwitch.isChecked()){
                             Trip myTripRound = new Trip(txt_place.getText().toString(), txt_end.getText().toString(), txt_start.getText().toString(),
-                                    txt_time_round.getText().toString(), txt_date_round.getText().toString(), myNotes, Constants.TRIP_UPCOMING, true, 2);
+                                    txt_time_round.getText().toString(), txt_date_round.getText().toString(), myNotes, Constants.TRIP_UPCOMING, true, repeatCase);
                             if (getArguments() == null) {
                                 id = (int) tripViewModel.insert(myTripRound);
                             } else {
@@ -310,7 +312,6 @@ public class AddTripFragments extends Fragment {
     }
 
     private int checkRepeated() {
-        int repeatCase = 0;
         if(repeat_switch.isChecked()){
             switch (radioGroup.getCheckedRadioButtonId()){
                 case R.id.radio_btn_day:

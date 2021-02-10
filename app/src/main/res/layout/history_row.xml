@@ -8,7 +8,7 @@
     android:layout_margin="6dp"
     android:animateLayoutChanges="true"
     android:animationCache="true"
-    app:cardCornerRadius="15dp"
+    app:cardCornerRadius="30dp"
     app:cardElevation="22dp">
 
     <LinearLayout
@@ -27,33 +27,43 @@
             <TextView
                 android:id="@+id/tripName"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="55dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="20dp"
                 android:layout_weight="1"
+                android:background="@drawable/rounded_edittext"
+                android:backgroundTint="@color/browser_actions_bg_grey"
+                android:drawableLeft="@drawable/ic_distance_to_travel_between_two_points"
+                android:drawablePadding="10dp"
                 android:gravity="center"
                 android:paddingStart="10dp"
                 android:paddingRight="10dp"
                 android:text="TextView"
-                android:textSize="25sp"
+                android:textAlignment="textStart"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/Status"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="55dp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="20dp"
                 android:layout_weight="1"
+                android:background="@drawable/rounded_edittext"
+                android:backgroundTint="@color/browser_actions_bg_grey"
+                android:drawableLeft="@drawable/ic_fast_charge"
+                android:drawablePadding="10dp"
                 android:gravity="center"
                 android:paddingLeft="10dp"
                 android:paddingEnd="10dp"
                 android:text="TextView"
-                android:textSize="25dp"
+                android:textAlignment="textStart"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -62,8 +72,9 @@
             android:id="@+id/imageView5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:visibility="visible"
-            app:srcCompat="@drawable/hmap" />
+            app:srcCompat="@drawable/ic_undraw_world_9iqb" />
 
         <TextView
             android:id="@+id/date"
@@ -76,7 +87,10 @@
             android:drawableLeft="@drawable/ic_date"
             android:text="TextView"
             android:textSize="20dp"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:background="@drawable/rounded_edittext"
+            android:drawablePadding="10dp"
+            android:backgroundTint="@color/browser_actions_bg_grey"/>
 
         <TextView
             android:id="@+id/Time"
@@ -89,7 +103,10 @@
             android:drawableLeft="@drawable/ic_time"
             android:text="TextView"
             android:textSize="20dp"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:background="@drawable/rounded_edittext"
+            android:drawablePadding="10dp"
+            android:backgroundTint="@color/browser_actions_bg_grey"/>
 
         <TextView
             android:id="@+id/start"
@@ -102,7 +119,10 @@
             android:drawableLeft="@drawable/ic_add_location"
             android:text="TextView"
             android:textSize="20dp"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:background="@drawable/rounded_edittext"
+            android:drawablePadding="10dp"
+            android:backgroundTint="@color/browser_actions_bg_grey"/>
 
         <TextView
             android:id="@+id/to"
@@ -114,7 +134,9 @@
             android:textColorLink="#FFFFFF"
             android:textSize="25dp"
             android:textStyle="bold"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:drawablePadding="10dp"
+           />
 
         <TextView
             android:id="@+id/End"
@@ -125,10 +147,12 @@
             android:layout_marginEnd="30dp"
             android:animateLayoutChanges="true"
             android:drawableLeft="@drawable/ic_add_location"
-
+            android:drawablePadding="10dp"
             android:text="TextView"
             android:textSize="20dp"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:background="@drawable/rounded_edittext"
+            android:backgroundTint="@color/browser_actions_bg_grey"/>
 
 
         <LinearLayout
@@ -151,10 +175,14 @@
                     android:layout_marginStart="40dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="10dp"
                     android:layout_weight="1"
                     android:animateLayoutChanges="true"
+                    android:background="@drawable/rounded_edittext"
                     android:onClick="Details"
-                    android:text="show Details" />
+                    android:text="show Details"
+                    android:backgroundTint="@color/browser_actions_bg_grey"
+                    app:backgroundTint="#ffb300"/>
 
                 <Button
                     android:id="@+id/delete"
@@ -163,7 +191,10 @@
                     android:layout_marginStart="40dp"
                     android:layout_marginEnd="20dp"
                     android:layout_marginBottom="10dp"
-                    android:text="Delete" />
+                    android:text="Delete"
+                    android:background="@drawable/rounded_edittext"
+                    android:backgroundTint="@color/browser_actions_bg_grey"
+                    app:backgroundTint="#ffb300"/>
 
             </LinearLayout>
 
@@ -183,9 +214,10 @@
                     android:layout_marginRight="30dp"
                     android:layout_marginBottom="30dp"
                     android:layout_weight="2"
+                    android:background="@android:color/transparent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/btn_startCard"
-                    app:srcCompat="@drawable/ic_note"
+                    app:srcCompat="@drawable/ic_verify"
                     tools:ignore="VectorDrawableCompat" />
 
             </LinearLayout>

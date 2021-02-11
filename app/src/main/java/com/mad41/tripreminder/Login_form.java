@@ -114,7 +114,6 @@ public class Login_form extends AppCompatActivity {
                 super.handleMessage(msg);
                 TotalUserData = (ArrayList<User_Data>) msg.obj;
                 if(TotalUserData.size() == 0){
-                    Toast.makeText(getApplicationContext(), "You don't have data", Toast.LENGTH_SHORT).show();
                 }else {
                     for(int i=0;i<TotalUserData.size();i++){
                         User_Data data=TotalUserData.get(i);
@@ -127,9 +126,7 @@ public class Login_form extends AppCompatActivity {
                         Trip trip =new Trip(data.getTripName(), data.getStart(), data.getEnd(),data.getTime(),data.getDate()
                                 , Notes , Integer.parseInt(data.getStatus()) ,true,0);
                         tripViewModel.insert(trip);
-                        System.out.println("message"+ " from fireeeee"+ data.getNotes().isEmpty());
                     }
-                    System.out.println("the result after thread :  " + TotalUserData.size() + "");
                 }
                 writeInSharedPreference();
                 setLoginAlarms();
@@ -160,7 +157,6 @@ public class Login_form extends AppCompatActivity {
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Toast.makeText(Login_form.this, "on success", Toast.LENGTH_SHORT).show();
                 handleFacebookToken(loginResult.getAccessToken());
             }
             @Override
@@ -212,7 +208,7 @@ public class Login_form extends AppCompatActivity {
                                         readFireBase.start();
                                        writeUserStatus("true",UserID);
                                     } else {
-                                        Toast.makeText(Login_form.this, "This account not found. please, create account.", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(Login_form.this, "Please check your data or create account.", Toast.LENGTH_SHORT).show();
                                         progress_bar.setVisibility(View.INVISIBLE);
 
                                     }
@@ -246,7 +242,7 @@ public class Login_form extends AppCompatActivity {
         startActivityForResult(signInIntent,RC_SIGN_IN);
     }
     private void handleFacebookToken(AccessToken token){
-        Toast.makeText(this, "handleFacebookToken", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "handleFacebookToken", Toast.LENGTH_SHORT).show();
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override

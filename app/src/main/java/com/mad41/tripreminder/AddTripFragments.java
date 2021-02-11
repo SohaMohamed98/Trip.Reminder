@@ -287,7 +287,7 @@ public class AddTripFragments extends Fragment {
                     int reapeated = checkRepeated();
                     Log.i("room", " repeated " + reapeated);
                     //checking trip time
-                    //                if (alarmTime > 0) {
+                                    if (alarmTime > 0) {
                     //checking time for round trip
                     if (roundSwitch.isChecked()) {
                         alarmTimeRound = getAlarmTime(mYear2, mMonth2, mDay2, t1Hour2, t1Minuite2);
@@ -317,14 +317,6 @@ public class AddTripFragments extends Fragment {
                         Trip myTripRound = new Trip(txt_place.getText().toString(), txt_end.getText().toString(), txt_start.getText().toString(),
                                 txt_time_round.getText().toString(), txt_date_round.getText().toString(), myNotes, Constants.TRIP_UPCOMING, roundSwitch.isChecked(), repeatCase);
                         id = (int) tripViewModel.insert(myTripRound);
-
-//                        if (getArguments() == null) {
-//                        } else {
-//                            id = (int) tripViewModel.insert(myTripRound);
-//                            myTripRound.setId(updatedID);
-//                            tripViewModel.update(myTripRound);
-//                            id = updatedID;
-//                        }
                         Log.i("room", "id is: " + id);
 
                         communicatorListener.setAlarm(alarmTimeRound, id);
@@ -333,9 +325,9 @@ public class AddTripFragments extends Fragment {
 
                     myData();
 
-                    //                } else {
-                    //                    Toast.makeText(getContext(), "Please enter a valid date & time", Toast.LENGTH_SHORT).show();
-                    //                }
+                                    } else {
+                                        Toast.makeText(getContext(), "Please enter a valid date & time", Toast.LENGTH_SHORT).show();
+                                    }
                 }
             }
 

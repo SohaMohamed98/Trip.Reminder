@@ -129,10 +129,7 @@ public class OnGoingFrag extends Fragment {
                         switch (item.getItemId()) {
                             case R.id.btnEditTrip:
                                 editTrip(id);
-                                Toast.makeText(view.getContext(), "item: " + id + " trip ", Toast.LENGTH_SHORT).show();
-                                break;
-                            case R.id.btnEditNotes:
-                                Toast.makeText(view.getContext(), "item: " + item + " trip ", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(view.getContext(), "item: " + id + " trip ", Toast.LENGTH_SHORT).show();
                                 break;
                             case R.id.btnCancel:
                                 new AlertDialog.Builder(getContext())

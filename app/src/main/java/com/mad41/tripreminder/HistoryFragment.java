@@ -125,7 +125,7 @@ public class HistoryFragment extends Fragment {
                         tripModelArrayList.remove(viewHolder.getAdapterPosition());
                         adapter.notifyDataSetChanged();
                         tripViewModel.deleteTripById(ID);
-                        Toast.makeText(getContext().getApplicationContext(),  "Trip is Deleted From Hisrory", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext().getApplicationContext(),  "Trip is Deleted From History", Toast.LENGTH_LONG).show();
                     }
                 };
                 new ItemTouchHelper(itemTouchHelper).attachToRecyclerView(recyclerView);
@@ -137,7 +137,7 @@ public class HistoryFragment extends Fragment {
         mapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "working", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), "working", Toast.LENGTH_SHORT).show();
                 MainScreen mainScreen = (MainScreen) getActivity();
                 mainScreen.openMaps();
             }

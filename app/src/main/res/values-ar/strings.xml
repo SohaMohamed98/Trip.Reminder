@@ -71,7 +71,6 @@
 
     <string-array name="spinner">
         <item>تعديل الرحلة</item>
-        <item>تعديل الملاحظات</item>
         <item>إلغاء</item>
         <item>مسح</item>
     </string-array>

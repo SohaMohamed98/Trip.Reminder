@@ -271,7 +271,7 @@ public class TransparentActivity extends AppCompatActivity {
                     Uri.parse("package:" + getPackageName()));
             startActivityForResult(intent, CODE_DRAW_OVER_OTHER_APP_PERMISSION);
         } else {
-            Toast.makeText(this,"Hello Button cliced", Toast.LENGTH_LONG).show();
+//            Toast.makeText(this,"Hello Button cliced", Toast.LENGTH_LONG).show();
             initializeView();
         }
     }

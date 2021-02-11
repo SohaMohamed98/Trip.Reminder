@@ -70,7 +70,6 @@
 
     <string-array name="spinner">
         <item>Edit Trip</item>
-        <item>Edit Notes</item>
         <item>Cancel</item>
         <item>Delete</item>
     </string-array>

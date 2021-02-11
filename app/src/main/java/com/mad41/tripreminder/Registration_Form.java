@@ -106,10 +106,8 @@ public class Registration_Form extends AppCompatActivity {
         }
        else if(!passString.equals(confPassString))
         {
-            Toast.makeText(this, "Password not matching", Toast.LENGTH_SHORT).show();
             confirmationPassword.setError("Password must be more 6 digits");
             confirmationPassword.requestFocus();
-
         }
        else if(passString.equals(confPassString) && !passString.isEmpty()) {
             progressBar.setVisibility(View.VISIBLE );
@@ -129,7 +127,7 @@ public class Registration_Form extends AppCompatActivity {
                             writeUserStatus("true" , UserId);
 
                         } else {
-                            Toast.makeText(Registration_Form.this, "Faild !" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Registration_Form.this, "Failed !" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             progressBar.setVisibility(View.INVISIBLE );
                         }
 

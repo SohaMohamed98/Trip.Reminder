@@ -58,7 +58,8 @@
                                     android:id="@+id/txt_place"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:hint="Name" >
+                                    android:hint="@string/Place"
+                                    android:gravity="right">
                                     <requestFocus/>
                                 </com.google.android.material.textfield.TextInputEditText>
                             </com.google.android.material.textfield.TextInputLayout>
@@ -87,7 +88,7 @@
                                     android:layout_marginStart="8dp"
                                     android:layout_marginTop="8dp"
                                     android:layout_marginBottom="8dp"
-                                    android:text="Date: "
+                                    android:text="@string/lbl_date"
                                     app:layout_constraintBottom_toBottomOf="@+id/btn_date"
                                     app:layout_constraintStart_toEndOf="@+id/btn_date"
                                     app:layout_constraintTop_toTopOf="@+id/btn_date" />
@@ -104,7 +105,7 @@
                                 <ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:src="@drawable/right_arrow"
+                                    android:src="@drawable/ic_baseline_arrow_back_ios_new_24"
                                     app:layout_constraintBottom_toBottomOf="@+id/btn_date"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toTopOf="@+id/btn_date" />
@@ -127,6 +128,7 @@
                                     android:layout_width="30dp"
                                     android:layout_height="30dp"
                                     android:src="@drawable/clock"
+                                    app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
 
                                 <TextView
@@ -136,7 +138,7 @@
                                     android:layout_marginStart="8dp"
                                     android:layout_marginTop="8dp"
                                     android:layout_marginBottom="8dp"
-                                    android:text="Time: "
+                                    android:text="@string/lbl_time"
                                     app:layout_constraintBottom_toBottomOf="@+id/btn_time"
                                     app:layout_constraintStart_toEndOf="@+id/btn_time"
                                     app:layout_constraintTop_toTopOf="@+id/btn_time" />
@@ -157,7 +159,7 @@
                                     android:layout_gravity="end|center_vertical"
                                     android:layout_marginTop="8dp"
                                     android:layout_marginBottom="8dp"
-                                    android:src="@drawable/right_arrow"
+                                    android:src="@drawable/ic_baseline_arrow_back_ios_new_24"
                                     app:layout_constraintBottom_toBottomOf="@+id/txt_time"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toTopOf="@+id/btn_time" />
@@ -197,6 +199,7 @@
                                     android:layout_width="30dp"
                                     android:layout_height="30dp"
                                     android:src="@drawable/pin"
+                                    app:layout_constraintStart_toStartOf="parent"
                                     tools:ignore="MissingConstraints" />
 
                                 <TextView
@@ -206,7 +209,7 @@
                                     android:layout_marginStart="8dp"
                                     android:layout_marginTop="8dp"
                                     android:layout_marginBottom="8dp"
-                                    android:text="start point"
+                                    android:text="@string/start_point"
                                     app:layout_constraintBottom_toBottomOf="@+id/btn_start"
                                     app:layout_constraintStart_toEndOf="@+id/btn_start"
                                     app:layout_constraintTop_toTopOf="@+id/btn_start" />
@@ -226,8 +229,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="end|center_vertical"
                                     android:layout_marginEnd="8dp"
-                                    android:src="@drawable/right_arrow"
-                                    app:layout_constraintBottom_toBottomOf="@+id/btn_start"
+                                    android:src="@drawable/ic_baseline_arrow_back_ios_new_24"
+                                    app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toTopOf="@+id/btn_start" />
                             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -252,6 +255,7 @@
                                     android:layout_width="30dp"
                                     android:layout_height="30dp"
                                     android:src="@drawable/finish"
+                                    app:layout_constraintStart_toStartOf="parent"
                                     tools:ignore="MissingConstraints" />
 
                                 <TextView
@@ -260,7 +264,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="8dp"
                                     android:layout_marginTop="8dp"
-                                    android:text="end point  "
+                                    android:text="@string/end_point"
                                     app:layout_constraintStart_toEndOf="@+id/btn_end"
                                     app:layout_constraintTop_toTopOf="@+id/btn_end" />
 
@@ -280,7 +284,7 @@
                                     android:layout_marginTop="8dp"
                                     android:layout_marginEnd="8dp"
                                     android:layout_marginBottom="8dp"
-                                    android:src="@drawable/right_arrow"
+                                    android:src="@drawable/ic_baseline_arrow_back_ios_new_24"
                                     app:layout_constraintBottom_toBottomOf="@+id/btn_end"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toTopOf="@+id/btn_end" />
@@ -293,9 +297,10 @@
                                 android:layout_marginStart="8dp"
                                 android:layout_marginEnd="8dp"
                                 android:checked="false"
-                                android:text="Round"
+                                android:text="@string/round"
                                 android:textOff="OFF"
                                 android:textOn="ON"
+                                android:gravity="right"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/layout_end_point" />
@@ -318,7 +323,7 @@
                                 android:id="@+id/txt_date_round"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:hint="Time"
+                                android:hint="@string/date"
                                 android:visibility="gone"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="@+id/btn_date_round"
@@ -341,7 +346,7 @@
                                 android:id="@+id/txt_time_round"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:hint="Date"
+                                android:hint="@string/time"
                                 android:visibility="gone"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="@+id/btn_time_round"
@@ -370,7 +375,8 @@
                                 android:layout_marginStart="8dp"
                                 android:layout_marginEnd="8dp"
                                 android:checked="false"
-                                android:text="Repeat"
+                                android:gravity="right"
+                                android:text="@string/repeat"
                                 android:textOff="OFF"
                                 android:textOn="ON"
                                 tools:ignore="UseSwitchCompatOrMaterialXml" />
@@ -389,19 +395,19 @@
                                     android:id="@+id/radio_btn_day"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="Daily" />
+                                    android:text="@string/daily" />
 
                                 <RadioButton
                                     android:id="@+id/radio_btn_week"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="weekly" />
+                                    android:text="@string/weekly" />
 
                                 <RadioButton
                                     android:id="@+id/radio_btn_month"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="monthly" />
+                                    android:text="@string/monthly" />
                             </RadioGroup>
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -427,7 +433,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
-                                android:text="My Notes"
+                                android:text="@string/my_notes"
                                 app:layout_constraintBottom_toBottomOf="@+id/btn_add_note"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="@+id/btn_add_note" />

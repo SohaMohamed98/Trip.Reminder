@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.PopupMenu;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,12 +35,14 @@ public class TripAdapter extends RecyclerView.Adapter<com.mad41.tripreminder.tri
     private static NoteReview noteReview;
     private static OnStartClickListener startListener;
     Trip currentItem;
+    Animation fade_scale_animation;
     private List<Trip> tripModels = new ArrayList<>();
 
     @Override
     public ExampleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_row, parent, false);
         ExampleViewHolder evh = new ExampleViewHolder(v);
+        fade_scale_animation = AnimationUtils.loadAnimation(parent.getContext(), R.anim.fade_scale_animation);
         return evh;
     }
 
@@ -50,14 +55,28 @@ public class TripAdapter extends RecyclerView.Adapter<com.mad41.tripreminder.tri
     @Override
     public void onBindViewHolder(ExampleViewHolder holder, int position) {
         currentItem = tripModels.get(position);
+        String Status = null;
+        if(currentItem.getStatus() == 0){
+            Status = "Canceled";
+        }
+        else if(currentItem.getStatus() == 1){
+            Status = "Completed";
+        }
+        else if(currentItem.getStatus() == -1){
+            Status = "Missed";
+        }else{
+            Status = "Done";
+        }
         holder.txt_date.setText(currentItem.getDate());
         holder.txt_time.setText(currentItem.getTime());
         holder.txt_start.setText(currentItem.getStartLoacation());
         holder.txt_end.setText(currentItem.getEndLoacation());
-        holder.txt_state.setText(String.valueOf(currentItem.getStatus()));
+        holder.txt_state.setText(Status);
         holder.txt_place.setText(currentItem.getName());
         //get the id of the trip and add it to the card (viewHolder)
         holder.id = currentItem.getId();
+
+        holder.card_trip.startAnimation(fade_scale_animation);
 
         Log.i("note", "the : " + currentItem.getEndLoacation());
 
@@ -100,6 +119,7 @@ public class TripAdapter extends RecyclerView.Adapter<com.mad41.tripreminder.tri
         ImageView btn_note_review;
         ImageView btn_menu_card;
         private Button btn_startCard;
+        CardView card_trip;
 
         public ExampleViewHolder(View itemView) {
             super(itemView);
@@ -112,6 +132,7 @@ public class TripAdapter extends RecyclerView.Adapter<com.mad41.tripreminder.tri
             btn_menu_card = itemView.findViewById(R.id.btn_menu_card);
             btn_note_review = itemView.findViewById(R.id.btn_noteCard);
             btn_startCard = itemView.findViewById(R.id.btn_startCard);
+            card_trip=itemView.findViewById(R.id.card_trip);
 
             btn_startCard.setOnClickListener(new View.OnClickListener() {
                 @Override

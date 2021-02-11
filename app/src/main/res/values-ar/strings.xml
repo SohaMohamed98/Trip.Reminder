@@ -46,8 +46,8 @@
     <string name="Confirm_Password">تأكيد كلمة السر</string>
     <string name="have_account">لديك حساب؟<font color="#1976d2"><u>تسجيل الدخول</u></font> </string>
     <string name="round">ذهاب و عودة</string>
-    <string name="time">التاريخ</string>
-    <string name="date">الوقت</string>
+    <string name="time">الوقت</string>
+    <string name="date">التاريخ</string>
     <string name="repeat">التكرار</string>
     <string name="daily">يوميا</string>
     <string name="weekly">أسبوعيا</string>
@@ -67,6 +67,16 @@
     <string name="deleteTrip">مسح الرحلة</string>
     <string name="sureDeleteTrip">متأكد من مسح هذه الرحلة؟</string>
     <string name="sureCancelTrip">متأكد من إلغاء هذه الرحلة</string>
+    <string name="lbl_date">التاريخ: </string>
+    <string name="lbl_time">الوقت: </string>
+    <string name="start_point">البداية:</string>
+    <string name="end_point">النهاية:</string>
+    <string name="status">الحالة</string>
+    <string name="startb">ابدأ</string>
+    <string name="my_notes">ملاحظاتي</string>
+
+
+
 
 
     <string-array name="spinner">

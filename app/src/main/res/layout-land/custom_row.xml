@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:id="@+id/card_trip"
+    app:cardCornerRadius="15dp"
+    >
+
+
+
+    <LinearLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="6"
+        android:padding="2dp">
+
+        <LinearLayout
+            android:padding="4dp"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <LinearLayout
+                android:padding="1dp"
+                android:layout_weight="2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+                <ImageButton
+                    android:layout_marginStart="8dp"
+                    android:id="@+id/btn_menu_card"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:srcCompat="@drawable/ic_menu"
+                    tools:ignore="MissingConstraints,NotSibling,VectorDrawableCompat" />
+
+                <TextView
+                    android:layout_marginTop="8dp"
+                    android:id="@+id/txt_tripName2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_add_location"
+                    android:gravity="left"
+                    android:padding="1dp"
+                    android:text="Name"
+                    android:textSize="17dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:padding="1dp">
+
+                <TextView
+                    android:layout_weight="1"
+                    android:id="@+id/txt_date2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:drawableLeft="@drawable/ic_date"
+                    android:gravity="center"
+                    android:hint="Date"
+                    android:padding="1dp"
+                    android:textSize="14dp" />
+
+                <TextView
+                    android:layout_weight="1"
+                    android:id="@+id/txt_time2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:drawableLeft="@drawable/ic_time"
+                    android:gravity="center"
+                    android:hint="Time"
+                    android:padding="1dp"
+                    android:textSize="14dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:padding="2dp"
+            android:layout_weight="2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="4">
+
+            <TextView
+                android:layout_marginStart="8dp"
+                android:layout_weight="3"
+                android:id="@+id/txt_start2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_start"
+                android:gravity="left"
+                android:hint="Start"
+                android:padding="1dp"
+                android:textSize="16dp" />
+            <TextView
+                android:layout_weight="1"
+                android:id="@+id/txt_state"
+                android:textSize="12dp"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_status"
+                android:hint="Status"
+
+                android:layout_marginEnd="8dp"
+                android:padding="1dp" />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:padding="2dp"
+            android:layout_weight="2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <TextView
+                android:layout_marginStart="8dp"
+                android:layout_weight="2"
+                android:id="@+id/txt_end2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_ends"
+                android:gravity="left"
+                android:hint="End:  "
+                android:textSize="16dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:padding="2dp"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="4">
+
+            <Button
+                android:layout_marginStart="8dp"
+                android:layout_weight="3"
+                android:layout_gravity="center"
+                android:id="@+id/btn_startCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:backgroundTint="@color/colorAccent"
+                android:text="Start" />
+
+            <ImageButton
+                android:layout_weight="1"
+                android:id="@+id/btn_noteCard"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="1dp"
+                android:layout_gravity="left"
+                app:srcCompat="@drawable/ic_note"
+                android:layout_marginEnd="8dp"
+                tools:ignore="MissingConstraints,VectorDrawableCompat"
+                android:layout_marginBottom="8dp"
+                />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

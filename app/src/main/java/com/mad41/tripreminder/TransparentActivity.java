@@ -313,7 +313,7 @@ public class TransparentActivity extends AppCompatActivity {
             notificationManager.createNotificationChannel(channel);
 
             Notification.Builder builder = new Notification.Builder(this, CHANNEL_ID).
-                    setSmallIcon(R.drawable.notification_icone).
+                    setSmallIcon(R.drawable.logo2).
                     setContentTitle("Reminder").setAutoCancel(true).
                     setContentText("Start your trip").setOngoing(true).
                     setContentIntent(pendingIntent);
